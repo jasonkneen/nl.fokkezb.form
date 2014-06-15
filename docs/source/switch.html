@@ -15,14 +15,14 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='Widgets-nl-fokkezb-form-controllers-switch'>/**
+  <pre class="prettyprint lang-js"><span id='Widgets-nlFokkezbForm-controllers-switch'>/**
 </span> * Controller for the switch field type.
  *
  * The switch field type is a `Ti.UI.Switch`.
  * 
- * @class Widgets.nl.fokkezb.form.controllers.switch
+ * @class Widgets.nlFokkezbForm.controllers.switch
  * @xtype switch
- * @requires Widgets.nl.fokkezb.form.controllers.row
+ * @requires Widgets.nlFokkezbForm.controllers.row
  */
 
 $.getValue = getValue;
@@ -30,12 +30,12 @@ $.setValue = setValue;
 
 $.focus = focus;
 
-<span id='Widgets-nl-fokkezb-form-controllers-switch-method-Controller'>/**
+<span id='Widgets-nlFokkezbForm-controllers-switch-method-Controller'>/**
 </span> * Constructor for the switch field type.
  *
  * @constructor
  * @method Controller
- * @param args Arguments for the controller, which it in turn will also use to call {@link Widgets.nl.fokkezb.form.controllers.row#init}.
+ * @param args Arguments for the controller, which it in turn will also use to call {@link Widgets.nlFokkezbForm.controllers.row#init}.
  * @param {Object} [args.input] Properties to apply to the `Ti.UI.Switch`.
  * @param {Boolean} [args.value=false] Set to `true` to turn the switch on.
  */
@@ -64,7 +64,7 @@ $.focus = focus;
 
 })(arguments[0]);
 
-<span id='Widgets-nl-fokkezb-form-controllers-switch-method-getValue'>/**
+<span id='Widgets-nlFokkezbForm-controllers-switch-method-getValue'>/**
 </span> * Get the value of the field.
  * 
  * @return {Boolean} Returns `true` if the switch is turned on or `false` otherwise.
@@ -73,7 +73,7 @@ function getValue() {
   return !!$.input.value;
 }
 
-<span id='Widgets-nl-fokkezb-form-controllers-switch-method-setValue'>/**
+<span id='Widgets-nlFokkezbForm-controllers-switch-method-setValue'>/**
 </span> * Set the value of the field.
  * 
  * @param  {Boolean} [value] Set to `true` to turn on and `false` to turn off the switch.
@@ -82,10 +82,10 @@ function setValue(value) {
   $.input.value = !!value;
 }
 
-<span id='Widgets-nl-fokkezb-form-controllers-switch-method-focus'>/**
+<span id='Widgets-nlFokkezbForm-controllers-switch-method-focus'>/**
 </span> * Toggles the switch.
  *
- * This method is called by {@link Widgets.nl.fokkezb.form.controllers.widget} when the user clicks on the row.
+ * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
  */
 function focus() {
   setValue(!getValue());
