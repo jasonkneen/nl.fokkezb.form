@@ -1,0 +1,1 @@
+Ext.data.JsonP.getting_started({"guide":"<h1 id='getting_started-section-hi'>Hi</h1>\n","title":"Getting Started"});

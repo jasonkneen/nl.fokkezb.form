@@ -1,0 +1,9 @@
+[{
+    "title": "Widget: nl.fokkezb.form",
+    "items": [{
+        "name": "getting_started",
+        "url": "guides/getting_started",
+        "title": "Getting Started",
+        "description": "How to get, install and use the widget."
+    }]
+}]
