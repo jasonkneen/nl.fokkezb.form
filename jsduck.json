@@ -1,0 +1,19 @@
+{
+    "--title": "Alloy TableView Form Widget - Documentation",
+    "--": [
+        "../master"
+    ],
+    "--output": "docs",
+    "--welcome": "../master/README.md",
+    "--categories": "jsduck-categories.json",
+    "--external": [
+        "Alloy",
+        "Backbone.*",
+        "Moment",
+        "Controller",
+        "Ti.*",
+        "Titanium.*",
+        "Point",
+        "Dimension"
+    ]
+}

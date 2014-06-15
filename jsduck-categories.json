@@ -1,0 +1,11 @@
+[
+  {
+    "name": "Widgets",
+    "groups": [
+      {
+        "name": "nl.fokkezb.form",
+        "classes": [ "Widgets.nlFokkezbForm.*" ]
+      }
+    ]
+  }
+]
