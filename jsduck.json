@@ -7,6 +7,7 @@
     "--welcome": "../master/README.md",
     "--categories": "jsduck-categories.json",
     "--guides": "jsduck-guides.json",
+    "--images": "doc-resources",
     "--external": [
         "Alloy",
         "Backbone.*",

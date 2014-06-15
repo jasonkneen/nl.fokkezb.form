@@ -20,9 +20,6 @@
  *
  *     @example
  *     Alloy.createWidget(&#39;nl.fokkezb.form&#39;, {
- *       CFG: {
- *         labelWidth: 200
- *       },
  *       fieldsets: [{
  *         legend: L(&#39;form_common_general&#39;),
  *         fields: [{
@@ -43,7 +40,7 @@
  *           type: &#39;text&#39;
  *         }]
  *       }]
- *     })
+ *     });
  *
  * @class Widgets.nlFokkezbForm.controllers.widget
  */
@@ -106,12 +103,12 @@ function init(opts) {
   }
 
   // user can either pass an array or fieldsets or just fields we&#39;ll wrap in one
-  fieldsets = args.fieldsets || [{
-    fields: args.fields
+  fieldsets = opts.fieldsets || [{
+    fields: opts.fields
   }];
 
   // values for the fields
-  values = args.values || {};
+  values = opts.values || {};
 
   render(fieldsets, values);
 }
