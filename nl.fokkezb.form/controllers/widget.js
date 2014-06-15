@@ -28,7 +28,7 @@
  *       }]
  *     })
  *
- * @class Widgets.nl.fokkezb.form.controllers.widget
+ * @class Widgets.nlFokkezbForm.controllers.widget
  */
 
 $.getValues = getValues;
@@ -65,10 +65,6 @@ var fieldCtrls = {};
   render(fieldsets, values);
 
 })(arguments[0] || {});
-
-/*
- * METHODS
- */
 
 /**
  * Get all field values.

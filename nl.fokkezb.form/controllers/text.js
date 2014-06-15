@@ -3,9 +3,9 @@
  *
  * The text field type is a `Ti.UI.Textfield`.
  *
- * @class Widgets.nl.fokkezb.form.controllers.text
+ * @class Widgets.nlFokkezbForm.controllers.text
  * @xtype text
- * @requires Widgets.nl.fokkezb.form.controllers.row
+ * @requires Widgets.nlFokkezbForm.controllers.row
  */
 
 $.getValue = getValue;
@@ -18,7 +18,7 @@ $.focus = focus;
  *
  * @constructor
  * @method Controller
- * @param args Arguments for the controller, which it in turn will also use to call {@link Widgets.nl.fokkezb.form.controllers.row#init}.
+ * @param args Arguments for the controller, which it in turn will also use to call {@link Widgets.nlFokkezbForm.controllers.row#init}.
  * @param {Object} [args.input] Properties to apply to the `Ti.UI.TextField`, e.g. keyboard type and toolbar.
  * @param {String} [args.value] Value to set for the field.
  */
@@ -79,7 +79,7 @@ function setValue(value) {
 /**
  * Sets the focus on the input.
  *
- * This method is called by {@link Widgets.nl.fokkezb.form.controllers.widget} when the user clicks on the row.
+ * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
  */
 function focus() {
   $.input.focus();

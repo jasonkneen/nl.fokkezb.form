@@ -1,7 +1,7 @@
 /**
  * Controller for the row wrapping (most of) the field types.
  *
- * @class Widgets.nl.fokkezb.form.controllers.row
+ * @class Widgets.nlFokkezbForm.controllers.row
  */
 
 $.init = init;

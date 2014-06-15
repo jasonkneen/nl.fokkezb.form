@@ -1,9 +1,12 @@
 {
-    "--title": "TableView Form - API",
+    "--title": "Alloy TableView Form Widget - Documentation",
     "--": [
         "nl.fokkezb.form"
     ],
-    "--output": "../gh-pages",
+    "--output": "../gh-pages/docs",
+    "--welcome": "README.md",
+    "--categories": "jsduck-categories.json",
+    "--guides": "jsduck-guides.json",
     "--external": [
         "Alloy",
         "Backbone.*",

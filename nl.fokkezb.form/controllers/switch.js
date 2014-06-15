@@ -3,9 +3,9 @@
  *
  * The switch field type is a `Ti.UI.Switch`.
  * 
- * @class Widgets.nl.fokkezb.form.controllers.switch
+ * @class Widgets.nlFokkezbForm.controllers.switch
  * @xtype switch
- * @requires Widgets.nl.fokkezb.form.controllers.row
+ * @requires Widgets.nlFokkezbForm.controllers.row
  */
 
 $.getValue = getValue;
@@ -18,7 +18,7 @@ $.focus = focus;
  *
  * @constructor
  * @method Controller
- * @param args Arguments for the controller, which it in turn will also use to call {@link Widgets.nl.fokkezb.form.controllers.row#init}.
+ * @param args Arguments for the controller, which it in turn will also use to call {@link Widgets.nlFokkezbForm.controllers.row#init}.
  * @param {Object} [args.input] Properties to apply to the `Ti.UI.Switch`.
  * @param {Boolean} [args.value=false] Set to `true` to turn the switch on.
  */
@@ -68,7 +68,7 @@ function setValue(value) {
 /**
  * Toggles the switch.
  *
- * This method is called by {@link Widgets.nl.fokkezb.form.controllers.widget} when the user clicks on the row.
+ * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
  */
 function focus() {
   setValue(!getValue());
