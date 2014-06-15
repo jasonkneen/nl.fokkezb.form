@@ -1,0 +1,7 @@
+"TextField": {
+  width: Ti.UI.FILL,
+
+  borderStyle: Ti.UI.INPUT_BORDERSTYLE_NONE,
+  borderWidth: 0,
+  color: "#999"
+}

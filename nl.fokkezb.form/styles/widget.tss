@@ -1,0 +1,3 @@
+"TableView[platform=ios]": {
+  style: Ti.UI.iPhone.TableViewStyle.GROUPED
+}

@@ -1,0 +1,16 @@
+"TableViewRow": {
+  height: 44
+}
+
+"TableViewRow[platform=ios]": {
+  selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
+}
+
+"Label": {
+  left: 15,
+  width: 200
+}
+
+"View": {
+  right: 15
+}
