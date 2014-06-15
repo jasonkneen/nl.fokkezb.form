@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Widgets-nl-fokkezb-form-controllers-text'>/**
+</span> * Controller for the text field type.
+ *
+ * The text field type is a `Ti.UI.Textfield`.
+ *
+ * @class Widgets.nl.fokkezb.form.controllers.text
+ * @xtype text
+ * @requires Widgets.nl.fokkezb.form.controllers.row
+ */
+
+$.getValue = getValue;
+$.setValue = setValue;
+
+$.focus = focus;
+
+<span id='Widgets-nl-fokkezb-form-controllers-text-method-Controller'>/**
+</span> * Constructor for the text field type.
+ *
+ * @constructor
+ * @method Controller
+ * @param args Arguments for the controller, which it in turn will also use to call {@link Widgets.nl.fokkezb.form.controllers.row#init}.
+ * @param {Object} [args.input] Properties to apply to the `Ti.UI.TextField`, e.g. keyboard type and toolbar.
+ * @param {String} [args.value] Value to set for the field.
+ */
+(function constructor(args) {
+  var input;
+
+  // user can pass input args
+  input = args.input || {};
+  delete args.input;
+
+  _.each([&#39;value&#39;, &#39;hinttext&#39;], function(property) {
+
+    if (_.has(args, property)) {
+      input[property] = args[property];
+      delete args[property];
+    }
+
+  });
+
+  if (args.format) {
+
+    switch (args.format) {
+      case &#39;email&#39;:
+        input.keyboardType = Ti.UI.KEYBOARD_EMAIL;
+        break;
+    }
+
+    delete args.format;
+  }
+
+  // input properties to apply
+  if (_.size(input) &gt; 0) {
+    $.input.applyProperties(input);
+  }
+
+  $.row.init(args);
+
+})(arguments[0]);
+
+<span id='Widgets-nl-fokkezb-form-controllers-text-method-getValue'>/**
+</span> * Get the value of the field.
+ *
+ * @return {String} Value of the field.
+ */
+function getValue() {
+  return $.input.value;
+}
+
+<span id='Widgets-nl-fokkezb-form-controllers-text-method-setValue'>/**
+</span> * Set the value of the field.
+ *
+ * @param  {String} [value] Value to set or `undefined` to unset.
+ */
+function setValue(value) {
+  $.input.value = value;
+}
+
+<span id='Widgets-nl-fokkezb-form-controllers-text-method-focus'>/**
+</span> * Sets the focus on the input.
+ *
+ * This method is called by {@link Widgets.nl.fokkezb.form.controllers.widget} when the user clicks on the row.
+ */
+function focus() {
+  $.input.focus();
+}</pre>
+</body>
+</html>
