@@ -43,16 +43,50 @@ var fieldCtrls = {};
 /**
  * Constructor for the form.
  *
+ * Automatically calls #init if it has `args.fieldsets` or `args.fields`.
+ *
  * @constructor
  * @method Controller
- * @param args Arguments passed to the controller. Either `fieldsets` or
- *             `fields` is required.
- * @param {Object[]} [args.fieldsets] Array of fieldsets.
- * @param {Object[]} [args.fields] Array of fields.
- * @param {Object} [args.values] Values as object with field names as keys.
+ * @param args Arguments passed to the controller.
+ * @param {String} [args.config] Path of a CommonJS or JSON file to extend `args` with.
  */
 (function constructor(args) {
+
+  if (args.config) {
+
+    if (args.config.indexOf('.json')) {
+      _.extend(args, JSON.parse(Ti.Filesystem.getFile(args.config).read().text));
+
+    } else {
+      _.extend(args, require(args.config));
+    }
+  }
+
+  // these are required, but we
+  if (args.fieldsets || args.fields) {
+    init(args);
+    return;
+  }
+
+})(arguments[0] || {});
+
+/**
+ * Initialize the form.
+ *
+ * Called automatically by #Controller if it has `args.fieldsets` or `args.fields`.
+ *
+ * @param opts Options. Either `opts.fieldsets` or `opts.fields` is required.
+ * @param {Object[]} [opts.fieldsets] Array of fieldsets.
+ * @param {Object[]} [opts.fields] Array of fields.
+ * @param {Object} [opts.values] Values as object with field names as keys.
+ * @throws {Error} If the required options are missing.
+ */
+function init(opts) {
   var fieldsets, values;
+
+  if (!opts.fieldsets && !opts.fields) {
+    throw 'Either `opts.fieldsets` or `opts.fields` is required.';
+  }
 
   // user can either pass an array or fieldsets or just fields we'll wrap in one
   fieldsets = args.fieldsets || [{
@@ -63,8 +97,7 @@ var fieldCtrls = {};
   values = args.values || {};
 
   render(fieldsets, values);
-
-})(arguments[0] || {});
+}
 
 /**
  * Get all field values.

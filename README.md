@@ -4,3 +4,10 @@ An [Alloy](http://appcelerator.com/alloy) widget to create a form using a `Ti.UI
 
 * Source code: [https://github.com/FokkeZB/nl.fokkezb.form/tree/master](https://github.com/FokkeZB/nl.fokkezb.form/tree/master)
 * Documentation: [http://form.fokkezb.nl](http://form.fokkezb.nl)
+
+	```
+	<Alloy>
+		<Widget src="nl.fokkezb.form" config="form.json" />
+	</Alloy>
+	```
+	

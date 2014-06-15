@@ -6,7 +6,7 @@
     "--output": "../gh-pages/docs",
     "--welcome": "README.md",
     "--categories": "jsduck-categories.json",
-    "--guides": "jsduck-guides.json",
+    //"--guides": "jsduck-guides.json",
     "--external": [
         "Alloy",
         "Backbone.*",
