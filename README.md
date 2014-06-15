@@ -32,7 +32,7 @@ An [Alloy](http://appcelerator.com/alloy) widget to create a form using a `Ti.UI
 
 Will get you:
 
-[![Screenshot](https://github.com/FokkeZB/form/blob/gh-pages/doc-resources/example.png?raw=true)]
+![Screenshot](https://github.com/FokkeZB/form/blob/gh-pages/doc-resources/example.png?raw=true)
  
 ## License
 
