@@ -18,30 +18,6 @@
   <pre class="prettyprint lang-js"><span id='Widgets-nlFokkezbForm-controllers-widget'>/**
 </span> * Main controller of the widget
  *
- *     @example
- *     Alloy.createWidget(&#39;nl.fokkezb.form&#39;, {
- *       fieldsets: [{
- *         legend: L(&#39;form_common_general&#39;),
- *         fields: [{
- *           name: &#39;code&#39;,
- *           label: L(&#39;form_common_code&#39;),
- *           type: &#39;text&#39;
- *         }, {
- *           name: &#39;employeeNumber&#39;,
- *           label: L(&#39;form_resource_employeeNumber&#39;),
- *           type: &#39;text&#39;
- *         }, {
- *           name: &#39;firstNames&#39;,
- *           label: L(&#39;form_resource_firstNames&#39;),
- *           type: &#39;text&#39;
- *         }, {
- *           name: &#39;lastName&#39;,
- *           label: L(&#39;form_resource_lastName&#39;),
- *           type: &#39;text&#39;
- *         }]
- *       }]
- *     });
- *
  * @class Widgets.nlFokkezbForm.controllers.widget
  */
 
@@ -90,27 +66,27 @@ var fieldCtrls = {};
  * Called automatically by #Controller if it has `args.fieldsets` or `args.fields`.
  *
  * @param opts Options. Either `opts.fieldsets` or `opts.fields` is required.
+ * @param {Object[]} [opts.table] Optional properties to apply to the `Ti.UI.TableView`.
  * @param {Object[]} [opts.fieldsets] Array of fieldsets.
  * @param {Object[]} [opts.fields] Array of fields.
  * @param {Object} [opts.values] Values as object with field names as keys.
  * @throws {Error} If the required options are missing.
  */
 function init(opts) {
-  var fieldsets, values;
 
   if (!opts.fieldsets &amp;&amp; !opts.fields) {
     throw &#39;Either `opts.fieldsets` or `opts.fields` is required.&#39;;
   }
 
   // user can either pass an array or fieldsets or just fields we&#39;ll wrap in one
-  fieldsets = opts.fieldsets || [{
+  opts.fieldsets = opts.fieldsets || [{
     fields: opts.fields
   }];
 
   // values for the fields
-  values = opts.values || {};
+  opts.values = opts.values || {};
 
-  render(fieldsets, values);
+  render(opts);
 }
 
 <span id='Widgets-nlFokkezbForm-controllers-widget-method-getValues'>/**
@@ -145,34 +121,39 @@ function setValues(values) {
 </span> * Renders the form.
  *
  * @private
- * @param  {Object[]} fieldsets  Array of fieldset Objects
- * @param  {Object} values       Object containing values
+ * @param  {Object[]} opts  See #init
  */
-function render(fieldsets, values) {
+function render(opts) {
 
-  // keeps a section for each fieldset
-  var sections = [];
+  // user can pass custom table properties
+  var tableProp = opts.table || {};
+
+  // create array for sections unless user gave some
+  tableProp.sections = table.sections || [];
 
   // for each fieldset
-  _.each(fieldsets, function(fieldset) {
+  _.each(opts.fieldsets, function(fieldset) {
 
-    // user can pass custom section args
-    var sectionArgs = fieldset.section || {};
+    // user can pass custom section properties
+    var sectionProp = fieldset.section || {};
 
-    // keeps a row for each field
-    sectionArgs.rows = sectionArgs.rows || [];
+    // create array for rows unless user gave some
+    sectionProp.rows = sectionProp.rows || [];
+
+    // add class for styling unless user gave some
+    sectionProp.classes = sectionProp.classes || [&#39;section&#39;];
 
     // user can pass legend we&#39;ll use as headerTitle
     if (fieldset.legend) {
-      sectionArgs.headerTitle = fieldset.legend;
+      sectionProp.headerTitle = fieldset.legend;
     }
 
     // for each field
     _.each(fieldset.fields, function(field) {
 
       // user can either pass value in field or in separate &#39;values&#39; arg
-      if (values[field.name]) {
-        field.value = values[field.name];
+      if (opts.values[field.name]) {
+        field.value = opts.values[field.name];
       }
 
       var fieldCtrl;
@@ -191,7 +172,7 @@ function render(fieldsets, values) {
       fieldCtrls[field.name] = fieldCtrl;
 
       // push the views of the controller as row
-      sectionArgs.rows.push(fieldCtrl.getViewEx({
+      sectionProp.rows.push(fieldCtrl.getViewEx({
 
         // makes sure we get an actual view and not the row controller
         recurse: true
@@ -200,15 +181,15 @@ function render(fieldsets, values) {
     });
 
     // create the section, extending TSS style by args
-    var section = $.UI.create(&#39;TableViewSection&#39;, sectionArgs);
+    var section = $.UI.create(&#39;TableViewSection&#39;, sectionProp);
 
     // push the section
-    sections.push(section);
+    tableProp.sections.push(section);
 
   });
 
   // set the table
-  $.table.data = sections;
+  $.table.applyProperties(tableProp);
 }
 
 function onTableClick(e) {

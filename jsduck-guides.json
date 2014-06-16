@@ -1,9 +1,29 @@
 [{
-    "title": "Widget: nl.fokkezb.form",
-    "items": [{
-        "name": "getting_started",
-        "url": "guides/getting_started",
-        "title": "Getting Started",
-        "description": "How to get, install and use the widget."
-    }]
+  "title": "Widget: nl.fokkezb.form",
+  "items": [{
+    "name": "getting_started",
+    "url": "guides/getting_started",
+    "title": "Getting Started",
+    "description": "How to get, install and use the widget."
+  }, {
+    "name": "forms",
+    "url": "guides/forms",
+    "title": "Forms",
+    "description": "Options for creating forms."
+  }, {
+    "name": "fieldsets",
+    "url": "guides/fieldsets",
+    "title": "Fieldsets",
+    "description": "Options for creating fieldsets."
+  }, {
+    "name": "fields",
+    "url": "guides/fields",
+    "title": "Fields",
+    "description": "Options for creating fields."
+  }, {
+    "name": "types",
+    "url": "guides/types",
+    "title": "Types",
+    "description": "Using and creating field types."
+  }]
 }]
