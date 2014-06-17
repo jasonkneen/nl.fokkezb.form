@@ -1,5 +1,3 @@
 <Alloy>
-  <Widget id="row" src="nl.fokkezb.form" name="row">
-    <Switch id="input" />
-  </Widget>
+  <Switch id="input" />
 </Alloy>

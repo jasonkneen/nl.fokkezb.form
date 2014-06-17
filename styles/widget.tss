@@ -1,3 +1,6 @@
-"TableView[platform=ios]": {
+".table[platform=ios]": {
   style: Ti.UI.iPhone.TableViewStyle.GROUPED
+}
+
+".section": {
 }

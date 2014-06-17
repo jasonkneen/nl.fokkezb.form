@@ -1,48 +1,50 @@
 /**
  * Controller for the text field type.
  *
- * The text field type is a `Ti.UI.Textfield`.
+ * This type exposes a `Ti.UI.Textfield`.
  *
  * @class Widgets.nlFokkezbForm.controllers.text
+ * @extends Widgets.nlFokkezbForm.controllers.field
  * @xtype text
- * @requires Widgets.nlFokkezbForm.controllers.row
  */
 
-$.getValue = getValue;
-$.setValue = setValue;
-
-$.focus = focus;
+exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 
 /**
- * Constructor for the text field type.
+ * Constructor.
  *
  * @constructor
  * @method Controller
- * @param args Arguments for the controller, which it in turn will also use to call {@link Widgets.nlFokkezbForm.controllers.row#init}.
- * @param {Object} [args.input] Properties to apply to the `Ti.UI.TextField`, e.g. keyboard type and toolbar.
- * @param {String} [args.value] Value to set for the field.
+ * @param args Arguments which will also be used to call {@link Widgets.nlFokkezbForm.controllers.field#Controller}.
+ * @param {Object} [args.input]     Properties to apply to the `Ti.UI.TextField`, e.g. keyboard type and toolbar.
+ * @param {String} [args.hinttext]  Hint text to set on the `Ti.UI.TextField`.
+ * @param {String} [args.format]    A format triggers different behavior, properties etc, e.g. 'email'.
  */
 (function constructor(args) {
-  var input;
+
+  var inputProp;
 
   // user can pass input args
-  input = args.input || {};
+  inputProp = args.input || {};
   delete args.input;
 
-  _.each(['value', 'hinttext'], function(property) {
+  _.each(['hinttext'], function(property) {
 
     if (_.has(args, property)) {
-      input[property] = args[property];
+      inputProp[property] = args[property];
       delete args[property];
     }
 
   });
 
+  // a string format is given
   if (args.format) {
 
     switch (args.format) {
       case 'email':
-        input.keyboardType = Ti.UI.KEYBOARD_EMAIL;
+        inputProp.keyboardType = inputProp.keyboardType || Ti.UI.KEYBOARD_EMAIL;
+        inputProp.autocapitalization = inputProp.autocapitalization || Ti.UI.TEXT_AUTOCAPITALIZATION_NONE;
+        inputProp.autocorrect = inputProp.autocorrect === true;
         break;
     }
 
@@ -50,37 +52,11 @@ $.focus = focus;
   }
 
   // input properties to apply
-  if (_.size(input) > 0) {
-    $.input.applyProperties(input);
+  if (_.size(inputProp) > 0) {
+    $.input.applyProperties(inputProp);
   }
 
-  $.row.init(args);
+  // add the input to the row
+  $.setInput($.input);
 
 })(arguments[0]);
-
-/**
- * Get the value of the field.
- *
- * @return {String} Value of the field.
- */
-function getValue() {
-  return $.input.value;
-}
-
-/**
- * Set the value of the field.
- *
- * @param  {String} [value] Value to set or `undefined` to unset.
- */
-function setValue(value) {
-  $.input.value = value;
-}
-
-/**
- * Sets the focus on the input.
- *
- * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
- */
-function focus() {
-  $.input.focus();
-}

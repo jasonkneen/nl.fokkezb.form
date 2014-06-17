@@ -1,35 +1,34 @@
 /**
- * Main controller of the widget
+ * Main controller of the widget.
  *
- *     @example
- *     Alloy.createWidget('nl.fokkezb.form', {
- *       fieldsets: [{
- *         legend: L('form_common_general'),
- *         fields: [{
- *           name: 'code',
- *           label: L('form_common_code'),
- *           type: 'text'
- *         }, {
- *           name: 'employeeNumber',
- *           label: L('form_resource_employeeNumber'),
- *           type: 'text'
- *         }, {
- *           name: 'firstNames',
- *           label: L('form_resource_firstNames'),
- *           type: 'text'
- *         }, {
- *           name: 'lastName',
- *           label: L('form_resource_lastName'),
- *           type: 'text'
- *         }]
- *       }]
- *     });
+ * See the [Getting Started](#!/guide/getting_started) guide.
  *
  * @class Widgets.nlFokkezbForm.controllers.widget
+ * @requires Widgets.nlFokkezbForm.lib.validator
  */
 
+var deepExtend = require(WPATH('deepExtend'));
+
+_.mixin({
+  deepExtend: deepExtend(_)
+});
+
+/**
+ * @type {Object} Exposes {@link Widgets.nlFokkezbForm.lib.validator}
+ */
+$.validator = require(WPATH('validator'));
+
+$.init = init;
 $.getValues = getValues;
 $.setValues = setValues;
+$.isValid = isValid;
+$.getField = getField;
+
+/**
+ * @type {Object} The args the widget was constructed with if auto-initialize couldn't be run.
+ * @private
+ */
+var defaults;
 
 /**
  * @type {Object} References to all field controllers by name.
@@ -40,29 +39,29 @@ var fieldCtrls = {};
 /**
  * Constructor for the form.
  *
- * Automatically calls #init if it has `args.fieldsets` or `args.fields`.
+ * Automatically calls #init if it has `args.fieldsets`, `args.fields` or `args.config`.
  *
- * @constructor
  * @method Controller
  * @param args Arguments passed to the controller.
- * @param {String} [args.config] Path of a CommonJS or JSON file to extend `args` with.
+ 
  */
 (function constructor(args) {
 
-  if (args.config) {
+  // we don't want these
+  delete args.id;
+  delete args.classes;
+  delete args.__parentSymbol;
+  delete args['$model'];
+  delete args.__itemTemplate;
 
-    if (args.config.indexOf('.json')) {
-      _.extend(args, JSON.parse(Ti.Filesystem.getFile(args.config).read().text));
-
-    } else {
-      _.extend(args, require(args.config));
-    }
+  // if we have one of these we can auto-initialize
+  if (args.config || args.fieldsets || args.fields) {
+    init(args);
   }
 
-  // these are required, but we
-  if (args.fieldsets || args.fields) {
-    init(args);
-    return;
+  // else we save them as defaults for init()
+  else {
+    defaults = args;
   }
 
 })(arguments[0] || {});
@@ -72,28 +71,55 @@ var fieldCtrls = {};
  *
  * Called automatically by #Controller if it has `args.fieldsets` or `args.fields`.
  *
- * @param opts Options. Either `opts.fieldsets` or `opts.fields` is required.
+ * @param {Object} opts Options. Either `opts.fieldsets` or `opts.fields` is required.
+ * @param {String} [opts.config] Path of a CommonJS or JSON file to extend `args` with.
+ * @param {Object[]} [opts.table] Optional properties to apply to the `Ti.UI.TableView`.
  * @param {Object[]} [opts.fieldsets] Array of fieldsets.
  * @param {Object[]} [opts.fields] Array of fields.
  * @param {Object} [opts.values] Values as object with field names as keys.
  * @throws {Error} If the required options are missing.
  */
 function init(opts) {
-  var fieldsets, values;
+
+  // opts can be a string we handle like opts.config
+  if (typeof opts === 'string') {
+    opts = {
+      config: opts
+    };
+  }
+
+  // we have a config file to load
+  if (opts.config) {
+
+    if (opts.config.indexOf('.json')) {
+      _.extend(opts, JSON.parse(Ti.Filesystem.getFile(opts.config).read().text));
+
+    } else {
+      _.extend(opts, require(opts.config));
+    }
+  }
+
+  // use the constructor's args as defaults if init() was run later
+  if (defaults) {
+    opts = _.deepExtend({}, defaults, opts);
+  }
 
   if (!opts.fieldsets && !opts.fields) {
     throw 'Either `opts.fieldsets` or `opts.fields` is required.';
   }
 
-  // user can either pass an array or fieldsets or just fields we'll wrap in one
-  fieldsets = opts.fieldsets || [{
-    fields: opts.fields
-  }];
+  // user can either pass an array or fieldsets or just fields we'll wrap it in one
+  if (!opts.fieldsets) {
+    opts = {
+      fieldsets: _.omit(opts, 'values'),
+      values: opts.values
+    };
+  }
 
   // values for the fields
-  values = opts.values || {};
+  opts.values = opts.values || {};
 
-  render(fieldsets, values);
+  render(opts);
 }
 
 /**
@@ -128,75 +154,125 @@ function setValues(values) {
  * Renders the form.
  *
  * @private
- * @param  {Object[]} fieldsets  Array of fieldset Objects
- * @param  {Object} values       Object containing values
+ * @param  {Object[]} opts  See #init
  */
-function render(fieldsets, values) {
+function render(opts) {
 
-  // keeps a section for each fieldset
-  var sections = [];
+  // user can pass custom table properties
+  var tableProp = opts.table || {};
+
+  // create array for sections unless user gave some
+  tableProp.sections = tableProp.sections || [];
 
   // for each fieldset
-  _.each(fieldsets, function(fieldset) {
+  _.each(opts.fieldsets, function(fieldset) {
 
-    // user can pass custom section args
-    var sectionArgs = fieldset.section || {};
+    // user can pass custom section properties
+    var sectionProp = fieldset.section || {};
 
-    // keeps a row for each field
-    sectionArgs.rows = sectionArgs.rows || [];
+    // create array for rows unless user gave some
+    sectionProp.rows = sectionProp.rows || [];
 
-    // user can pass legend we'll use as headerTitle
+    // add class for styling unless user gave some
+    sectionProp.classes = sectionProp.classes || ['section'];
+
+    // user can pass legend or legendid we'll use as headerTitle
     if (fieldset.legend) {
-      sectionArgs.headerTitle = fieldset.legend;
+      sectionProp.headerTitle = fieldset.legend;
+
+    } else if (fieldset.legendid) {
+      sectionProp.headerTitle = L(fieldset.legendid);
     }
 
     // for each field
     _.each(fieldset.fields, function(field) {
 
-      // user can either pass value in field or in separate 'values' arg
-      if (values[field.name]) {
-        field.value = values[field.name];
-      }
-
-      var fieldCtrl;
-
-      // user can specify a controller to deliver the row
-      if (field.controller) {
-        fieldCtrl = Alloy.createController(field.controller, field);
+      // field can be a Ti.UI.TableViewRow
+      // FIXME: apiName is Ti.View (https://jira.appcelerator.org/browse/TC-4278)
+      if (field.apiName) {
+        sectionProp.rows.push(field);
 
       } else {
 
-        // user can specify a widget and or widget view (type) to deliver the row
-        fieldCtrl = Alloy.createWidget(field.widget || 'nl.fokkezb.form', field.type || 'text', field);
+        // user can either pass value in field or in separate 'values' arg
+        if (opts.values[field.name]) {
+          field.value = opts.values[field.name];
+        }
+
+        var fieldCtrl;
+
+        // user can specify a controller to deliver the row
+        if (field.controller) {
+          fieldCtrl = Alloy.createController(field.controller, field);
+
+        } else {
+
+          // user can specify a widget and or widget view (type) to deliver the row
+          fieldCtrl = Alloy.createWidget(field.widget || 'nl.fokkezb.form', field.type || 'text', field);
+        }
+
+        // keep a reference to the widget
+        fieldCtrls[field.name] = fieldCtrl;
+
+        // push the views of the controller as row
+        sectionProp.rows.push(fieldCtrl.getViewEx({
+
+          // makes sure we get an actual view and not the row controller
+          recurse: true
+        }));
       }
-
-      // keep a reference to the widget
-      fieldCtrls[field.name] = fieldCtrl;
-
-      // push the views of the controller as row
-      sectionArgs.rows.push(fieldCtrl.getViewEx({
-
-        // makes sure we get an actual view and not the row controller
-        recurse: true
-      }));
 
     });
 
     // create the section, extending TSS style by args
-    var section = $.UI.create('TableViewSection', sectionArgs);
+    var section = $.UI.create('TableViewSection', sectionProp);
 
     // push the section
-    sections.push(section);
+    tableProp.sections.push(section);
 
   });
 
   // set the table
-  $.table.data = sections;
+  $.table.applyProperties(tableProp);
 }
 
-function onTableClick(e) {
+/**
+ * Get the controller of a field, e.g. to call its value, validation or focus methods.
+ *
+ * @param  {String} name        Name of the field to get.
+ * @return {Object|undefined}   Controller of the field or `undefined` if not found.
+ */
+function getField(name) {
+  return fieldCtrls[name];
+}
 
-  var name = _.keys(fieldCtrls)[e.index];
+/**
+ * Validate all fields.
+ *
+ * @return {Boolean} Returns `true` if all fields are valid.
+ */
+function isValid() {
+  var valid = true;
 
-  fieldCtrls[name].focus();
+  _.each(fieldCtrls, function(fieldCtrl, name) {
+    valid = valid && fieldCtrl.isValid();
+  });
+
+  return valid;
+}
+
+/**
+ * Handles the table's `singletap` event.
+ *
+ * @private
+ * @param  {Object} e Event dictionary.
+ */
+function onTableSingletap(e) {
+
+  // click on a TableView headerView or custom row
+  if (!e.row || !e.row._name) {
+    return;
+  }
+
+  fieldCtrls[e.row._name].focus();
 }

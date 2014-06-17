@@ -1,0 +1,10 @@
+"TextArea": {
+  width: Ti.UI.FILL,
+  height: 132,
+
+  color: "#999",
+
+  font: {
+    fontSize: 17
+  }
+}

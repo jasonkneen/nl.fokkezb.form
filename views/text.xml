@@ -1,5 +1,3 @@
 <Alloy>
-  <Widget id="row" src="nl.fokkezb.form" name="row">
     <TextField id="input" />
-  </Widget>
 </Alloy>

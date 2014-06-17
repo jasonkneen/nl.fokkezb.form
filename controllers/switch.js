@@ -2,68 +2,37 @@
  * Controller for the switch field type.
  *
  * The switch field type is a `Ti.UI.Switch`.
- * 
+ *
  * @class Widgets.nlFokkezbForm.controllers.switch
+ * @extends Widgets.nlFokkezbForm.controllers.field
  * @xtype switch
- * @requires Widgets.nlFokkezbForm.controllers.row
  */
 
-$.getValue = getValue;
-$.setValue = setValue;
+exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 
 $.focus = focus;
+$.isValid = isValid;
 
 /**
- * Constructor for the switch field type.
+ * Constructor.
  *
  * @constructor
  * @method Controller
- * @param args Arguments for the controller, which it in turn will also use to call {@link Widgets.nlFokkezbForm.controllers.row#init}.
+ * @param args Arguments which will also be used to call {@link Widgets.nlFokkezbForm.controllers.field#Controller}.
  * @param {Object} [args.input] Properties to apply to the `Ti.UI.Switch`.
  * @param {Boolean} [args.value=false] Set to `true` to turn the switch on.
  */
 (function constructor(args) {
-  var input;
-  
-  // user can pass input args
-  input = args.input || {};
-  delete args.input;
-
-  _.each(['value'], function(property) {
-
-    if (_.has(args, property)) {
-      input[property] = args[property];
-      delete args[property];
-    }
-
-  });
 
   // input properties to apply
-  if (_.size(input) > 0) {
-    $.input.applyProperties(input);
+  if (args.input) {
+    $.input.applyProperties(args.input);
   }
 
-  $.row.init(args);
+  // add the input to the row
+  $.setInput($.input);
 
 })(arguments[0]);
-
-/**
- * Get the value of the field.
- * 
- * @return {Boolean} Returns `true` if the switch is turned on or `false` otherwise.
- */
-function getValue() {
-  return !!$.input.value;
-}
-
-/**
- * Set the value of the field.
- * 
- * @param  {Boolean} [value] Set to `true` to turn on and `false` to turn off the switch.
- */
-function setValue(value) {
-  $.input.value = !!value;
-}
 
 /**
  * Toggles the switch.
@@ -71,5 +40,14 @@ function setValue(value) {
  * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
  */
 function focus() {
-  setValue(!getValue());
+  $.setValue(!$.getValue());
+}
+
+/**
+ * A switch is always valid.
+ *
+ * @return {Boolean} Always `true`.
+ */
+function isValid() {
+  return true;
 }
