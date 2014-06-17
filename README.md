@@ -2,9 +2,9 @@
 
 An [Alloy](http://appcelerator.com/alloy) [Widget](http://docs.appcelerator.com/titanium/latest/#!/guide/Alloy_Widgets) to create a form using a [TableView](http://docs.appcelerator.com/titanium/latest/#!/guide/TableViews), much like the familiar settings views on iOS.
 
-* Source code: [https://github.com/FokkeZB/form/tree/master]()
-* Documentation: [http://form.fokkezb.nl]()
-* Test app: [https://github.com/FokkeZB/form/tree/master]()
+* Source code: [https://github.com/FokkeZB/nl.fokkezb.form/tree/master](https://github.com/FokkeZB/nl.fokkezb.form/tree/master)
+* Documentation: [http://form.fokkezb.nl](http://form.fokkezb.nl)
+* Test app: [https://github.com/FokkeZB/nl.fokkezb.form/tree/master](https://github.com/FokkeZB/nl.fokkezb.form/tree/master)
 
 ## Get it [![gitTio](http://gitt.io/badge.png)](http://gitt.io/component/nl.fokkezb.form)
 
@@ -12,7 +12,7 @@ Install via [gitTio](http://gitt.io/component/nl.fokkezb.form):
 
 	$ gittio install nl.fokkezb.form
 
-Or download a [release](https://github.com/FokkeZB/form/releases), extract it to your app's `app/widgets/nl.fokkezb.form` folder and add the dependency to your `config.json`:
+Or download a [release](https://github.com/FokkeZB/nl.fokkezb.form/releases), extract it to your app's `app/widgets/nl.fokkezb.form` folder and add the dependency to your `config.json`:
 
 	{
 		..
@@ -51,7 +51,7 @@ Consult the [documentation](http://form.fokkezb.nl) for all options, e.g. to cre
 
 ### Screenshot
 
-![Screenshot](https://github.com/FokkeZB/form/blob/gh-pages/doc-resources/example.png?raw=true)
+![Screenshot](https://github.com/FokkeZB/nl.fokkezb.form/blob/gh-pages/doc-resources/example.png?raw=true)
  
 ## License
 
