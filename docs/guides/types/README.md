@@ -53,7 +53,7 @@ You can overload any of {@link Widgets.nlFokkezbForm.controllers.field}'s method
 	}
 
 ### Overloading views
-You can maninpulate any of {@link Widgets.nlFokkezbForm.controllers.field}'s [view elements](https://github.com/FokkeZB/form/blob/master/views/field.xml) using the `$.row`, `$.label` and `$.control` references. You could even remove the label and control, but not the row since that will already be added to the table.
+You can maninpulate any of {@link Widgets.nlFokkezbForm.controllers.field}'s [view elements](https://github.com/FokkeZB/nl.fokkezb.form/blob/master/views/field.xml) using the `$.row`, `$.label` and `$.control` references. You could even remove the label and control, but not the row since that will already be added to the table.
 
 	(function constructor(args) {
 

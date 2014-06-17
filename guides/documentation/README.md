@@ -8,16 +8,16 @@ After reading Ronald Treur's article about [Duckumentation](http://www.tidev.io/
 
 ## GitHub pages
 
-I wanted to publish the documentation online with minimal effort. Since the widget lives on GitHub, using [GitHub pages](https://pages.github.com) was the logical choice. This requires the repo to have a [gh-pages](https://github.com/FokkeZB/form/tree/gh-pages) branch which will be served as a website.
+I wanted to publish the documentation online with minimal effort. Since the widget lives on GitHub, using [GitHub pages](https://pages.github.com) was the logical choice. This requires the repo to have a [gh-pages](https://github.com/FokkeZB/nl.fokkezb.form/tree/gh-pages) branch which will be served as a website.
 
 ## Working copies
 Because JSDuck generates most of the documentation from inline docblocks in the code, I have set up multiple working copies on my local machine as follows:
 
-- `~/form/master`: the [master](https://github.com/FokkeZB/form/tree/master) branch.
-- `~/form/gh-pages`: the [gh-pages](https://github.com/FokkeZB/form/tree/gh-pages) branch.
-- `~/form/test`: the [test](https://github.com/FokkeZB/form/tree/test) branch.
+- `~/form/master`: the [master](https://github.com/FokkeZB/nl.fokkezb.form/tree/master) branch.
+- `~/form/gh-pages`: the [gh-pages](https://github.com/FokkeZB/nl.fokkezb.form/tree/gh-pages) branch.
+- `~/form/test`: the [test](https://github.com/FokkeZB/nl.fokkezb.form/tree/test) branch.
 
-This way I can keep the `master` repo clean by having all `jsduck-*.json` files in the `gh-pages` repo, just like I do for [testing](#!/guide/testing). When I execute `$ jsduck` in the `gh-pages` branch it looks for code in `../master`, as the [jsduck.json](https://github.com/FokkeZB/form/blob/gh-pages/jsduck.json) file shows:
+This way I can keep the `master` repo clean by having all `jsduck-*.json` files in the `gh-pages` repo, just like I do for [testing](#!/guide/testing). When I execute `$ jsduck` in the `gh-pages` branch it looks for code in `../master`, as the [jsduck.json](https://github.com/FokkeZB/nl.fokkezb.form/blob/gh-pages/jsduck.json) file shows:
 
 	{
 	    "--title": "Alloy Form Widget - Documentation",
@@ -34,7 +34,7 @@ This way I can keep the `master` repo clean by having all `jsduck-*.json` files 
 
 ## Re-using README's
 
-To stay DRY, I have re-used the `master` branch's [README](https://github.com/FokkeZB/form/blob/master/README.md) as the welcome page as the [testing](#!/guide/testing) guide is the `test` branch's [README](https://github.com/FokkeZB/form/blob/test/README.md). I did need to disable `image_unused` warnings for this to work.
+To stay DRY, I have re-used the `master` branch's [README](https://github.com/FokkeZB/nl.fokkezb.form/blob/master/README.md) as the welcome page as the [testing](#!/guide/testing) guide is the `test` branch's [README](https://github.com/FokkeZB/nl.fokkezb.form/blob/test/README.md). I did need to disable `image_unused` warnings for this to work.
 
 	[{
 	  "title": "Widget: nl.fokkezb.form",
