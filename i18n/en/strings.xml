@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<string name="i18n_label">Label from strings.xml</string>
+  <string name="i18n_legend">Legend from strings.xml</string>
+</resources>

@@ -1,3 +1,0 @@
-<Alloy>
-  <TableView id="table" onClick="onTableClick" />
-</Alloy>

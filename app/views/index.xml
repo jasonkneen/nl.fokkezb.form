@@ -1,0 +1,14 @@
+<Alloy>
+
+  <!-- ROOT CONTROLLER VIEW -->
+	<Window>
+		<Widget id="form" src="nl.fokkezb.form" />
+	</Window>
+
+  <!-- VIEWS TO BE ADDED TO PARENTS IN CONTROLLER -->
+
+  <Button id="submit" onClick="onSubmitClick">Submit</Button>
+
+  <TableViewRow id="sectionRow" title="Custom row via section" />
+
+</Alloy>

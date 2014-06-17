@@ -1,0 +1,15 @@
+"Window": {
+  top: Alloy.Globals.top,
+	backgroundColor: 'white'
+}
+
+"#form": {
+  table: {
+    headerTitle: 'headerTitle of table set in TSS'
+  }
+}
+
+"#sectionRow": {
+  backgroundColor: '#000',
+  color: '#fff'
+}
