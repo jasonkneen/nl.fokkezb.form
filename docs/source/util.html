@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Widgets-nlFokkezbForm-lib-util'>/**
+</span> * Utilities.
+ *
+ * @class Widgets.nlFokkezbForm.lib.util
+ * @private
+ */
+
+exports.extractProperties = extractProperties;
+
+<span id='Widgets-nlFokkezbForm-lib-util-method-extractProperties'>/**
+</span> * Extracts properties out of arguments. Best understood by example:
+ *
+ *     @example
+ *     extractProperties({ label:&#39;foo&#39; }, &#39;label&#39;, &#39;text&#39;);
+ *     // { text:&#39;foo&#39; }
+ *     
+ *     extractProperties({ labelid:&#39;foo&#39; }, &#39;label&#39;, &#39;text&#39;);
+ *     // { text: L(&#39;foo&#39;) }
+ *     
+ *     extractProperties({ label:{ text:&#39;foo&#39;, color:&#39;red&#39; } }, &#39;label&#39;, &#39;text&#39;);
+ *     // { text:&#39;foo&#39;, color:&#39;red&#39; }
+ *
+ * @param  {Object} arguments  Arguments in which the key can be found.
+ * @param  {String} key        Property or property+id to find in arguments
+ * @param  {String} string     Property or property+id to set in properties
+ * @return {Object}            Extracted properties
+ */
+function extractProperties(arguments, key, string) {
+  var properties;
+
+  var keyId = key + &#39;id&#39;;
+
+  if (typeof arguments[key] === &#39;object&#39;) {
+    properties = arguments[key];
+  } else {
+    properties = {};
+
+    if (arguments[key]) {
+      properties[string] = arguments[key];
+
+    } else if (arguments[keyId]) {
+      properties[string] = L(arguments[keyId]);
+    }
+  }
+
+  delete arguments[key];
+  delete arguments[keyId];
+
+  return properties;
+};</pre>
+</body>
+</html>

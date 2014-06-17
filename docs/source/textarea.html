@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Widgets-nlFokkezbForm-controllers-textarea'>/**
+</span> * Controller for the textarea field type.
+ *
+ * This type exposes a `Ti.UI.TextArea`.
+ *
+ * @class Widgets.nlFokkezbForm.controllers.textarea
+ * @extends Widgets.nlFokkezbForm.controllers.field
+ * @xtype text
+ * @requires Widgets.nlFokkezbForm.lib.util
+ */
+
+var util = require(WPATH(&#39;util&#39;));
+
+exports.baseController = &#39;../widgets/nl.fokkezb.form/controllers/field&#39;;
+
+<span id='Widgets-nlFokkezbForm-controllers-textarea-method-Controller'>/**
+</span> * Constructor.
+ *
+ * @constructor
+ * @method Controller
+ * @param args Arguments which will also be used to call {@link Widgets.nlFokkezbForm.controllers.field#Controller}.
+ * @param {Object} [args.input] Properties to apply to the `Ti.UI.TextArea`, e.g. keyboard type and toolbar.
+ */
+(function constructor(args) {
+
+  // align our label to the top
+  $.label.top = 10;
+
+  // input properties to apply
+  if (args.input) {
+    $.input.applyProperties(args.input);
+  }
+
+  // add the input to the row
+  $.setInput($.input);
+
+})(arguments[0]);</pre>
+</body>
+</html>

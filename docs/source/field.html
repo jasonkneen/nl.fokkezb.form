@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Widgets-nlFokkezbForm-controllers-field'>/**
+</span> * Base Controller for all field types.
+ *
+ * See the [Fields](#!/guide/types) guide.
+ *
+ * @class Widgets.nlFokkezbForm.controllers.field
+ * @requires Widgets.nlFokkezbForm.lib.util
+ */
+
+var util = require(WPATH(&#39;util&#39;));
+
+<span id='Widgets-nlFokkezbForm-controllers-field-property-validator'>/**
+</span> * @type {Function} Function to use as validator, e.g.:
+ *
+ *     function(value) {
+ *       return form.validator.isEmail(value) &amp;&amp; !value.indexOf(&#39;hotmail.com&#39;);
+ *     }
+ */
+$.validator = null;
+
+<span id='Widgets-nlFokkezbForm-controllers-field-property-required'>/**
+</span> * @type {Boolean} Whether the field is required.
+ */
+$.required = false;
+
+$.setInput = setInput;
+$.focus = focus;
+$.setValue = setValue;
+$.getValue = getValue;
+$.isValid = isValid;
+$.showError = showError;
+
+// keep a reference to our controllerParam for showError()
+// when we are extended they will change to our child&#39;s.
+var controllerParam = {
+  widgetId: $.__widgetId,
+  name: $.__controllerPath
+};
+
+<span id='Widgets-nlFokkezbForm-controllers-field-method-Controller'>/**
+</span> * Constructor for the row.
+ *
+ * @constructor
+ * @method Controller
+ * @param args Arguments passed to the controller.
+ * @param {Object|String} [args.label]  Properties to apply to the `Ti.UI.Label` or value for the text property.
+ * @param {String} args.labelid         String name to use with `L()` for the `Ti.UI.Label` text property.
+ */
+(function constructor(args) {
+
+  // for the table&#39;s singletap event listener
+  $.row._name = args.name;
+
+  if (args.validator) {
+    $.validator = args.validator;
+  }
+
+  $.required = args.required === true;
+
+  if (args.value !== undefined) {
+    $.setValue(args.value);
+  }
+
+  var label = util.extractProperties(args, &#39;label&#39;, &#39;text&#39;);
+
+  // label properties to apply
+  if (_.size(label) &gt; 0) {
+    $.label.applyProperties(label);
+  }
+
+  // position the controls right of the label, where ever that is.
+  $.control.left = $.label.width;
+
+})(arguments[0]);
+
+<span id='Widgets-nlFokkezbForm-controllers-field-method-setInput'>/**
+</span> * Set the input view in the control wrapper
+ *
+ * @param {Object} input Some kind of input, e.g. `Ti.UI.TextField`.
+ */
+function setInput(input) {
+
+  // if a custom type uses another id we make the ref ourselves
+  if (input.id !== &#39;input&#39;) {
+    $.input = input;
+  }
+
+  $.control.add($.input);
+}
+
+<span id='Widgets-nlFokkezbForm-controllers-field-method-showError'>/**
+</span> * Visually mark the row as having an error.
+ *
+ * @param {Boolean} show   Show or hide the mark.
+ */
+function showError(show) {
+
+  if (show) {
+    Alloy.addClass(controllerParam, $.row, &#39;errorRow&#39;);
+    Alloy.addClass(controllerParam, $.label, &#39;errorLabel&#39;);
+
+  } else {
+    Alloy.removeClass(controllerParam, $.row, &#39;errorRow&#39;);
+    Alloy.removeClass(controllerParam, $.label, &#39;errorLabel&#39;);
+  }
+}
+
+<span id='Widgets-nlFokkezbForm-controllers-field-method-focus'>/**
+</span> * Sets the focus on the input.
+ *
+ * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
+ */
+function focus() {
+  $.input.focus();
+}
+
+<span id='Widgets-nlFokkezbForm-controllers-field-method-getValue'>/**
+</span> * Get the value of the field.
+ *
+ * @return {String} Value of the field.
+ */
+function getValue() {
+  return $.input.value;
+}
+
+<span id='Widgets-nlFokkezbForm-controllers-field-method-setValue'>/**
+</span> * Set the value of the field.
+ *
+ * @param  {String} [value] Value to set or `undefined` to unset.
+ */
+function setValue(value) {
+  $.input.value = value;
+}
+
+<span id='Widgets-nlFokkezbForm-controllers-field-method-isValid'>/**
+</span> * Validates the current value.
+ *
+ * @return {Boolean|String} Returns `true` if valid or an error message if not.
+ */
+function isValid() {
+  var value = $.getValue();
+  var valid = true;
+
+  if ($.required &amp;&amp; !value) {
+    valid = false;
+
+  } else if ($.validator) {
+    valid = $.validator(value);
+  }
+
+  $.showError(!valid);
+
+  return valid;
+}</pre>
+</body>
+</html>

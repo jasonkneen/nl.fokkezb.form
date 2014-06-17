@@ -1,62 +1,74 @@
-# Fieldsets
-Fieldsets group fields `Ti.UI.TableViewRow` in a `Ti.UI.TableViewSection`.
+# Forms
+The form is a `Ti.UI.TableView` holding a `Ti.UI.TableViewSection` for each fieldset and a `Ti.UI.TableViewRow` for each field. 
 
-## All forms require a fieldset..
-Fields are always wrapped in a fieldset. Fieldsets create a [`Ti.UI.TableViewSection`](http://docs.appcelerator.com/titanium/latest/#!/api/Titanium.UI.TableViewSection) holding one or more fields, each creating a [`Ti.UI.TableViewRow`](http://docs.appcelerator.com/titanium/latest/#!/api/Titanium.UI.TableViewRow). And like all [TableViews](http://docs.appcelerator.com/titanium/latest/#!/guide/TableViews) require at least one section, so do our forms.
+## Create
+See [Getting Started](#!/guide/getting_started) to learn how to create a form.
 
-## But it can create one for you
-If you don't have a `fieldsets` property in the root of your config, but you do have a `fields` property, then the widget will wrap it in a fieldset for you so that:
+## Values
+You can pass initial values when you [initialize](#!/guide/getting_started-section-2.-initializing-the-widget) the widget using the `values` property:
 
-	{
-		fields: [{
-			name: 'name',
-			label: 'Your name',
-			type: 'text'
-		}]
-	}
-	
-Equals:
-
-	{
+	var form = Alloy.createWidget('nl.fokkezb.nl', {
 		fieldsets: [{
+			legend: 'My form',			
 			fields: [{
 				name: 'name',
 				label: 'Your name',
 				type: 'text'
 			}]
-		}]
-	}
-	
-## Setting a legend
-The `legend` property sets the [`headerTitle`](http://docs.appcelerator.com/titanium/latest/#!/api/Titanium.UI.TableViewSection-property-headerTitle) property of the `Ti.UI.TableViewSection`.
+		}],
+		values: {
+			name: 'Jeff'
+		}
+	});
 
-	{
-		fieldsets: [{
-			legend: 'My form',
-			fields: [{
-				name: 'name',
-				label: 'Your name',
-				type: 'text'
-			}]
-		}]
+After init you can set them like this:
+
+	form.setValues({
+		name: 'Jeff'
+	});
+
+	var values = form.getValues();
+
+	console.debug(values.name); // will show 'Jeff';
+
+To set or get the value of an individual field:
+
+	var fieldCtrl = form.getField('name');
+
+	fieldCtrl.setValue('Jeff');
+
+	var value = fieldCtrl.getValue();
+
+	console.debug(value); // will show 'Jeff';
+
+## Validate
+You can validate all fields by calling {@link Widgets.nlFokkezbForm.controllers.widget#isValid}. This will call {@link Widgets.nlFokkezbForm.controllers.field#isValid} on all fields and return either `true` or `false`. The rows of invalid fields will get a reddish `backgroundColor`.
+
+	if (form.isValid() === false) {
+		alert('Correct the red fields please!');
 	}
-	
+
+To validate an individual field:
+
+	var fieldCtrl = form.getField('name');
+
+	if (fieldCtrl.isValid() === false) {
+		alert('Your name please!');
+	}
+
 ## Customize
-You can further customize the `Ti.UI.TableViewSection` in 2 ways:
+You can customize the `Ti.UI.TableView` in 2 ways:
 
 ### Apply properties
-Set any `Ti.UI.TableViewSection` properties via fieldset's `section` property:
+Set any `Ti.UI.TableView` properties via the `table` property:
 
 	{
+		table: {
+			top: 100,
+			headerView: Ti.UI.createView( .. ),
+			footerTitle: 'Some text after all fieldsets'
+		},
 		fieldsets: [{
-			section: {
-				headerView: Ti.UI.createView( .. ),
-				footerTitle: 'Some text after the fields',
-				classes: ['customClass'], // section is created by $.UI.create()
-				rows: [
-					Ti.UI.createTableViewRow( .. ) // field rows will be appended
-				]
-			},
 			fields: [{
 				name: 'name',
 				label: 'Your name',
@@ -66,4 +78,4 @@ Set any `Ti.UI.TableViewSection` properties via fieldset's `section` property:
 	}
 	
 ### Override style
-The `Ti.UI.TableViewSection` is created using a `.section` class, unless you have set it to something else. As of Alloy 1.4.0 you can use this class to [override the style using a theme](https://jira.appcelerator.org/browse/ALOY-378) for the widget's `widget.tss` file.
+The `Ti.UI.TableView` is created using a `.table` class. As of Alloy 1.4.0 you can use this class to [override the style using a theme](https://jira.appcelerator.org/browse/ALOY-378) for the widget's `widget.tss` file.

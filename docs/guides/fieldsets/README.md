@@ -8,23 +8,31 @@ Fields are always wrapped in a fieldset. Fieldsets create a [`Ti.UI.TableViewSec
 If you don't have a `fieldsets` property in the root of your config, but you do have a `fields` property, then the widget will wrap it in a fieldset for you so that:
 
 	{
+		legend: 'My form',
 		fields: [{
 			name: 'name',
 			label: 'Your name',
 			type: 'text'
-		}]
+		}],
+		values: {
+			name: 'Jeff'
+		}
 	}
 	
 Equals:
 
 	{
 		fieldsets: [{
+			legend: 'My form',
 			fields: [{
 				name: 'name',
 				label: 'Your name',
 				type: 'text'
 			}]
-		}]
+		}],
+		values: {
+			name: 'Jeff'
+		}
 	}
 	
 ## Setting a legend
@@ -40,12 +48,14 @@ The `legend` property sets the [`headerTitle`](http://docs.appcelerator.com/tita
 			}]
 		}]
 	}
+
+You can also use `legendid` in which case it will be processed by `L()`.
 	
 ## Customize
 You can further customize the `Ti.UI.TableViewSection` in 2 ways:
 
 ### Apply properties
-Set any `Ti.UI.TableViewSection` properties via fieldset's `section` property:
+Set any `Ti.UI.TableViewSection` properties via the fieldset's `section` property:
 
 	{
 		fieldsets: [{

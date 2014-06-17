@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Widgets-nlFokkezbForm-lib-validator'>/**
+</span> * The NPM [validator](https://www.npmjs.org/package/validator) package.
+ *
+ *     Copyright (c) 2014 Chris O&#39;Hara &lt;cohara87@gmail.com&gt;
+ *  
+ *     Permission is hereby granted, free of charge, to any person obtaining
+ *     a copy of this software and associated documentation files (the
+ *     &quot;Software&quot;), to deal in the Software without restriction, including
+ *     without limitation the rights to use, copy, modify, merge, publish,
+ *     distribute, sublicense, and/or sell copies of the Software, and to
+ *     permit persons to whom the Software is furnished to do so, subject to
+ *     the following conditions:
+ *  
+ *     The above copyright notice and this permission notice shall be
+ *     included in all copies or substantial portions of the Software.
+ *  
+ *     THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND,
+ *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *     MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ *     LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ *     OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ *     WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * @class Widgets.nlFokkezbForm.lib.validator
+ */
+
+(function (name, definition) {
+    if (typeof module !== &#39;undefined&#39;) {
+        module.exports = definition();
+    } else if (typeof define === &#39;function&#39; &amp;&amp; typeof define.amd === &#39;object&#39;) {
+        define(definition);
+    } else {
+        this[name] = definition();
+    }
+})(&#39;validator&#39;, function (validator) {
+
+    &#39;use strict&#39;;
+
+    validator = { version: &#39;3.16.0&#39; };
+
+    var email = /^((([a-z]|\d|[!#\$%&amp;&#39;\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&amp;&#39;\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i;
+
+    var creditCard = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
+
+    var isbn10Maybe = /^(?:[0-9]{9}X|[0-9]{10})$/
+      , isbn13Maybe = /^(?:[0-9]{13})$/;
+
+    var ipv4Maybe = /^(\d?\d?\d)\.(\d?\d?\d)\.(\d?\d?\d)\.(\d?\d?\d)$/
+      , ipv6 = /^::|^::1|^([a-fA-F0-9]{1,4}::?){1,7}([a-fA-F0-9]{1,4})$/;
+
+    var uuid = {
+        &#39;3&#39;: /^[0-9A-F]{8}-[0-9A-F]{4}-3[0-9A-F]{3}-[0-9A-F]{4}-[0-9A-F]{12}$/i
+      , &#39;4&#39;: /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
+      , &#39;5&#39;: /^[0-9A-F]{8}-[0-9A-F]{4}-5[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
+      , all: /^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$/i
+    };
+
+    var alpha = /^[a-zA-Z]+$/
+      , alphanumeric = /^[a-zA-Z0-9]+$/
+      , numeric = /^-?[0-9]+$/
+      , int = /^(?:-?(?:0|[1-9][0-9]*))$/
+      , float = /^(?:-?(?:[0-9]+))?(?:\.[0-9]*)?(?:[eE][\+\-]?(?:[0-9]+))?$/
+      , hexadecimal = /^[0-9a-fA-F]+$/
+      , hexcolor = /^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+
+    var ascii = /^[\x00-\x7F]+$/
+      , multibyte = /[^\x00-\x7F]/
+      , fullWidth = /[^\u0020-\u007E\uFF61-\uFF9F\uFFA0-\uFFDC\uFFE8-\uFFEE0-9a-zA-Z]/
+      , halfWidth = /[\u0020-\u007E\uFF61-\uFF9F\uFFA0-\uFFDC\uFFE8-\uFFEE0-9a-zA-Z]/;
+
+    var surrogatePair = /[\uD800-\uDBFF][\uDC00-\uDFFF]/;
+
+    var base64 = /^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{4})$/;
+
+    validator.extend = function (name, fn) {
+        validator[name] = function () {
+            var args = Array.prototype.slice.call(arguments);
+            args[0] = validator.toString(args[0]);
+            return fn.apply(validator, args);
+        };
+    };
+
+    //Right before exporting the validator object, pass each of the builtins
+    //through extend() so that their first argument is coerced to a string
+    validator.init = function () {
+        for (var name in validator) {
+            if (typeof validator[name] !== &#39;function&#39; || name === &#39;toString&#39; ||
+                    name === &#39;toDate&#39; || name === &#39;extend&#39; || name === &#39;init&#39;) {
+                continue;
+            }
+            validator.extend(name, validator[name]);
+        }
+    };
+
+    validator.toString = function (input) {
+        if (typeof input === &#39;object&#39; &amp;&amp; input !== null &amp;&amp; input.toString) {
+            input = input.toString();
+        } else if (input === null || typeof input === &#39;undefined&#39; || (isNaN(input) &amp;&amp; !input.length)) {
+            input = &#39;&#39;;
+        } else if (typeof input !== &#39;string&#39;) {
+            input += &#39;&#39;;
+        }
+        return input;
+    };
+
+    validator.toDate = function (date) {
+        if (Object.prototype.toString.call(date) === &#39;[object Date]&#39;) {
+            return date;
+        }
+        date = Date.parse(date);
+        return !isNaN(date) ? new Date(date) : null;
+    };
+
+    validator.toFloat = function (str) {
+        return parseFloat(str);
+    };
+
+    validator.toInt = function (str, radix) {
+        return parseInt(str, radix || 10);
+    };
+
+    validator.toBoolean = function (str, strict) {
+        if (strict) {
+            return str === &#39;1&#39; || str === &#39;true&#39;;
+        }
+        return str !== &#39;0&#39; &amp;&amp; str !== &#39;false&#39; &amp;&amp; str !== &#39;&#39;;
+    };
+
+    validator.equals = function (str, comparison) {
+        return str === validator.toString(comparison);
+    };
+
+    validator.contains = function (str, elem) {
+        return str.indexOf(validator.toString(elem)) &gt;= 0;
+    };
+
+    validator.matches = function (str, pattern, modifiers) {
+        if (Object.prototype.toString.call(pattern) !== &#39;[object RegExp]&#39;) {
+            pattern = new RegExp(pattern, modifiers);
+        }
+        return pattern.test(str);
+    };
+
+    validator.isEmail = function (str) {
+        return email.test(str);
+    };
+
+    var default_url_options = {
+        protocols: [ &#39;http&#39;, &#39;https&#39;, &#39;ftp&#39; ]
+      , require_tld: true
+      , require_protocol: false
+      , allow_underscores: false
+    };
+
+    validator.isURL = function (str, options) {
+        if (!str || str.length &gt;= 2083) {
+            return false;
+        }
+        options = merge(options, default_url_options);
+        var separators = &#39;-?-?&#39; + (options.allow_underscores ? &#39;_?&#39; : &#39;&#39;);
+        var url = new RegExp(&#39;^(?!mailto:)(?:(?:&#39; + options.protocols.join(&#39;|&#39;) + &#39;)://)&#39; + (options.require_protocol ? &#39;&#39; : &#39;?&#39;) + &#39;(?:\\S+(?::\\S*)?@)?(?:(?:(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[0-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:www.)?)?(?:(?:[a-z\\u00a1-\\uffff0-9]+&#39; + separators + &#39;)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]+&#39; + separators + &#39;)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))&#39; + (options.require_tld ? &#39;&#39; : &#39;?&#39;) + &#39;)|localhost)(?::(\\d{1,5}))?(?:(?:/|\\?|#)[^\\s]*)?$&#39;, &#39;i&#39;);
+        var match = str.match(url)
+          , port = match ? match[1] : 0;
+        return !!(match &amp;&amp; (!port || (port &gt; 0 &amp;&amp; port &lt;= 65535)));
+    };
+
+    validator.isIP = function (str, version) {
+        version = validator.toString(version);
+        if (!version) {
+            return validator.isIP(str, 4) || validator.isIP(str, 6);
+        } else if (version === &#39;4&#39;) {
+            if (!ipv4Maybe.test(str)) {
+                return false;
+            }
+            var parts = str.split(&#39;.&#39;).sort();
+            return parts[3] &lt;= 255;
+        }
+        return version === &#39;6&#39; &amp;&amp; ipv6.test(str);
+    };
+
+    validator.isAlpha = function (str) {
+        return alpha.test(str);
+    };
+
+    validator.isAlphanumeric = function (str) {
+        return alphanumeric.test(str);
+    };
+
+    validator.isNumeric = function (str) {
+        return numeric.test(str);
+    };
+
+    validator.isHexadecimal = function (str) {
+        return hexadecimal.test(str);
+    };
+
+    validator.isHexColor = function (str) {
+        return hexcolor.test(str);
+    };
+
+    validator.isLowercase = function (str) {
+        return str === str.toLowerCase();
+    };
+
+    validator.isUppercase = function (str) {
+        return str === str.toUpperCase();
+    };
+
+    validator.isInt = function (str) {
+        return int.test(str);
+    };
+
+    validator.isFloat = function (str) {
+        return str !== &#39;&#39; &amp;&amp; float.test(str);
+    };
+
+    validator.isDivisibleBy = function (str, num) {
+        return validator.toFloat(str) % validator.toInt(num) === 0;
+    };
+
+    validator.isNull = function (str) {
+        return str.length === 0;
+    };
+
+    validator.isLength = function (str, min, max) {
+        var surrogatePairs = str.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g) || [];
+        var len = str.length - surrogatePairs.length;
+        return len &gt;= min &amp;&amp; (typeof max === &#39;undefined&#39; || len &lt;= max);
+    };
+
+    validator.isByteLength = function (str, min, max) {
+        return str.length &gt;= min &amp;&amp; (typeof max === &#39;undefined&#39; || str.length &lt;= max);
+    };
+
+    validator.isUUID = function (str, version) {
+        var pattern = uuid[version ? version : &#39;all&#39;];
+        return pattern &amp;&amp; pattern.test(str);
+    };
+
+    validator.isDate = function (str) {
+        return !isNaN(Date.parse(str));
+    };
+
+    validator.isAfter = function (str, date) {
+        var comparison = validator.toDate(date || new Date())
+          , original = validator.toDate(str);
+        return !!(original &amp;&amp; comparison &amp;&amp; original &gt; comparison);
+    };
+
+    validator.isBefore = function (str, date) {
+        var comparison = validator.toDate(date || new Date())
+          , original = validator.toDate(str);
+        return original &amp;&amp; comparison &amp;&amp; original &lt; comparison;
+    };
+
+    validator.isIn = function (str, options) {
+        if (!options || typeof options.indexOf !== &#39;function&#39;) {
+            return false;
+        }
+        if (Object.prototype.toString.call(options) === &#39;[object Array]&#39;) {
+            var array = [];
+            for (var i = 0, len = options.length; i &lt; len; i++) {
+                array[i] = validator.toString(options[i]);
+            }
+            options = array;
+        }
+        return options.indexOf(str) &gt;= 0;
+    };
+
+    validator.isCreditCard = function (str) {
+        var sanitized = str.replace(/[^0-9]+/g, &#39;&#39;);
+        if (!creditCard.test(sanitized)) {
+            return false;
+        }
+        var sum = 0, digit, tmpNum, shouldDouble;
+        for (var i = sanitized.length - 1; i &gt;= 0; i--) {
+            digit = sanitized.substring(i, (i + 1));
+            tmpNum = parseInt(digit, 10);
+            if (shouldDouble) {
+                tmpNum *= 2;
+                if (tmpNum &gt;= 10) {
+                    sum += ((tmpNum % 10) + 1);
+                } else {
+                    sum += tmpNum;
+                }
+            } else {
+                sum += tmpNum;
+            }
+            shouldDouble = !shouldDouble;
+        }
+        return !!((sum % 10) === 0 ? sanitized : false);
+    };
+
+    validator.isISBN = function (str, version) {
+        version = validator.toString(version);
+        if (!version) {
+            return validator.isISBN(str, 10) || validator.isISBN(str, 13);
+        }
+        var sanitized = str.replace(/[\s-]+/g, &#39;&#39;)
+          , checksum = 0, i;
+        if (version === &#39;10&#39;) {
+            if (!isbn10Maybe.test(sanitized)) {
+                return false;
+            }
+            for (i = 0; i &lt; 9; i++) {
+                checksum += (i + 1) * sanitized.charAt(i);
+            }
+            if (sanitized.charAt(9) === &#39;X&#39;) {
+                checksum += 10 * 10;
+            } else {
+                checksum += 10 * sanitized.charAt(9);
+            }
+            if ((checksum % 11) === 0) {
+                return !!sanitized;
+            }
+        } else  if (version === &#39;13&#39;) {
+            if (!isbn13Maybe.test(sanitized)) {
+                return false;
+            }
+            var factor = [ 1, 3 ];
+            for (i = 0; i &lt; 12; i++) {
+                checksum += factor[i % 2] * sanitized.charAt(i);
+            }
+            if (sanitized.charAt(12) - ((10 - (checksum % 10)) % 10) === 0) {
+                return !!sanitized;
+            }
+        }
+        return false;
+    };
+
+    validator.isJSON = function (str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    };
+
+    validator.isMultibyte = function (str) {
+        return multibyte.test(str);
+    };
+
+    validator.isAscii = function (str) {
+        return ascii.test(str);
+    };
+
+    validator.isFullWidth = function (str) {
+        return fullWidth.test(str);
+    };
+
+    validator.isHalfWidth = function (str) {
+        return halfWidth.test(str);
+    };
+
+    validator.isVariableWidth = function (str) {
+        return fullWidth.test(str) &amp;&amp; halfWidth.test(str);
+    };
+
+    validator.isSurrogatePair = function (str) {
+        return surrogatePair.test(str);
+    };
+
+    validator.isBase64 = function (str) {
+        return base64.test(str);
+    };
+
+    validator.ltrim = function (str, chars) {
+        var pattern = chars ? new RegExp(&#39;^[&#39; + chars + &#39;]+&#39;, &#39;g&#39;) : /^\s+/g;
+        return str.replace(pattern, &#39;&#39;);
+    };
+
+    validator.rtrim = function (str, chars) {
+        var pattern = chars ? new RegExp(&#39;[&#39; + chars + &#39;]+$&#39;, &#39;g&#39;) : /\s+$/g;
+        return str.replace(pattern, &#39;&#39;);
+    };
+
+    validator.trim = function (str, chars) {
+        var pattern = chars ? new RegExp(&#39;^[&#39; + chars + &#39;]+|[&#39; + chars + &#39;]+$&#39;, &#39;g&#39;) : /^\s+|\s+$/g;
+        return str.replace(pattern, &#39;&#39;);
+    };
+
+    validator.escape = function (str) {
+        return (str.replace(/&amp;/g, &#39;&amp;amp;&#39;)
+            .replace(/&quot;/g, &#39;&amp;quot;&#39;)
+            .replace(/&lt;/g, &#39;&amp;lt;&#39;)
+            .replace(/&gt;/g, &#39;&amp;gt;&#39;));
+    };
+
+    validator.stripLow = function (str, keep_new_lines) {
+        var chars = keep_new_lines ? &#39;\x00-\x09\x0B\x0C\x0E-\x1F\x7F&#39; : &#39;\x00-\x1F\x7F&#39;;
+        return validator.blacklist(str, chars);
+    };
+
+    validator.whitelist = function (str, chars) {
+        return str.replace(new RegExp(&#39;[^&#39; + chars + &#39;]+&#39;, &#39;g&#39;), &#39;&#39;);
+    };
+
+    validator.blacklist = function (str, chars) {
+        return str.replace(new RegExp(&#39;[&#39; + chars + &#39;]+&#39;, &#39;g&#39;), &#39;&#39;);
+    };
+
+    function merge(obj, defaults) {
+        obj = obj || {};
+        for (var key in defaults) {
+            if (typeof obj[key] === &#39;undefined&#39;) {
+                obj[key] = defaults[key];
+            }
+        }
+        return obj;
+    }
+
+    validator.init();
+
+    return validator;
+
+});
+</pre>
+</body>
+</html>

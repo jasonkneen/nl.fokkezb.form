@@ -1,69 +1,71 @@
-# Fieldsets
-Fieldsets group fields `Ti.UI.TableViewRow` in a `Ti.UI.TableViewSection`.
+# Types
 
-## All forms require a fieldset..
-Fields are always wrapped in a fieldset. Fieldsets create a [`Ti.UI.TableViewSection`](http://docs.appcelerator.com/titanium/latest/#!/api/Titanium.UI.TableViewSection) holding one or more fields, each creating a [`Ti.UI.TableViewRow`](http://docs.appcelerator.com/titanium/latest/#!/api/Titanium.UI.TableViewRow). And like all [TableViews](http://docs.appcelerator.com/titanium/latest/#!/guide/TableViews) require at least one section, so do our forms.
+At the moment the widget comes with these built-in types:
 
-## But it can create one for you
-If you don't have a `fieldsets` property in the root of your config, but you do have a `fields` property, then the widget will wrap it in a fieldset for you so that:
+- {@link Widgets.nlFokkezbForm.controllers.text text}
+- {@link Widgets.nlFokkezbForm.controllers.textarea textarea}
+- {@link Widgets.nlFokkezbForm.controllers.switch switch}
 
-	{
-		fields: [{
-			name: 'name',
-			label: 'Your name',
-			type: 'text'
-		}]
+## Using types
+See [Fields](#!/guide/fields-section-type) to learn how to use a built-in or custom type.
+
+## Adding types
+By leaving most of the common views and logic in {@link Widgets.nlFokkezbForm.controllers.field} a new type's controller can be as simple as:
+
+	exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
+
+	(function constructor(args) {
+
+	  // input properties to apply
+	  if (args.input) {
+	    $.input.applyProperties(args.input);
+	  }
+
+	  $.setInput($.input);
+
+	})(arguments[0]);
+ 
+And a view not much more then:
+
+	<Alloy>
+	  <Slider id="input" />
+	</Alloy>
+
+### baseController
+The strange `baseController` path is a workaround for [TC-4280](https://jira.appcelerator.org/browse/TC-4280) to cope with Alloy prepending `alloy/controllers/`.
+
+### applyProperties
+Please conform to how the built-ins work by allowing the user to apply properties to your type's (main) input view using the `input` property.
+
+### setInput
+You need to call {@link Widgets.nlFokkezbForm.controllers.field#setInput} to add your type's input view to the row.
+
+### Overloading controller methods
+You can overload any of {@link Widgets.nlFokkezbForm.controllers.field}'s methods:
+
+	/**
+	 * A switch is always valid.
+	 *
+	 * @return {Boolean} Always `true`.
+	 */
+	$.isValid = function isValid() {
+	  return true;
 	}
-	
-Equals:
 
-	{
-		fieldsets: [{
-			fields: [{
-				name: 'name',
-				label: 'Your name',
-				type: 'text'
-			}]
-		}]
-	}
-	
-## Setting a legend
-The `legend` property sets the [`headerTitle`](http://docs.appcelerator.com/titanium/latest/#!/api/Titanium.UI.TableViewSection-property-headerTitle) property of the `Ti.UI.TableViewSection`.
+### Overloading views
+You can maninpulate any of {@link Widgets.nlFokkezbForm.controllers.field}'s [view elements](https://github.com/FokkeZB/form/blob/master/views/field.xml) using the `$.row`, `$.label` and `$.control` references. You could even remove the label and control, but not the row since that will already be added to the table.
 
-	{
-		fieldsets: [{
-			legend: 'My form',
-			fields: [{
-				name: 'name',
-				label: 'Your name',
-				type: 'text'
-			}]
-		}]
-	}
-	
-## Customize
-You can further customize the `Ti.UI.TableViewSection` in 2 ways:
+	(function constructor(args) {
 
-### Apply properties
-Set any `Ti.UI.TableViewSection` properties via fieldset's `section` property:
+	  // align our label to the top
+	  $.label.top = 10;
 
-	{
-		fieldsets: [{
-			section: {
-				headerView: Ti.UI.createView( .. ),
-				footerTitle: 'Some text after the fields',
-				classes: ['customClass'], // section is created by $.UI.create()
-				rows: [
-					Ti.UI.createTableViewRow( .. ) // field rows will be appended
-				]
-			},
-			fields: [{
-				name: 'name',
-				label: 'Your name',
-				type: 'text'
-			}]
-		}]
-	}
-	
-### Override style
-The `Ti.UI.TableViewSection` is created using a `.section` class, unless you have set it to something else. As of Alloy 1.4.0 you can use this class to [override the style using a theme](https://jira.appcelerator.org/browse/ALOY-378) for the widget's `widget.tss` file.
+	  // input properties to apply
+	  if (args.input) {
+	    $.input.applyProperties(args.input);
+	  }
+
+	  // add the input to the row
+	  $.setInput($.input);
+
+	})(arguments[0]);

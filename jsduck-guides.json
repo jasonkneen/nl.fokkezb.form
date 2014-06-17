@@ -25,5 +25,15 @@
     "url": "guides/types",
     "title": "Types",
     "description": "Using and creating field types."
+  }, {
+    "name": "testing",
+    "url": "../test",
+    "title": "Testing",
+    "description": "Information about the test-branch."
+  }, {
+    "name": "documentation",
+    "url": "guides/documentation",
+    "title": "Documentation",
+    "description": "Documenting the documentation."
   }]
 }]

@@ -8,6 +8,7 @@
     "--categories": "jsduck-categories.json",
     "--guides": "jsduck-guides.json",
     "--images": "doc-resources",
+    "--warnings": "-image_unused",
     "--external": [
         "Alloy",
         "Backbone.*",

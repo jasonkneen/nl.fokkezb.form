@@ -18,48 +18,50 @@
   <pre class="prettyprint lang-js"><span id='Widgets-nlFokkezbForm-controllers-text'>/**
 </span> * Controller for the text field type.
  *
- * The text field type is a `Ti.UI.Textfield`.
+ * This type exposes a `Ti.UI.Textfield`.
  *
  * @class Widgets.nlFokkezbForm.controllers.text
+ * @extends Widgets.nlFokkezbForm.controllers.field
  * @xtype text
- * @requires Widgets.nlFokkezbForm.controllers.row
  */
 
-$.getValue = getValue;
-$.setValue = setValue;
-
-$.focus = focus;
+exports.baseController = &#39;../widgets/nl.fokkezb.form/controllers/field&#39;;
 
 <span id='Widgets-nlFokkezbForm-controllers-text-method-Controller'>/**
-</span> * Constructor for the text field type.
+</span> * Constructor.
  *
  * @constructor
  * @method Controller
- * @param args Arguments for the controller, which it in turn will also use to call {@link Widgets.nlFokkezbForm.controllers.row#init}.
- * @param {Object} [args.input] Properties to apply to the `Ti.UI.TextField`, e.g. keyboard type and toolbar.
- * @param {String} [args.value] Value to set for the field.
+ * @param args Arguments which will also be used to call {@link Widgets.nlFokkezbForm.controllers.field#Controller}.
+ * @param {Object} [args.input]     Properties to apply to the `Ti.UI.TextField`, e.g. keyboard type and toolbar.
+ * @param {String} [args.hinttext]  Hint text to set on the `Ti.UI.TextField`.
+ * @param {String} [args.format]    A format triggers different behavior, properties etc, e.g. &#39;email&#39;.
  */
 (function constructor(args) {
-  var input;
+
+  var inputProp;
 
   // user can pass input args
-  input = args.input || {};
+  inputProp = args.input || {};
   delete args.input;
 
-  _.each([&#39;value&#39;, &#39;hinttext&#39;], function(property) {
+  _.each([&#39;hinttext&#39;], function(property) {
 
     if (_.has(args, property)) {
-      input[property] = args[property];
+      inputProp[property] = args[property];
       delete args[property];
     }
 
   });
 
+  // a string format is given
   if (args.format) {
 
     switch (args.format) {
       case &#39;email&#39;:
-        input.keyboardType = Ti.UI.KEYBOARD_EMAIL;
+        inputProp.keyboardType = inputProp.keyboardType || Ti.UI.KEYBOARD_EMAIL;
+        inputProp.autocapitalization = inputProp.autocapitalization || Ti.UI.TEXT_AUTOCAPITALIZATION_NONE;
+        inputProp.autocorrect = inputProp.autocorrect === true;
         break;
     }
 
@@ -67,39 +69,13 @@ $.focus = focus;
   }
 
   // input properties to apply
-  if (_.size(input) &gt; 0) {
-    $.input.applyProperties(input);
+  if (_.size(inputProp) &gt; 0) {
+    $.input.applyProperties(inputProp);
   }
 
-  $.row.init(args);
+  // add the input to the row
+  $.setInput($.input);
 
-})(arguments[0]);
-
-<span id='Widgets-nlFokkezbForm-controllers-text-method-getValue'>/**
-</span> * Get the value of the field.
- *
- * @return {String} Value of the field.
- */
-function getValue() {
-  return $.input.value;
-}
-
-<span id='Widgets-nlFokkezbForm-controllers-text-method-setValue'>/**
-</span> * Set the value of the field.
- *
- * @param  {String} [value] Value to set or `undefined` to unset.
- */
-function setValue(value) {
-  $.input.value = value;
-}
-
-<span id='Widgets-nlFokkezbForm-controllers-text-method-focus'>/**
-</span> * Sets the focus on the input.
- *
- * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
- */
-function focus() {
-  $.input.focus();
-}</pre>
+})(arguments[0]);</pre>
 </body>
 </html>
