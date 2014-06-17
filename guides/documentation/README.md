@@ -25,33 +25,13 @@ This way I can keep the `master` repo clean by having all `jsduck-*.json` files 
 	        "../master"
 	    ],
 	    "--output": "docs",
-	    "--welcome": "../master/README.md",
-	    "--categories": "jsduck-categories.json",
-	    "--guides": "jsduck-guides.json",
-	    "--warnings": "-image_unused",
+	    "--welcome": "../master/README.md"
 	    ..
 	}
 
-## Re-using README's
+## Re-using README
 
-To stay DRY, I have re-used the `master` branch's [README](https://github.com/FokkeZB/nl.fokkezb.form/blob/master/README.md) as the welcome page as the [testing](#!/guide/testing) guide is the `test` branch's [README](https://github.com/FokkeZB/nl.fokkezb.form/blob/test/README.md). I did need to disable `image_unused` warnings for this to work.
-
-	[{
-	  "title": "Widget: nl.fokkezb.form",
-	  "items": [
-	  	..
-	  {
-	    "name": "testing",
-	    "url": "../test",
-	    "title": "Testing",
-	    "description": "Information about the test-branch."
-	  }, {
-	    "name": "documentation",
-	    "url": "guides/documentation",
-	    "title": "Documentation",
-	    "description": "Documenting the documentation."
-	  }]
-	}]
+To stay DRY, I have re-used the `master` branch's [README](https://github.com/FokkeZB/nl.fokkezb.form/blob/master/README.md) as the welcome page. I also wanted to use the `test` branch [README](https://github.com/FokkeZB/nl.fokkezb.form/blob/test/README.md) for the [testing](#!/guide/testing) guide, but this unfortunately copied the whole test app into the guides. Of course I could still use Grunt to copy only the README before running `jsduck` if I wanted.
 
 ## Namespacing
 I want to be able to also use JSDuck to generate documentation for an app, *including* this and other widgets it uses. This is why I namespaced the widget controllers and libraries as `Widgets.nlFokkezbForm.controllers.*` instead of just. `controllers.field`. In an app's documentation this will look like:
