@@ -27,7 +27,7 @@
     "description": "Using and creating field types."
   }, {
     "name": "testing",
-    "url": "../test",
+    "url": "guides/testing",
     "title": "Testing",
     "description": "Information about the test-branch."
   }, {
