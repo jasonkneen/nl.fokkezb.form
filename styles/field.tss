@@ -3,8 +3,11 @@
 }
 
 ".label": {
+  top: 17,
+  bottom: 17,
   left: 15,
   width: 145,
+  height: Ti.UI.SIZE,
 
   color: '#000'
 }
