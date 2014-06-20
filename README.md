@@ -4,7 +4,7 @@ This is the test branch for the [Alloy](http://appcelerator.com/alloy) [Form Wid
 
 * Source code: [https://github.com/FokkeZB/nl.fokkezb.form/tree/master](https://github.com/FokkeZB/nl.fokkezb.form/tree/master)
 * Documentation: [http://form.fokkezb.nl](http://form.fokkezb.nl)
-* Test app: [https://github.com/FokkeZB/nl.fokkezb.form/tree/master](https://github.com/FokkeZB/nl.fokkezb.form/tree/master)
+* Test app: [https://github.com/FokkeZB/nl.fokkezb.form/tree/test](https://github.com/FokkeZB/nl.fokkezb.form/tree/test)
 
 ## Testing
 
