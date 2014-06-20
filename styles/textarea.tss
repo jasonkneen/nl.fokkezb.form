@@ -1,4 +1,4 @@
-"TextArea": {
+".input": {
   width: Ti.UI.FILL,
   height: 132,
 
@@ -7,4 +7,8 @@
   font: {
     fontSize: 17
   }
+}
+
+".label": {
+  top: 10
 }

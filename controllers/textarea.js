@@ -24,7 +24,9 @@ exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 (function constructor(args) {
 
   // align our label to the top
-  $.label.top = 10;
+  $.label.applyProperties($.createStyle({
+    classes: ['label']
+  }));
 
   // input properties to apply
   if (args.input) {
