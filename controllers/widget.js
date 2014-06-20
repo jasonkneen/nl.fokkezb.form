@@ -9,10 +9,6 @@
 
 var deepExtend = require(WPATH('deepExtend'));
 
-_.mixin({
-  deepExtend: deepExtend(_)
-});
-
 /**
  * @type {Object} Exposes {@link Widgets.nlFokkezbForm.lib.validator}
  */
@@ -91,17 +87,22 @@ function init(opts) {
   // we have a config file to load
   if (opts.config) {
 
-    if (opts.config.indexOf('.json')) {
-      _.extend(opts, JSON.parse(Ti.Filesystem.getFile(opts.config).read().text));
+    if (opts.config.indexOf('.json') !== -1) {
+      opts = deepExtend({}, opts, JSON.parse(Ti.Filesystem.getFile(opts.config).read().text));
 
     } else {
-      _.extend(opts, require(opts.config));
+      opts = deepExtend({}, opts, require(opts.config));
     }
   }
 
   // use the constructor's args as defaults if init() was run later
   if (defaults) {
-    opts = _.deepExtend({}, defaults, opts);
+    opts = deepExtend({}, defaults, opts);
+  }
+
+  // if we haven't deepExtend until now, use it now to clone the original opts
+  else if (!opts.config) {
+    opts = deepExtend({}, opts);
   }
 
   if (!opts.fieldsets && !opts.fields) {
