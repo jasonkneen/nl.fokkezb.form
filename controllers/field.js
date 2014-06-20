@@ -37,6 +37,9 @@ var controllerParam = {
   name: $.__controllerPath
 };
 
+// hold the value received via constructor until after setInput was called.
+var value;
+
 /**
  * Constructor for the row.
  *
@@ -57,10 +60,6 @@ var controllerParam = {
 
   $.required = args.required === true;
 
-  if (args.value !== undefined) {
-    $.setValue(args.value);
-  }
-
   var label = util.extractProperties(args, 'label', 'text');
 
   // label properties to apply
@@ -70,6 +69,10 @@ var controllerParam = {
 
   // position the controls right of the label, where ever that is.
   $.control.left = $.label.width;
+
+  if (args.value !== undefined) {
+    value = args.value;
+  }
 
 })(arguments[0]);
 
@@ -81,11 +84,15 @@ var controllerParam = {
 function setInput(input) {
 
   // if a custom type uses another id we make the ref ourselves
-  if (input.id !== 'input') {
+  if (!$.input) {
     $.input = input;
   }
 
   $.control.add($.input);
+
+  if (value !== undefined) {
+    $.setValue(value);
+  }
 }
 
 /**
