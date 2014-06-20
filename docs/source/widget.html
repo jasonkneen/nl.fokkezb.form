@@ -26,10 +26,6 @@
 
 var deepExtend = require(WPATH(&#39;deepExtend&#39;));
 
-_.mixin({
-  deepExtend: deepExtend(_)
-});
-
 <span id='Widgets-nlFokkezbForm-controllers-widget-property-validator'>/**
 </span> * @type {Object} Exposes {@link Widgets.nlFokkezbForm.lib.validator}
  */
@@ -73,6 +69,8 @@ var fieldCtrls = {};
 
   // if we have one of these we can auto-initialize
   if (args.config || args.fieldsets || args.fields) {
+
+    // use a deep clone to leave the original object alone
     init(args);
   }
 
@@ -108,17 +106,22 @@ function init(opts) {
   // we have a config file to load
   if (opts.config) {
 
-    if (opts.config.indexOf(&#39;.json&#39;)) {
-      _.extend(opts, JSON.parse(Ti.Filesystem.getFile(opts.config).read().text));
+    if (opts.config.indexOf(&#39;.json&#39;) !== -1) {
+      opts = deepExtend({}, opts, JSON.parse(Ti.Filesystem.getFile(opts.config).read().text));
 
     } else {
-      _.extend(opts, require(opts.config));
+      opts = deepExtend({}, opts, require(opts.config));
     }
   }
 
   // use the constructor&#39;s args as defaults if init() was run later
   if (defaults) {
-    opts = _.deepExtend({}, defaults, opts);
+    opts = deepExtend({}, defaults, opts);
+  }
+
+  // if we haven&#39;t deepExtend until now, use it now to clone the original opts
+  else if (!opts.config) {
+    opts = deepExtend({}, opts);
   }
 
   if (!opts.fieldsets &amp;&amp; !opts.fields) {

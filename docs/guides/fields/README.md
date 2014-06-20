@@ -44,6 +44,8 @@ Use the `type` property to specify one of the widget's controllers to use:
 
 	// equals: Alloy.createWidget('nl.fokkezb.form', 'text');
 
+### Custom type by a widget
+
 Use the `widget` property to load the controller set by `type` form a different widget:
 
 	fields: [{
@@ -55,6 +57,8 @@ Use the `widget` property to load the controller set by `type` form a different 
 
 	// equals: Alloy.createWidget('my.form', 'text');
 
+### Custom type by a controller
+
 Use the `controller` property to load an app controller:
 
 	fields: [{
@@ -64,6 +68,8 @@ Use the `controller` property to load an app controller:
 	}]
 
 	// equals: Alloy.createController('fields/myField');
+
+### Custom row
 
 Or even insert a custom `Ti.UI.TableViewRow`:
 
