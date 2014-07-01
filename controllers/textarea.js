@@ -6,10 +6,7 @@
  * @class Widgets.nlFokkezbForm.controllers.textarea
  * @extends Widgets.nlFokkezbForm.controllers.field
  * @xtype text
- * @requires Widgets.nlFokkezbForm.lib.util
  */
-
-var util = require(WPATH('util'));
 
 exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 
@@ -22,6 +19,11 @@ exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
  * @param {Object} [args.input] Properties to apply to the `Ti.UI.TextArea`, e.g. keyboard type and toolbar.
  */
 (function constructor(args) {
+
+  // vertical align label to top
+  $.label.applyProperties($.createStyle({
+    classes: ['label']
+  }));
 
   // input properties to apply
   if (args.input) {

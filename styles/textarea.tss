@@ -3,8 +3,11 @@
   height: 132,
 
   color: "#999",
-
   font: {
     fontSize: 17
   }
+}
+
+".label": {
+  top: 17
 }

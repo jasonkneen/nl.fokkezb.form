@@ -1,8 +1,10 @@
+".row": {
+  hasChild: true
+}
+
 ".input": {
   width: Ti.UI.FILL,
 
-  borderStyle: Ti.UI.INPUT_BORDERSTYLE_NONE,
-  borderWidth: 0,
   color: "#999",
   font: {
     fontSize: 17

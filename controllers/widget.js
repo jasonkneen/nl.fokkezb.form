@@ -147,7 +147,11 @@ function getValues() {
 function setValues(values) {
 
   _.each(values, function(value, name) {
-    fieldCtrls[name].setValue(value);
+
+    // values could contain properties for which we don't have a field
+    if (fieldCtrls[name]) {
+      fieldCtrls[name].setValue(value);
+    }
   });
 }
 
@@ -215,12 +219,16 @@ function render(opts) {
         // keep a reference to the widget
         fieldCtrls[field.name] = fieldCtrl;
 
-        // push the views of the controller as row
-        sectionProp.rows.push(fieldCtrl.getViewEx({
+        var row = fieldCtrl.getViewEx({
 
           // makes sure we get an actual view and not the row controller
           recurse: true
-        }));
+        });
+
+        console.debug(row);
+
+        // push the views of the controller as row
+        sectionProp.rows.push(row);
       }
 
     });
@@ -228,10 +236,14 @@ function render(opts) {
     // create the section, extending TSS style by args
     var section = $.UI.create('TableViewSection', sectionProp);
 
+    console.debug(section.rows);
+
     // push the section
     tableProp.sections.push(section);
 
   });
+
+
 
   // set the table
   $.table.applyProperties(tableProp);
