@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Widgets-nlFokkezbForm-controllers-select'>/**
+</span> * Controller for the select field type.
+ *
+ * The switch field type is a `Ti.UI.Label` to display current and a `Ti.UI.OptionDialog` to change the selected option.
+ *
+ * @class Widgets.nlFokkezbForm.controllers.select
+ * @extends Widgets.nlFokkezbForm.controllers.field
+ * @xtype select
+ * @requires Widgets.nlFokkezbForm.lib.util
+ */
+
+var util = require(WPATH(&#39;util&#39;));
+
+exports.baseController = &#39;../widgets/nl.fokkezb.form/controllers/field&#39;;
+
+$.focus = focus;
+$.setValue = setValue;
+$.getValue = getValue;
+
+var options;
+var value;
+var iPadArrow = false;
+var cancel = L(&#39;nlFokkezbForm_cancel&#39;, &#39;Cancel&#39;);
+
+<span id='Widgets-nlFokkezbForm-controllers-select-method-Controller'>/**
+</span> * Constructor.
+ *
+ * @constructor
+ * @method Controller
+ * @param args Arguments which will also be used to call {@link Widgets.nlFokkezbForm.controllers.field#Controller}.
+ * @param {Object} [args.input] Properties to apply to the `Ti.UI.Label`.
+ * @param {Array|Object} options An `Array` or `Object` in which values are keys and values are labels to display.
+ * @param {String|Object} args.label Will be used for the dialog title as well.
+ * @param {Boolean} [iPadArrow=false] If `true` it will attach the dialog to the input on iPads.
+ */
+(function constructor(args) {
+
+  options = args.options || [];
+  iPadArrow = args.iPadArrow === true;
+  
+  if (_.has(args, &#39;cancel&#39;)) {
+    cancel = args.cancel;
+  }
+
+  // display a hasChild marker
+  $.row.applyProperties($.createStyle({
+    classes: [&#39;row&#39;]
+  }));
+
+  // input properties to apply
+  if (args.input) {
+    $.input.applyProperties(args.input);
+  }
+
+  // add the input to the row
+  $.setInput($.input);
+
+})(arguments[0]);
+
+<span id='Widgets-nlFokkezbForm-controllers-select-method-focus'>/**
+</span> * Toggles the switch.
+ *
+ * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
+ */
+function focus() {
+
+  var labels = _.values(options);
+  labels.push(cancel);
+  var cancelIndex = labels.length - 1;
+
+  var selectedIndex = _.isArray(options) ? value : _.indexOf(_.keys(options), value);
+
+  var dialog = Ti.UI.createOptionDialog({
+    cancel: cancelIndex,
+    options: labels,
+    selectedIndex: selectedIndex,
+    title: $.label.text
+  });
+
+  dialog.addEventListener(&#39;click&#39;, function(e) {
+
+    if (OS_ANDROID ? e.cancel : (e.index === e.cancel)) {
+      return;
+    }
+
+    var val = _.isArray(options) ? e.index : _.keys(options)[e.index];
+
+    setValue(val);
+
+  });
+
+  dialog.show(iPadArrow ? {
+    view: $.input
+  } : {});
+}
+
+function setValue(val) {
+  value = val;
+
+  $.input.text = options[value];
+}
+
+function getValue() {
+  return value;
+}</pre>
+</body>
+</html>

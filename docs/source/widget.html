@@ -69,8 +69,6 @@ var fieldCtrls = {};
 
   // if we have one of these we can auto-initialize
   if (args.config || args.fieldsets || args.fields) {
-
-    // use a deep clone to leave the original object alone
     init(args);
   }
 
@@ -166,7 +164,11 @@ function getValues() {
 function setValues(values) {
 
   _.each(values, function(value, name) {
-    fieldCtrls[name].setValue(value);
+
+    // values could contain properties for which we don&#39;t have a field
+    if (fieldCtrls[name]) {
+      fieldCtrls[name].setValue(value);
+    }
   });
 }
 
@@ -234,12 +236,16 @@ function render(opts) {
         // keep a reference to the widget
         fieldCtrls[field.name] = fieldCtrl;
 
-        // push the views of the controller as row
-        sectionProp.rows.push(fieldCtrl.getViewEx({
+        var row = fieldCtrl.getViewEx({
 
           // makes sure we get an actual view and not the row controller
           recurse: true
-        }));
+        });
+
+        console.debug(row);
+
+        // push the views of the controller as row
+        sectionProp.rows.push(row);
       }
 
     });
@@ -247,10 +253,14 @@ function render(opts) {
     // create the section, extending TSS style by args
     var section = $.UI.create(&#39;TableViewSection&#39;, sectionProp);
 
+    console.debug(section.rows);
+
     // push the section
     tableProp.sections.push(section);
 
   });
+
+
 
   // set the table
   $.table.applyProperties(tableProp);
