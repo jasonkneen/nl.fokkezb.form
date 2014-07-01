@@ -39,6 +39,22 @@ $.form.init({
       type: 'text',
       format: 'email'
     }, {
+      name: 'sdk',
+      label: 'Select type (arr)',
+      type: 'select',
+      options: ['3.1.3.GA', '3.2.3.GA', '3.3.0.RC'],
+      value: 2
+    }, {
+      name: 'cities',
+      label: 'Select type (obj)',
+      type: 'select',
+      options: {
+        'ams': 'Amsterdam',
+        'nyc': 'New York City',
+        'lnd': 'London'
+      },
+      value: 'nyc'
+    }, {
       name: 'req',
       label: 'Required field',
       type: 'text',
