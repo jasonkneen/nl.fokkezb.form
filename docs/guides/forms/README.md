@@ -55,12 +55,32 @@ To validate an individual field:
 	if (fieldCtrl.isValid() === false) {
 		alert('Your name please!');
 	}
+	
+## Vertical align labels and input
+Since 1.1.1 you can vertical align a single field, fieldset or the full form via the `row` property that can exist at any of these 3 levels:
+
+	{
+		row: {
+			layout: 'vertical'
+		},
+		fieldsets: [{
+			row: {
+				layout: 'horizontal'
+			},
+			fields: [{
+				name: 'name',
+				row: {
+					layout: 'vertical'
+				}
+			}]
+		}]
+	}
 
 ## Customize
 You can customize the `Ti.UI.TableView` in 2 ways:
 
 ### Apply properties
-Set any `Ti.UI.TableView` properties via the `table` property:
+Set any `Ti.UI.TableView` properties via the `table` property in either JS or TSS:
 
 	{
 		table: {

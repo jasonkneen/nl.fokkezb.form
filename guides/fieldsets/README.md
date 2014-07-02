@@ -55,7 +55,7 @@ You can also use `legendid` in which case it will be processed by `L()`.
 You can further customize the `Ti.UI.TableViewSection` in 2 ways:
 
 ### Apply properties
-Set any `Ti.UI.TableViewSection` properties via the fieldset's `section` property:
+Set any `Ti.UI.TableViewSection` properties via the fieldset's `section` property in either JS or TSS:
 
 	{
 		fieldsets: [{
