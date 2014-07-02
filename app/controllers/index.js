@@ -37,7 +37,10 @@ $.form.init({
       name: 'email',
       label: 'E-mail format',
       type: 'text',
-      format: 'email'
+      format: 'email',
+      row: {
+        layout: 'vertical'
+      }
     }, {
       name: 'sdk',
       label: 'Select type (arr)',
