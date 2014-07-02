@@ -20,11 +20,6 @@ exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
  */
 (function constructor(args) {
 
-  // vertical align label to top
-  $.label.applyProperties($.createStyle({
-    classes: ['label']
-  }));
-
   // input properties to apply
   if (args.input) {
     $.input.applyProperties(args.input);

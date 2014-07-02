@@ -110,11 +110,14 @@ function init(opts) {
   }
 
   // user can either pass an array or fieldsets or just fields we'll wrap it in one
-  if (!opts.fieldsets) {
-    opts = {
-      fieldsets: _.omit(opts, 'values'),
-      values: opts.values
-    };
+  if (!opts.fieldsets && opts.fields) {
+    opts.fieldsets = [{
+      fields: opts.fields,
+      section: opts.section,
+      legend: opts.legend,
+      legendid: opts.legendid
+    }];
+    delete opts.fields;
   }
 
   // values for the fields
@@ -189,6 +192,11 @@ function render(opts) {
       sectionProp.headerTitle = L(fieldset.legendid);
     }
 
+    // cascade form-wide row properties
+    if (opts.row) {
+      fieldset.row = _.defaults(fieldset.row || {}, opts.row);
+    }
+
     // for each field
     _.each(fieldset.fields, function(field) {
 
@@ -202,6 +210,11 @@ function render(opts) {
         // user can either pass value in field or in separate 'values' arg
         if (opts.values[field.name]) {
           field.value = opts.values[field.name];
+        }
+
+        // cascade fieldset-wide row properties
+        if (fieldset.row) {
+          field.row = _.defaults(field.row || {}, fieldset.row);
         }
 
         var fieldCtrl;
@@ -225,8 +238,6 @@ function render(opts) {
           recurse: true
         });
 
-        console.debug(row);
-
         // push the views of the controller as row
         sectionProp.rows.push(row);
       }
@@ -236,14 +247,10 @@ function render(opts) {
     // create the section, extending TSS style by args
     var section = $.UI.create('TableViewSection', sectionProp);
 
-    console.debug(section.rows);
-
     // push the section
     tableProp.sections.push(section);
 
   });
-
-
 
   // set the table
   $.table.applyProperties(tableProp);

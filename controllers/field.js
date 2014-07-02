@@ -31,7 +31,7 @@ $.isValid = isValid;
 $.showError = showError;
 
 // keep a reference to our controllerParam for showError()
-// when we are extended they will change to our child's.
+// when we are extended the original values will change to our child's.
 var controllerParam = {
   widgetId: $.__widgetId,
   name: $.__controllerPath
@@ -45,14 +45,18 @@ var value;
  *
  * @constructor
  * @method Controller
- * @param args Arguments passed to the controller.
+ * @param args                          Arguments passed to the controller.
  * @param {Object|String} [args.label]  Properties to apply to the `Ti.UI.Label` or value for the text property.
- * @param {String} args.labelid         String name to use with `L()` for the `Ti.UI.Label` text property.
+ * @param {String} [args.labelid]       String name to use with `L()` for the `Ti.UI.Label` text property.
+ * @param {Object} [args.row]            Properties to apply to the `Ti.UI.TableViwRow`.
  */
 (function constructor(args) {
 
-  // for the table's singletap event listener
-  $.row._name = args.name;
+  $.row.applyProperties(_.extend(args.row || {}, {
+
+    // for the table's singletap event listener
+    _name: args.name
+  }));
 
   if (args.validator) {
     $.validator = args.validator;
@@ -60,15 +64,11 @@ var value;
 
   $.required = args.required === true;
 
-  var label = util.extractProperties(args, 'label', 'text');
-
   // label properties to apply
+  var label = util.extractProperties(args, 'label', 'text');
   if (_.size(label) > 0) {
     $.label.applyProperties(label);
   }
-
-  // position the controls right of the label, where ever that is.
-  $.control.left = $.label.width;
 
   if (args.value !== undefined) {
     value = args.value;

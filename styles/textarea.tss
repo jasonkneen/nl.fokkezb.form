@@ -5,9 +5,17 @@
   color: "#999",
   font: {
     fontSize: 17
-  }
+  },
+  paddingLeft: 0,
+  paddingRight: 0
 }
 
-".label": {
-  top: 17
+".input[platform=ios]": {
+
+  // correct for left padding compared to TextField
+  left: -6,
+
+  // doesn't seem to work?
+  paddingLeft: 0,
+  paddingRight: 0
 }
