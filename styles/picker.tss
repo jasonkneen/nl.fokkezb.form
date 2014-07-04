@@ -3,23 +3,26 @@
 }
 
 ".input": {
-  left: 0,
+  width: Ti.UI.FILL,
 
   // align up with textfields
   height: 40,
 
-  color: "white",
+  color: "#999",
   font: {
     fontSize: 17
-  },
-  borderRadius: 5
+  }
 }
 
 ".popover": {
-  width: 320,
-  height: 440,
+  width: Ti.UI.SIZE,
+  height: Ti.UI.SIZE
+}
 
-  backgroundColor: 'white'
+".view": {
+  height: Ti.UI.SIZE,
+
+  layout: 'vertical'
 }
 
 ".cancel[platform=ios]": {
