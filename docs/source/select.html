@@ -18,15 +18,12 @@
   <pre class="prettyprint lang-js"><span id='Widgets-nlFokkezbForm-controllers-select'>/**
 </span> * Controller for the select field type.
  *
- * The switch field type is a `Ti.UI.Label` to display current and a `Ti.UI.OptionDialog` to change the selected option.
+ * The select field type is a `Ti.UI.Label` to display current and a `Ti.UI.OptionDialog` to change the selected option.
  *
  * @class Widgets.nlFokkezbForm.controllers.select
  * @extends Widgets.nlFokkezbForm.controllers.field
  * @xtype select
- * @requires Widgets.nlFokkezbForm.lib.util
  */
-
-var util = require(WPATH(&#39;util&#39;));
 
 exports.baseController = &#39;../widgets/nl.fokkezb.form/controllers/field&#39;;
 
@@ -75,7 +72,7 @@ var cancel = L(&#39;nlFokkezbForm_cancel&#39;, &#39;Cancel&#39;);
 })(arguments[0]);
 
 <span id='Widgets-nlFokkezbForm-controllers-select-method-focus'>/**
-</span> * Toggles the switch.
+</span> * Displays an option dialog to change value.
  *
  * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
  */
