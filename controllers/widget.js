@@ -10,6 +10,16 @@
 var deepExtend = require(WPATH('deepExtend'));
 
 /**
+ * @event change
+ * Fired when the value of the field changes.
+ * 
+ * @param {Object} e Event
+ * @param {String} e.field The name of the field that has changed.
+ * @param {Mixed} e.value The new value.
+ * @param {Object} e.form The form controller.
+ */
+
+/**
  * @type {Object} Exposes {@link Widgets.nlFokkezbForm.lib.validator}
  */
 $.validator = require(WPATH('validator'));
@@ -20,13 +30,13 @@ $.setValues = setValues;
 $.isValid = isValid;
 $.getField = getField;
 
-/**
+/*
  * @type {Object} The args the widget was constructed with if auto-initialize couldn't be run.
  * @private
  */
 var defaults;
 
-/**
+/*
  * @type {Object} References to all field controllers by name.
  * @private
  */
@@ -73,6 +83,7 @@ var fieldCtrls = {};
  * @param {Object[]} [opts.fieldsets] Array of fieldsets.
  * @param {Object[]} [opts.fields] Array of fields.
  * @param {Object} [opts.values] Values as object with field names as keys.
+ * @param {Function} [opts.listener] Listener for the form's #change event.
  * @throws {Error} If the required options are missing.
  */
 function init(opts) {
@@ -84,25 +95,33 @@ function init(opts) {
     };
   }
 
+  // clone deep so we leave the original referenced object untouched
+  else {
+    opts = deepExtend({}, opts);
+  }
+
   // we have a config file to load
   if (opts.config) {
 
     if (opts.config.indexOf('.json') !== -1) {
-      opts = deepExtend({}, opts, JSON.parse(Ti.Filesystem.getFile(opts.config).read().text));
+      opts = deepExtend(opts, JSON.parse(Ti.Filesystem.getFile(opts.config).read().text));
 
     } else {
-      opts = deepExtend({}, opts, require(opts.config));
+      var cjs = require(opts.config);
+
+      if (_.isFunction(cjs.extend)) {
+        config = cjs.extend(opts);
+      } else {
+        config = cjs;
+      }
+
+      opts = deepExtend(opts, config);
     }
   }
 
   // use the constructor's args as defaults if init() was run later
   if (defaults) {
-    opts = deepExtend({}, defaults, opts);
-  }
-
-  // if we haven't deepExtend until now, use it now to clone the original opts
-  else if (!opts.config) {
-    opts = deepExtend({}, opts);
+    opts = deepExtend(defaults, opts);
   }
 
   if (!opts.fieldsets && !opts.fields) {
@@ -124,6 +143,11 @@ function init(opts) {
   opts.values = opts.values || {};
 
   render(opts);
+
+  // add form-wide listener
+  if (opts.listener) {
+    $.on('change', opts.listener);
+  }
 }
 
 /**
@@ -158,7 +182,7 @@ function setValues(values) {
   });
 }
 
-/**
+/*
  * Renders the form.
  *
  * @private
@@ -229,6 +253,21 @@ function render(opts) {
           fieldCtrl = Alloy.createWidget(field.widget || 'nl.fokkezb.form', field.type || 'text', field);
         }
 
+        // pass field events on to the form listeners
+        fieldCtrl.on('change', function(e) {
+
+          e.field = field.name;
+          e.form = $;
+
+          $.trigger('change change:' + field.name, e);
+
+        });
+
+        // add a field listener here so he has the form reference
+        if (field.listener) {
+          $.on('change:' + field.name, field.listener);
+        }
+
         // keep a reference to the widget
         fieldCtrls[field.name] = fieldCtrl;
 
@@ -281,7 +320,7 @@ function isValid() {
   return valid;
 }
 
-/**
+/*
  * Handles the table's `singletap` event.
  *
  * @private

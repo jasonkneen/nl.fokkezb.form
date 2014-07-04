@@ -29,3 +29,7 @@ exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
   $.setInput($.input);
 
 })(arguments[0]);
+
+function onChange(e) {
+  $.changeValue(e.value);
+}

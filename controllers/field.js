@@ -10,6 +10,14 @@
 var util = require(WPATH('util'));
 
 /**
+ * @event change
+ * Fired when the value of the field changes.
+ *
+ * @param {Object} e Event
+ * @param {Mixed} e.value The new value.
+ */
+
+/**
  * @type {Function} Function to use as validator, e.g.:
  *
  *     function(value) {
@@ -24,9 +32,15 @@ $.validator = null;
 $.required = false;
 
 $.setInput = setInput;
+
 $.focus = focus;
+
 $.setValue = setValue;
 $.getValue = getValue;
+
+$.showValue = showValue;
+$.changeValue = changeValue;
+
 $.isValid = isValid;
 $.showError = showError;
 
@@ -61,7 +75,7 @@ var value;
   if (args.validator) {
     $.validator = args.validator;
   }
-
+  
   $.required = args.required === true;
 
   // label properties to apply
@@ -80,6 +94,7 @@ var value;
  * Set the input view in the control wrapper
  *
  * @param {Object} input Some kind of input, e.g. `Ti.UI.TextField`.
+ * @private
  */
 function setInput(input) {
 
@@ -99,6 +114,7 @@ function setInput(input) {
  * Visually mark the row as having an error.
  *
  * @param {Boolean} show   Show or hide the mark.
+ * @private
  */
 function showError(show) {
 
@@ -116,6 +132,8 @@ function showError(show) {
  * Sets the focus on the input.
  *
  * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
+ * 
+ * @private
  */
 function focus() {
   $.input.focus();
@@ -127,16 +145,50 @@ function focus() {
  * @return {String} Value of the field.
  */
 function getValue() {
-  return $.input.value;
+  return value;
 }
 
 /**
  * Set the value of the field.
  *
- * @param  {String} [value] Value to set or `undefined` to unset.
+ * @param  {String} [value] Value to set.
  */
-function setValue(value) {
-  $.input.value = value;
+function setValue(val) {
+  value = val;
+
+  $.showValue(value);
+}
+
+/**
+ * Shows the value via the input.
+ *
+ * To be overridden by field types so that their input shows the value.
+ * 
+ * @param  {Mixed} val The value to display.
+ * @private
+ */
+function showValue(val) {
+  $.input.value = val;
+}
+
+/**
+ * Changes the value stored to be returned to the form.
+ * Also fires the #change event if it has changed.
+ * 
+ * @param  {Mixed} val The value changed by the input control.
+ * @private
+ */
+function changeValue(val) {
+
+  if (val === value) {
+    return;
+  }
+
+  value = val;
+
+  $.trigger('change', {
+    value: value
+  });
 }
 
 /**
@@ -145,7 +197,9 @@ function setValue(value) {
  * @return {Boolean|String} Returns `true` if valid or an error message if not.
  */
 function isValid() {
+
   var value = $.getValue();
+  
   var valid = true;
 
   if ($.required && !value) {

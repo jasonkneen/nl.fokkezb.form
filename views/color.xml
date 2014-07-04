@@ -12,6 +12,7 @@
     </RightNavButton>
 
     <View module="nl.fokkezb.colorpicker" id="picker" class="picker" />
+    
   </Popover>
   
 </Alloy>

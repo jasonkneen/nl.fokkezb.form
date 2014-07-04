@@ -13,8 +13,7 @@
 exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 
 $.focus = focus;
-$.getValue = getValue;
-$.setValue = setValue;
+$.showValue = showValue;
 
 /**
  * Constructor.
@@ -56,18 +55,17 @@ function focus() {
   });
 }
 
-function getValue() {
-  return $.input.text;
-}
-
-function setValue(val) {
+function showValue(val) {
   $.input.text = '  ' + val + '  ';
   $.input.backgroundColor = val;
   $.input.color = getContrastColor(val);
 }
 
 function onDoneClick(e) {
-  $.setValue($.picker.color);
+  var val = $.picker.color;
+
+  $.showValue(val);
+  $.changeValue(val);
 
   onCancelClick(e);
 }

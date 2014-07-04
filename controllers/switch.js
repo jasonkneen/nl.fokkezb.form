@@ -11,6 +11,7 @@
 exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 
 $.focus = focus;
+$.showValue = showValue;
 $.isValid = isValid;
 
 /**
@@ -40,7 +41,13 @@ $.isValid = isValid;
  * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
  */
 function focus() {
-  $.setValue(!$.getValue());
+  var val = !$.input.value;
+
+  $.input.value = val;
+}
+
+function showValue(val) {
+  $.input.value = !!val;
 }
 
 /**
@@ -50,4 +57,8 @@ function focus() {
  */
 function isValid() {
   return true;
+}
+
+function onChange(e) {
+  $.changeValue(e.value);
 }

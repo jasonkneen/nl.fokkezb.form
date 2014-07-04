@@ -11,8 +11,7 @@
 exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 
 $.focus = focus;
-$.setValue = setValue;
-$.getValue = getValue;
+$.showValue = showValue;
 
 var options;
 var value;
@@ -82,7 +81,8 @@ function focus() {
 
     var val = _.isArray(options) ? e.index : _.keys(options)[e.index];
 
-    setValue(val);
+    $.showValue(val);
+    $.changeValue(val);
 
   });
 
@@ -91,12 +91,6 @@ function focus() {
   } : {});
 }
 
-function setValue(val) {
-  value = val;
-
-  $.input.text = options[value];
-}
-
-function getValue() {
-  return value;
+function showValue(val) {
+  $.input.text = options[val];
 }
