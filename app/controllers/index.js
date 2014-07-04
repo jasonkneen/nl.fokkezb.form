@@ -1,4 +1,7 @@
 $.form.init({
+  listener: function(e) {
+    console.debug('form change:' + e.field + ' > ' + e.value);
+  },
   table: {
     footerView: $.submit
   },
@@ -15,7 +18,10 @@ $.form.init({
       }, {
         name: 'bar',
         labelid: 'i18n_label',
-        type: 'text'
+        type: 'text',
+        listener: function(e) {
+          console.debug('field change:' + e.field + ' > ' + e.value);
+        },
       },
       Ti.UI.createTableViewRow({
         title: 'Custom row via fields',
