@@ -30,6 +30,24 @@ $.form.init({
         label: 'Color type (iPad)',
         type: 'color',
         value: '#F00'
+      }, {
+        name: 'date',
+        label: 'Picker type (date)',
+        type: 'picker',
+        picker: {
+          type: Ti.UI.PICKER_TYPE_DATE,
+          format: 'DD-MM-YYYY'
+        },
+        value: '04-07-2014'
+      }, {
+        name: 'time',
+        label: 'Picker type (time)',
+        type: 'picker',
+        picker: {
+          type: Ti.UI.PICKER_TYPE_TIME,
+          format: 'HH:mm'
+        },
+        value: '16:30'
       }
     ]
   }, {
