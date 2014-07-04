@@ -25,6 +25,11 @@ $.form.init({
         name: 'lorem',
         label: 'Textarea type',
         type: 'textarea'
+      }, {
+        name: 'color',
+        label: 'Color type (iPad)',
+        type: 'color',
+        value: '#F00'
       }
     ]
   }, {

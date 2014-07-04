@@ -17,6 +17,7 @@ module.exports = function(grunt) {
         options: {
           command: 'build',
           platform: 'ios',
+          deviceFamily: 'ipad',
           logLevel: 'trace',
           iosVersion: 7.1
         }
