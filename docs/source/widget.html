@@ -26,6 +26,16 @@
 
 var deepExtend = require(WPATH(&#39;deepExtend&#39;));
 
+<span id='Widgets-nlFokkezbForm-controllers-widget-event-change'>/**
+</span> * @event change
+ * Fired when the value of the field changes.
+ * 
+ * @param {Object} e Event
+ * @param {String} e.field The name of the field that has changed.
+ * @param {Mixed} e.value The new value.
+ * @param {Object} e.form The form controller.
+ */
+
 <span id='Widgets-nlFokkezbForm-controllers-widget-property-validator'>/**
 </span> * @type {Object} Exposes {@link Widgets.nlFokkezbForm.lib.validator}
  */
@@ -37,14 +47,14 @@ $.setValues = setValues;
 $.isValid = isValid;
 $.getField = getField;
 
-<span id='Widgets-nlFokkezbForm-controllers-widget-property-defaults'>/**
-</span> * @type {Object} The args the widget was constructed with if auto-initialize couldn&#39;t be run.
+/*
+ * @type {Object} The args the widget was constructed with if auto-initialize couldn&#39;t be run.
  * @private
  */
 var defaults;
 
-<span id='Widgets-nlFokkezbForm-controllers-widget-property-fieldCtrls'>/**
-</span> * @type {Object} References to all field controllers by name.
+/*
+ * @type {Object} References to all field controllers by name.
  * @private
  */
 var fieldCtrls = {};
@@ -90,6 +100,7 @@ var fieldCtrls = {};
  * @param {Object[]} [opts.fieldsets] Array of fieldsets.
  * @param {Object[]} [opts.fields] Array of fields.
  * @param {Object} [opts.values] Values as object with field names as keys.
+ * @param {Function} [opts.listener] Listener for the form&#39;s #change event.
  * @throws {Error} If the required options are missing.
  */
 function init(opts) {
@@ -101,25 +112,33 @@ function init(opts) {
     };
   }
 
+  // clone deep so we leave the original referenced object untouched
+  else {
+    opts = deepExtend({}, opts);
+  }
+
   // we have a config file to load
   if (opts.config) {
 
     if (opts.config.indexOf(&#39;.json&#39;) !== -1) {
-      opts = deepExtend({}, opts, JSON.parse(Ti.Filesystem.getFile(opts.config).read().text));
+      opts = deepExtend(opts, JSON.parse(Ti.Filesystem.getFile(opts.config).read().text));
 
     } else {
-      opts = deepExtend({}, opts, require(opts.config));
+      var cjs = require(opts.config);
+
+      if (_.isFunction(cjs.extend)) {
+        config = cjs.extend(opts);
+      } else {
+        config = cjs;
+      }
+
+      opts = deepExtend(opts, config);
     }
   }
 
   // use the constructor&#39;s args as defaults if init() was run later
   if (defaults) {
-    opts = deepExtend({}, defaults, opts);
-  }
-
-  // if we haven&#39;t deepExtend until now, use it now to clone the original opts
-  else if (!opts.config) {
-    opts = deepExtend({}, opts);
+    opts = deepExtend(defaults, opts);
   }
 
   if (!opts.fieldsets &amp;&amp; !opts.fields) {
@@ -141,6 +160,11 @@ function init(opts) {
   opts.values = opts.values || {};
 
   render(opts);
+
+  // add form-wide listener
+  if (opts.listener) {
+    $.on(&#39;change&#39;, opts.listener);
+  }
 }
 
 <span id='Widgets-nlFokkezbForm-controllers-widget-method-getValues'>/**
@@ -175,8 +199,8 @@ function setValues(values) {
   });
 }
 
-<span id='Widgets-nlFokkezbForm-controllers-widget-method-render'>/**
-</span> * Renders the form.
+/*
+ * Renders the form.
  *
  * @private
  * @param  {Object[]} opts  See #init
@@ -246,6 +270,21 @@ function render(opts) {
           fieldCtrl = Alloy.createWidget(field.widget || &#39;nl.fokkezb.form&#39;, field.type || &#39;text&#39;, field);
         }
 
+        // pass field events on to the form listeners
+        fieldCtrl.on(&#39;change&#39;, function(e) {
+
+          e.field = field.name;
+          e.form = $;
+
+          $.trigger(&#39;change change:&#39; + field.name, e);
+
+        });
+
+        // add a field listener here so he has the form reference
+        if (field.listener) {
+          $.on(&#39;change:&#39; + field.name, field.listener);
+        }
+
         // keep a reference to the widget
         fieldCtrls[field.name] = fieldCtrl;
 
@@ -298,8 +337,8 @@ function isValid() {
   return valid;
 }
 
-<span id='Widgets-nlFokkezbForm-controllers-widget-method-onTableSingletap'>/**
-</span> * Handles the table&#39;s `singletap` event.
+/*
+ * Handles the table&#39;s `singletap` event.
  *
  * @private
  * @param  {Object} e Event dictionary.

@@ -13,6 +13,7 @@ See [Fields](#!/guide/fields-section-type) to learn how to use a built-in or cus
 By leaving most of the common views and logic in {@link Widgets.nlFokkezbForm.controllers.field} a new type's controller can be as simple as:
 
 	exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
+	$.__widgetId = 'timewax.fields';
 
 	(function constructor(args) {
 
@@ -24,21 +25,38 @@ By leaving most of the common views and logic in {@link Widgets.nlFokkezbForm.co
 	  $.setInput($.input);
 
 	})(arguments[0]);
+	
+	$.showValue(val) {
+		$.input.value = val;
+	}
+	
+	function onChange(e) {
+		$.changeValue(e.value);
+	}
  
 And a view not much more then:
 
 	<Alloy>
-	  <Slider id="input" />
+	  <Slider id="input" onChange="onChange" />
 	</Alloy>
 
 ### baseController
 The strange `baseController` path is a workaround for [TC-4280](https://jira.appcelerator.org/browse/TC-4280) to cope with Alloy prepending `alloy/controllers/`.
+
+### __widgetId
+If you have your custom type in a widget and need dynamic styling via `$.createStyle` or similar to read from your controller's TSS file, you need to manually set `$.__widgetId` to that of your widget. Else it will read from the form widget.
 
 ### applyProperties
 Please conform to how the built-ins work by allowing the user to apply properties to your type's (main) input view using the `input` property.
 
 ### setInput
 You need to call {@link Widgets.nlFokkezbForm.controllers.field#setInput} to add your type's input view to the row.
+
+### showValue
+To display the value set to the field via the type's input controller, you need to overload the `$.showValue` method and do what needs to be done there.
+
+### changeValue
+The other way around you need to call `$.changeValue` whenever the value of the control changes. The base controller will take care of the `change` events.
 
 ### Overloading controller methods
 You can overload any of {@link Widgets.nlFokkezbForm.controllers.field}'s methods:

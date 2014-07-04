@@ -99,7 +99,9 @@ If `config` ends with `.json`, it will assume it to be a path absolute or relati
 
 #### CommonJS
 
-If not, it will assume it to be a relative path to a CommonJS module like:
+If not, it will assume it to be a relative path to a CommonJS module. This can in turn have two forms.
+
+It can export the properties themselve:
 
 	module.exports = {
 		fieldsets: [{
@@ -110,4 +112,34 @@ If not, it will assume it to be a relative path to a CommonJS module like:
 				type: 'text'
 			}]
 		}]
+	};
+	
+Or export an `extend` function to be called with te existing properties. This way you can return different properties depending on e.g. the values:
+
+	exports.extend = function(opts) {
+	
+		return {
+			listener: function(e) {
+				
+				if (e.field === 'name') {
+					e.form.getField('email').required = (e.value === 'Jeff');
+				}
+			
+			},
+			fieldsets: [{
+				legend: 'My form',			
+				fields: [{
+					name: 'name',
+					label: 'Your name',
+					type: 'text'
+				}, {
+					email: 'email',
+					label: 'Your email',
+					type: 'text',
+					format: 'email'
+					required: (opts.values && opts.values.name === 'Jeff')
+				}]
+			}]
+		};
+	
 	};

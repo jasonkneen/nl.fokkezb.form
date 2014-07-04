@@ -40,6 +40,33 @@ To set or get the value of an individual field:
 	var value = fieldCtrl.getValue();
 
 	console.debug(value); // will show 'Jeff';
+	
+## Events
+The form fires a `change` and `change:[field]` event whenever a field's value changes.
+
+You can add a listener via the `listener` property:
+
+	{
+		listener: function(e) {
+			if (e.field === 'name') {
+				e.form.getField('email').required = (e.value === 'Jeff');
+			}
+		}
+		fields: [{
+			name: 'name',
+			label: 'Your name',
+			type: 'text'
+		}, {
+			email: 'email',
+			label: 'Your email',
+			type: 'text',
+			format: 'email'
+		}]
+	}
+	
+Or using the BackBoneJS `on` method of the form:
+
+	form.on('change', myListener);
 
 ## Validate
 You can validate all fields by calling {@link Widgets.nlFokkezbForm.controllers.widget#isValid}. This will call {@link Widgets.nlFokkezbForm.controllers.field#isValid} on all fields and return either `true` or `false`. The rows of invalid fields will get a reddish `backgroundColor`.

@@ -90,6 +90,33 @@ Or even insert a custom `Ti.UI.TableViewRow`:
 
 See [Forms](#!/guide/forms-section-values) for how to set and get values, also on a individual field.
 
+## Events
+The field fires a `change` and `change:[field]` event whenever the value changes.
+
+You can add a listener via the `listener` property:
+
+	{
+		fields: [{
+			name: 'name',
+			label: 'Your name',
+			type: 'text',
+			listener: function(e) {
+				e.form.getField('email').required = (e.value === 'Jeff');
+			}
+		}, {
+			email: 'email',
+			label: 'Your email',
+			type: 'text',
+			format: 'email'
+		}]
+	}
+	
+Or using the BackBoneJS `on` method of the form:
+
+	form.getField('name').on('change', myListener);
+	
+**NOTE**: Using the last method you don't have `e.form` and `e.field`.
+
 ## Validate
 
 See [Forms](#!/guide/forms-section-validate) for how to set and get values, also on a individual field.
