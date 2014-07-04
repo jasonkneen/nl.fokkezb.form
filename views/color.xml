@@ -1,0 +1,17 @@
+<Alloy>
+  <Label id="input" class="input" />
+  
+  <Popover id="popover" class="popover" platform="ios" formFactor="tablet">
+
+    <LeftNavButton>
+      <Button id="cancel" class="cancel" onClick="onCancelClick" />
+    </LeftNavButton>
+
+    <RightNavButton>
+      <Button id="done" class="done" onClick="onDoneClick" />  
+    </RightNavButton>
+
+    <View module="nl.fokkezb.colorpicker" id="picker" class="picker" />
+  </Popover>
+  
+</Alloy>

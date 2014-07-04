@@ -1,6 +1,6 @@
 ".input": {
   right: 0,
 
-  // compensate for padding of text fields
-  top: 5
+  // align up with textfields
+  height: 40
 }

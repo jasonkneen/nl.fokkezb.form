@@ -1,15 +1,12 @@
 /**
  * Controller for the select field type.
  *
- * The switch field type is a `Ti.UI.Label` to display current and a `Ti.UI.OptionDialog` to change the selected option.
+ * The select field type is a `Ti.UI.Label` to display current and a `Ti.UI.OptionDialog` to change the selected option.
  *
  * @class Widgets.nlFokkezbForm.controllers.select
  * @extends Widgets.nlFokkezbForm.controllers.field
  * @xtype select
- * @requires Widgets.nlFokkezbForm.lib.util
  */
-
-var util = require(WPATH('util'));
 
 exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 
@@ -58,7 +55,7 @@ var cancel = L('nlFokkezbForm_cancel', 'Cancel');
 })(arguments[0]);
 
 /**
- * Toggles the switch.
+ * Displays an option dialog to change value.
  *
  * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
  */

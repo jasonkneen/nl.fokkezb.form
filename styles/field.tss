@@ -9,7 +9,6 @@
   height: Ti.UI.SIZE,
   
   top: 19,
-  bottom: 19,
   left: 15,
 
   color: '#000'
