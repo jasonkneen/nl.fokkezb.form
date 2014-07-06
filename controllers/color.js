@@ -1,7 +1,7 @@
 /**
  * Controller for the color field type.
  *
- * The color field type is a `Ti.UI.Label` to display current and the `nl.fokkezb.colorpicker` module to change.
+ * The color field type is a `Ti.UI.Label` to display current and the `nl.fokkezb.colorpick` module to change.
  *
  * **WARNING** For now this is an iPad-only type!
  *

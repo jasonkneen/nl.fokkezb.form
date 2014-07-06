@@ -11,7 +11,7 @@
       <Button id="done" class="done" onClick="onDoneClick" />  
     </RightNavButton>
 
-    <View module="nl.fokkezb.colorpicker" id="picker" class="picker" />
+    <View module="nl.fokkezb.colorpick" id="picker" class="picker" />
     
   </Popover>
   
