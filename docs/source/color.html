@@ -18,7 +18,7 @@
   <pre class="prettyprint lang-js"><span id='Widgets-nlFokkezbForm-controllers-color'>/**
 </span> * Controller for the color field type.
  *
- * The color field type is a `Ti.UI.Label` to display current and the `nl.fokkezb.colorpick` module to change.
+ * The color field type is a `Ti.UI.Label` to display current and the `nl.fokkezb.color` widget to change.
  *
  * **WARNING** For now this is an iPad-only type!
  *
@@ -42,6 +42,10 @@ $.showValue = showValue;
  * @param {String|Object} args.label Will be used for the dialog title as well.
  */
 (function constructor(args) {
+
+  if (Ti.Platform.osname !== &#39;ipad&#39;) {
+    throw &#39;The color-field type only supports iPad for now.&#39;;
+  }
 
   // display a hasChild marker
   $.row.applyProperties($.createStyle({
@@ -73,52 +77,18 @@ function focus() {
 }
 
 function showValue(val) {
-  $.input.text = &#39;  &#39; + val + &#39;  &#39;;
-  $.input.backgroundColor = val;
-  $.input.color = getContrastColor(val);
+  $.input.applyProperties({
+    text: &#39;  &#39; + val + &#39;  &#39;,
+    backgroundColor: val,
+    color: $.picker.convert.hsv2bw($.picker.convert.rgb2hsv($.picker.convert.hex2rgb(val)))
+  });
 }
 
-function onDoneClick(e) {
-  var val = $.picker.color;
+function onColorChange(e) {
+  var val = e.hex;
 
   $.showValue(val);
   $.changeValue(val);
-
-  onCancelClick(e);
-}
-
-function onCancelClick(e) {
-  $.popover.hide();
-}
-
-function getContrastColor(hexcolor) {
-
-  if (!hexcolor) {
-    return &#39;black&#39;;
-  }
-
-  // we don&#39;t want the #
-  if (hexcolor.substr(0, 1) === &#39;#&#39;) {
-    hexcolor = hexcolor.substr(1);
-  }
-
-  // sorry we don&#39;t do alpha
-  if (hexcolor.length === 4 || hexcolor.length === 7) {
-    hexcolor = hexcolor.substr(1);
-  }
-
-  // translate F00 to FF0000
-  if (hexcolor.length === 3) {
-    hexcolor = hexcolor.substr(0, 1) + hexcolor.substr(0, 1) + hexcolor.substr(1, 1) + hexcolor.substr(1, 1) + hexcolor.substr(2, 1) + hexcolor.substr(2, 1);
-  }
-
-  var r = parseInt(hexcolor.substr(0, 2), 16);
-  var g = parseInt(hexcolor.substr(2, 2), 16);
-  var b = parseInt(hexcolor.substr(4, 2), 16);
-
-  var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-
-  return (yiq &gt;= 128) ? &#39;black&#39; : &#39;white&#39;;
 }</pre>
 </body>
 </html>
