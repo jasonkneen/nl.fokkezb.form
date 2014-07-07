@@ -60,10 +60,20 @@ function focus() {
 }
 
 function showValue(val) {
+  var color, rgb;
+
+  if (val) {
+    rgb = $.picker.convert.hex2rgb(val);
+
+    if (rgb) {
+      color = $.picker.convert.hsv2bw($.picker.convert.rgb2hsv(rgb));
+    }
+  }
+
   $.input.applyProperties({
     text: '  ' + val + '  ',
     backgroundColor: val,
-    color: $.picker.convert.hsv2bw($.picker.convert.rgb2hsv($.picker.convert.hex2rgb(val)))
+    color: color
   });
 }
 
