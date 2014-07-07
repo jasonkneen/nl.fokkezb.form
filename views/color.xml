@@ -2,17 +2,9 @@
   <Label id="input" class="input" />
   
   <Popover id="popover" class="popover" platform="ios" formFactor="tablet">
-
-    <LeftNavButton>
-      <Button id="cancel" class="cancel" onClick="onCancelClick" />
-    </LeftNavButton>
-
-    <RightNavButton>
-      <Button id="done" class="done" onClick="onDoneClick" />  
-    </RightNavButton>
-
-    <View module="nl.fokkezb.colorpick" id="picker" class="picker" />
-    
+    <ContentView>
+      <Widget src="nl.fokkezb.color" id="picker" class="picker" onChange="onColorChange" />
+    </ContentView>
   </Popover>
   
 </Alloy>

@@ -10,7 +10,7 @@
 	"min-titanium-version":"3.1",
 	"tags":"",
 	"platforms":"ios",
-	"modules": {
-		"nl.fokkezb.colorpick": "*"
+	"dependencies": {
+		"nl.fokkezb.color": "*"
 	}
 }

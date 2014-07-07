@@ -15,17 +15,7 @@
   borderRadius: 5
 }
 
-".popover": {
-  width: 320,
-  height: 440,
-
-  backgroundColor: 'white'
-}
-
-".cancel[platform=ios]": {
-  systemButton: Ti.UI.iPhone.SystemButton.CANCEL
-}
-
-".done[platform=ios]": {
-  systemButton: Ti.UI.iPhone.SystemButton.DONE
+".picker": {
+  width: 250,
+  height: 250
 }
