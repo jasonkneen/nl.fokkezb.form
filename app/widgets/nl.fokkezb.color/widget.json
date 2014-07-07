@@ -1,0 +1,13 @@
+{
+	"id": "nl.fokkezb.color",
+	"name": "Alloy Color Picker Widget",
+	"description" : "Color Picker that can have any size.",
+	"author": "Fokke Zandbergen",
+	"version": "1.0",
+	"copyright":"Copyright (c) 2014 Fokke Zandbergen",
+	"license":"MIT",
+	"min-alloy-version": "1.0",
+	"min-titanium-version":"2.1",
+	"tags":"",
+	"platforms":"android,blackberry,ios,mobileweb"
+}

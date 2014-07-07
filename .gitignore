@@ -8,5 +8,5 @@ tmp
 .project
 .settings
 Thumbs.db
-app/widgets
+app/widgets/nl.fokkezb.form
 node_modules

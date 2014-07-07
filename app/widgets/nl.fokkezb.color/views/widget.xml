@@ -1,0 +1,5 @@
+<Alloy>
+  <View id="image" class="image" onTouchmove="onColorChange" onClick="onColorChange" onPostlayout="onPostlayout">
+   <View id="circle" class="circle" />
+  </View>
+</Alloy>

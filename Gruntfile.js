@@ -19,8 +19,7 @@ module.exports = function(grunt) {
           platform: 'ios',
           deviceFamily: 'ipad',
           logLevel: 'trace',
-          iosVersion: 7.1,
-          shadow: true
+          iosVersion: 7.1
         }
       }
     }

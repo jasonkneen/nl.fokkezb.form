@@ -1,0 +1,15 @@
+".image": {
+  backgroundImage: WPATH('images/color.png')
+}
+
+".circle": {
+  width: 20,
+  height: 20,
+
+  borderWidth: 5,
+  borderColor: 'black',
+  borderRadius: 10,
+
+  touchEnabled: false,
+  visible: false
+}

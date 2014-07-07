@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?><ti:app xmlns:ti="http://ti.appcelerator.org">
-	<id>nl.fokkezb.form</id>
-	<name>Form</name>
+	<id>nl.fokkezb.form.test</id>
+	<name>Alloy Form Widget</name>
 	<version>1.0</version>
-	<publisher>not specified</publisher>
+	<publisher>Fokke Zandbergen</publisher>
 	<url>http://fokkezb.nl</url>
-	<description/>
-	<copyright>not specified</copyright>
+	<description>Alloy Form Widget</description>
+	<copyright>Copyright (c) 2014 Fokke Zandbergen</copyright>
 	<icon>appicon.png</icon>
 	<fullscreen>false</fullscreen>
 	<navbar-hidden>false</navbar-hidden>
-	<analytics>true</analytics>
+	<analytics>false</analytics>
 	<guid>5402ec0c-aa75-4dd1-b737-579b5433bafc</guid>
 	<property name="ti.ui.defaultunit" type="string">dp</property>
 	<ios>
@@ -37,20 +37,6 @@
 			</dict>
 		</plist>
 	</ios>
-	<android xmlns:android="http://schemas.android.com/apk/res/android">
-	</android>
-	<mobileweb>
-		<precache>
-		</precache>
-		<splash>
-			<enabled>true</enabled>
-			<inline-css-images>true</inline-css-images>
-		</splash>
-		<theme>default</theme>
-	</mobileweb>
-	<modules>
-		<module platform="iphone">nl.fokkezb.colorpicker</module>
-	</modules>
 	<deployment-targets>
 		<target device="android">false</target>
 		<target device="blackberry">false</target>
@@ -59,6 +45,7 @@
 		<target device="mobileweb">false</target>
 	</deployment-targets>
 	<sdk-version>3.3.0.RC</sdk-version>
-<plugins><plugin version="1.0">ti.alloy</plugin>
-</plugins>
+	<plugins>
+		<plugin version="1.0">ti.alloy</plugin>
+	</plugins>
 </ti:app>
