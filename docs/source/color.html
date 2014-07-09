@@ -30,7 +30,11 @@
 exports.baseController = &#39;../widgets/nl.fokkezb.form/controllers/field&#39;;
 
 $.focus = focus;
-$.showValue = showValue;
+$.setValue = setValue;
+$.getValue = getValue;
+
+var value;
+var showHex = true;
 
 <span id='Widgets-nlFokkezbForm-controllers-color-method-Controller'>/**
 </span> * Constructor.
@@ -38,8 +42,10 @@ $.showValue = showValue;
  * @constructor
  * @method Controller
  * @param args Arguments which will also be used to call {@link Widgets.nlFokkezbForm.controllers.field#Controller}.
- * @param {Object} [args.input] Properties to apply to the `Ti.UI.Label`.
- * @param {String|Object} args.label Will be used for the dialog title as well.
+ * @param {Object} [args.input]        Properties to apply to the `Ti.UI.Label`.
+ * @param {Boolean} [args.input.text]  A static string (can also be empty) to display instead of the current hex value.
+ * @param {String|Object} args.label   Will be used for the dialog title as well.
+ * @param {Object} [args.color]        Settings to apply to the color picker.
  */
 (function constructor(args) {
 
@@ -54,7 +60,18 @@ $.showValue = showValue;
 
   // input properties to apply
   if (args.input) {
+
+    // always show static text
+    if (_.has(args.input, &#39;text&#39;)) {
+      showHex = false;
+    }
+
     $.input.applyProperties(args.input);
+  }
+
+  // properties to apply to picker
+  if (args.color) {
+    $.picker.applyProperties(args.color);
   }
 
   // add the input to the row
@@ -76,19 +93,41 @@ function focus() {
   });
 }
 
-function showValue(val) {
-  $.input.applyProperties({
-    text: &#39;  &#39; + val + &#39;  &#39;,
-    backgroundColor: val,
-    color: $.picker.convert.hsv2bw($.picker.convert.rgb2hsv($.picker.convert.hex2rgb(val)))
-  });
+function setValue(val) {
+  value = val;
+
+  var prop = {
+    backgroundColor: &#39;white&#39;,
+    color: &#39;black&#39;
+  };
+
+  // find text color
+  if (value) {
+    prop.backgroundColor = value;
+
+    if (showHex) {
+      prop.text = &#39;  &#39; + value + &#39;  &#39;;
+
+      var rgb = $.picker.convert.hex2rgb(value);
+
+      if (rgb) {
+        prop.color = $.picker.convert.hsv2bw($.picker.convert.rgb2hsv(rgb));
+      }
+    }
+  }
+
+  $.input.applyProperties(prop);
+}
+
+function getValue() {
+  return value;
 }
 
 function onColorChange(e) {
   var val = e.hex;
 
-  $.showValue(val);
-  $.changeValue(val);
+  $.setValue(val);
+  $.change();
 }</pre>
 </body>
 </html>

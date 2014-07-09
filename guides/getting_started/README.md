@@ -99,8 +99,9 @@ If `config` ends with `.json`, it will assume it to be a path absolute or relati
 
 #### CommonJS
 
-If not, it will assume it to be a relative path to a CommonJS module. This can in turn have two forms.
+If not, it will assume it to be a relative path to a CommonJS module. This can in turn be used in 2, or even 3 ways.
 
+##### Export an object
 It can export the properties themselve:
 
 	module.exports = {
@@ -114,6 +115,7 @@ It can export the properties themselve:
 		}]
 	};
 	
+##### Export a function (sync)
 Or export an `extend` function to be called with te existing properties. This way you can return different properties depending on e.g. the values:
 
 	exports.extend = function(opts) {
@@ -142,4 +144,37 @@ Or export an `extend` function to be called with te existing properties. This wa
 			}]
 		};
 	
+	};
+
+##### Export a function (async)
+If you need to request data to determine the fields, you can also return nothing and call the second argument when you're done:
+
+	exports.extend = function(opts, callback) {
+	
+		require('xhr').request('http://my.back.end', function(res) {
+		
+			callback({
+				listener: function(e) {
+					
+					if (e.field === 'name') {
+						e.form.getField('email').required = (e.value === 'Jeff');
+					}
+				
+				},
+				fieldsets: [{
+					legend: res.legend,			
+					fields: [{
+						name: 'name',
+						label: 'Your name',
+						type: 'text'
+					}, {
+						email: 'email',
+						label: 'Your email',
+						type: 'text',
+						format: 'email'
+						required: (opts.values && opts.values.name === 'Jeff')
+					}]
+				}]
+			});
+		});
 	};

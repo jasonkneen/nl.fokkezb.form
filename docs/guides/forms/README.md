@@ -5,7 +5,7 @@ The form is a `Ti.UI.TableView` holding a `Ti.UI.TableViewSection` for each fiel
 See [Getting Started](#!/guide/getting_started) to learn how to create a form.
 
 ## Values
-You can pass initial values when you [initialize](#!/guide/getting_started-section-2.-initializing-the-widget) the widget using the `values` property:
+You can pass initial values when you [initialize](#!/guide/getting_started-section-2.-initializing-the-widget) the widget using the `values` property on the field and/or form level. The latter will overwrite the first, so you can use the field values as defaults.
 
 	var form = Alloy.createWidget('nl.fokkezb.nl', {
 		fieldsets: [{
@@ -13,7 +13,8 @@ You can pass initial values when you [initialize](#!/guide/getting_started-secti
 			fields: [{
 				name: 'name',
 				label: 'Your name',
-				type: 'text'
+				type: 'text',
+				value: 'John'
 			}]
 		}],
 		values: {

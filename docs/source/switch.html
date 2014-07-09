@@ -28,7 +28,8 @@
 exports.baseController = &#39;../widgets/nl.fokkezb.form/controllers/field&#39;;
 
 $.focus = focus;
-$.showValue = showValue;
+$.getValue = getValue;
+$.setValue = setValue;
 $.isValid = isValid;
 
 <span id='Widgets-nlFokkezbForm-controllers-switch-method-Controller'>/**
@@ -63,7 +64,11 @@ function focus() {
   $.input.value = val;
 }
 
-function showValue(val) {
+function getValue(val) {
+  return $.input.value;
+}
+
+function setValue(val) {
   $.input.value = !!val;
 }
 
@@ -77,7 +82,7 @@ function isValid() {
 }
 
 function onChange(e) {
-  $.changeValue(e.value);
+  $.change();
 }</pre>
 </body>
 </html>

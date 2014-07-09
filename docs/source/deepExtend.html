@@ -75,7 +75,7 @@ var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
 
             if (val === target) continue;
 
-            if (typeof val !== &#39;object&#39; || val.apiName || val === null) {
+            if (typeof val !== &#39;object&#39; || val === null || val.apiName) {
                 target[key] = val;
                 continue;
             }/* else if (val instanceof Buffer) {

@@ -26,12 +26,16 @@ By leaving most of the common views and logic in {@link Widgets.nlFokkezbForm.co
 
 	})(arguments[0]);
 	
-	$.showValue(val) {
+	$.setValue(val) {
 		$.input.value = val;
 	}
 	
+	$.getValue() {
+		return $.input.value;
+	}
+	
 	function onChange(e) {
-		$.changeValue(e.value);
+		$.change();
 	}
  
 And a view not much more then:
@@ -52,11 +56,11 @@ Please conform to how the built-ins work by allowing the user to apply propertie
 ### setInput
 You need to call {@link Widgets.nlFokkezbForm.controllers.field#setInput} to add your type's input view to the row.
 
-### showValue
-To display the value set to the field via the type's input controller, you need to overload the `$.showValue` method and do what needs to be done there.
+### setValue
+To display the value set to the field via the type's input controller, you need to overload the `$.setValue` method and do what needs to be done there.
 
-### changeValue
-The other way around you need to call `$.changeValue` whenever the value of the control changes. The base controller will take care of the `change` events.
+### change
+The other way around you need to call `$.change` whenever the value of the control is changed by the user. The base controller will take care of the `change` events.
 
 ### Overloading controller methods
 You can overload any of {@link Widgets.nlFokkezbForm.controllers.field}'s methods:

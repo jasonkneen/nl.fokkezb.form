@@ -29,7 +29,7 @@ var deepExtend = require(WPATH(&#39;deepExtend&#39;));
 <span id='Widgets-nlFokkezbForm-controllers-widget-event-change'>/**
 </span> * @event change
  * Fired when the value of the field changes.
- * 
+ *
  * @param {Object} e Event
  * @param {String} e.field The name of the field that has changed.
  * @param {Mixed} e.value The new value.
@@ -58,6 +58,11 @@ var defaults;
  * @private
  */
 var fieldCtrls = {};
+
+/*
+ * @type {Function} Form-wide listener added via #init.
+ */
+var listener;
 
 <span id='Widgets-nlFokkezbForm-controllers-widget-method-Controller'>/**
 </span> * Constructor for the form.
@@ -112,23 +117,40 @@ function init(opts) {
     };
   }
 
-  // clone deep so we leave the original referenced object untouched
-  else {
-    opts = deepExtend({}, opts);
-  }
+  // clone input opts and apply defaults set in constructor
+  opts = deepExtend({}, defaults || {}, opts);
 
   // we have a config file to load
   if (opts.config) {
 
+    // JSON
     if (opts.config.indexOf(&#39;.json&#39;) !== -1) {
       opts = deepExtend(opts, JSON.parse(Ti.Filesystem.getFile(opts.config).read().text));
+    }
 
-    } else {
+    // CommonJS
+    else {
       var cjs = require(opts.config);
+      var config;
 
+      // Function
       if (_.isFunction(cjs.extend)) {
-        config = cjs.extend(opts);
-      } else {
+
+        // can be either sync or async
+        config = cjs.extend(opts, function(config) {
+          opts = deepExtend(opts, config);
+
+          render(opts);
+        });
+
+        // Async
+        if (!config) {
+          return;
+        }
+      }
+
+      // Object
+      else {
         config = cjs;
       }
 
@@ -136,10 +158,16 @@ function init(opts) {
     }
   }
 
-  // use the constructor&#39;s args as defaults if init() was run later
-  if (defaults) {
-    opts = deepExtend(defaults, opts);
-  }
+  render(opts);
+}
+
+/*
+ * Continue init after config has been loaded
+ *
+ * @private
+ * @param {Object} Options from constructor, init and config files merged.
+ */
+function render(opts) {
 
   if (!opts.fieldsets &amp;&amp; !opts.fields) {
     throw &#39;Either `opts.fieldsets` or `opts.fields` is required.&#39;;
@@ -159,53 +187,11 @@ function init(opts) {
   // values for the fields
   opts.values = opts.values || {};
 
-  render(opts);
-
-  // add form-wide listener
-  if (opts.listener) {
-    $.on(&#39;change&#39;, opts.listener);
-  }
-}
-
-<span id='Widgets-nlFokkezbForm-controllers-widget-method-getValues'>/**
-</span> * Get all field values.
- *
- * @return {Object} Values as object with field names as keys.
- */
-function getValues() {
-
-  var values = {};
-
+  // clean-up listeners
+  listener = null;
   _.each(fieldCtrls, function(fieldCtrl, name) {
-    values[name] = fieldCtrl.getValue();
+    fieldCtrl.off();
   });
-
-  return values;
-}
-
-<span id='Widgets-nlFokkezbForm-controllers-widget-method-setValues'>/**
-</span> * Set field values.
- *
- * @param {Object} Values as object with field names as keys.
- */
-function setValues(values) {
-
-  _.each(values, function(value, name) {
-
-    // values could contain properties for which we don&#39;t have a field
-    if (fieldCtrls[name]) {
-      fieldCtrls[name].setValue(value);
-    }
-  });
-}
-
-/*
- * Renders the form.
- *
- * @private
- * @param  {Object[]} opts  See #init
- */
-function render(opts) {
 
   // user can pass custom table properties
   var tableProp = opts.table || {};
@@ -241,6 +227,11 @@ function render(opts) {
     // for each field
     _.each(fieldset.fields, function(field) {
 
+      // allow for `null` or `undefined` values
+      if (!field) {
+        return;
+      }
+
       // field can be a Ti.UI.TableViewRow
       // FIXME: apiName is Ti.View (https://jira.appcelerator.org/browse/TC-4278)
       if (field.apiName) {
@@ -249,6 +240,7 @@ function render(opts) {
       } else {
 
         // user can either pass value in field or in separate &#39;values&#39; arg
+        // set both to use the field&#39;s value as default
         if (opts.values[field.name]) {
           field.value = opts.values[field.name];
         }
@@ -257,6 +249,8 @@ function render(opts) {
         if (fieldset.row) {
           field.row = _.defaults(field.row || {}, fieldset.row);
         }
+
+        field.form = $;
 
         var fieldCtrl;
 
@@ -272,18 +266,14 @@ function render(opts) {
 
         // pass field events on to the form listeners
         fieldCtrl.on(&#39;change&#39;, function(e) {
+          $.trigger(&#39;change change:&#39; + e.field, e);
 
-          e.field = field.name;
-          e.form = $;
-
-          $.trigger(&#39;change change:&#39; + field.name, e);
+          // form-wide listener set via init
+          if (listener) {
+            listener(e);
+          }
 
         });
-
-        // add a field listener here so he has the form reference
-        if (field.listener) {
-          $.on(&#39;change:&#39; + field.name, field.listener);
-        }
 
         // keep a reference to the widget
         fieldCtrls[field.name] = fieldCtrl;
@@ -310,6 +300,38 @@ function render(opts) {
 
   // set the table
   $.table.applyProperties(tableProp);
+}
+
+<span id='Widgets-nlFokkezbForm-controllers-widget-method-getValues'>/**
+</span> * Get all field values.
+ *
+ * @return {Object} Values as object with field names as keys.
+ */
+function getValues() {
+
+  var values = {};
+
+  _.each(fieldCtrls, function(fieldCtrl, name) {
+    values[name] = fieldCtrl.getValue();
+  });
+
+  return values;
+}
+
+<span id='Widgets-nlFokkezbForm-controllers-widget-method-setValues'>/**
+</span> * Set field values.
+ *
+ * @param {Object} Values as object with field names as keys.
+ */
+function setValues(values) {
+
+  _.each(values, function(value, name) {
+
+    // values could contain properties for which we don&#39;t have a field
+    if (fieldCtrls[name]) {
+      fieldCtrls[name].setValue(value);
+    }
+  });
 }
 
 <span id='Widgets-nlFokkezbForm-controllers-widget-method-getField'>/**

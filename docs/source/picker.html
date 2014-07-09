@@ -32,7 +32,7 @@ var moment = require(&#39;alloy/moment&#39;);
 exports.baseController = &#39;../widgets/nl.fokkezb.form/controllers/field&#39;;
 
 $.focus = focus;
-$.showValue = showValue;
+$.setValue = setValue;
 
 var picker = {
   type: Ti.UI.PICKER_TYPE_DATE,
@@ -90,7 +90,7 @@ function focus() {
   // picker needs a year, also for time
   if (m.year() === 0) {
     m.year(2000);
-  } 
+  }
 
   $.picker.value = m.toDate();
 
@@ -114,7 +114,7 @@ function focus() {
   }
 }
 
-function showValue(val) {
+function setValue(val) {
 
   if (typeof val === &#39;object&#39;) {
     val = moment(val).format(picker.format);
@@ -140,9 +140,9 @@ function onDialogClose(e) {
 
   if (!e.cancel) {
     var val = moment(e.value).format(picker.format);
-    
-    $.showValue(val);
-    $.changeValue(val);
+
+    $.setValue(val);
+    $.change();
   }
 }</pre>
 </body>
