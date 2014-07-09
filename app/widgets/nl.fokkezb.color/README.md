@@ -36,7 +36,11 @@ See the following code form the [test app](https://github.com/FokkeZB/nl.fokkezb
 	<Alloy>
 	  <Window id="win" backgroundColor="#00FF00" fullscreen="true">
 	    <Label id="hex" width="Ti.UI.FILL" textAlign="Ti.UI.TEXT_ALIGNMENT_CENTER" top="0" height="40">#00FF00</Label>
-			<Widget id="widget" src="nl.fokkezb.color" onChange="onChange" color="#00FF00" top="40" bottom="40" left="40" right="40" />
+	    
+			<Widget id="widget" src="nl.fokkezb.color" onChange="onChange" color="#00FF00" top="40" bottom="40" left="40" right="40">
+				<!-- YOU CAN ADD CHILD VIEWS -->
+			</Widget>
+			
 		</Window>
 	</Alloy>
 	

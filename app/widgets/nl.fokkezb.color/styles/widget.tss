@@ -1,5 +1,5 @@
 ".image": {
-  backgroundImage: WPATH('images/color.png')
+  backgroundImage: WPATH('images/ghsv.png')
 }
 
 ".circle": {

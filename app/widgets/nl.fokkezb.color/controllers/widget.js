@@ -5,6 +5,19 @@
  *
  * Inspired by: [https://github.com/JigarM/TiColorPicker/]()
  *
+ * # Built-in spectrums
+ *
+ * The default color spectrum is {@link Widgets.nlFokkezbColor.lib.ghsv ghsv},
+ * but you can also set this to {@link Widgets.nlFokkezbColor.lib.hsvg hsvg}
+ * or {@link Widgets.nlFokkezbColor.lib.hsv hsv}.
+ *
+ * # Custom spectrums
+ *
+ * You can also set the `spectrum` argument to a custom type. Just pass an
+ * object exposing the required `image` property (start your path by `/` to
+ * prevent the widget to prepend the widget asset path) and the `pc2hsv`
+ * and `hsv2pc` methods as with the builtins.
+ *
  * @class Widgets.nlFokkezbColor.controllers.widget
  * @requires Widgets.nlFokkezbColor.lib.convert
  */
@@ -52,6 +65,8 @@ $.setColor = setColor;
  */
 $.getColor = getColor;
 
+$.applyProperties = applyProperties;
+
 /**
  * Fired when the user changes the color.
  *
@@ -62,7 +77,7 @@ $.getColor = getColor;
  */
 
 // private vars
-var rect, unit, color;
+var spectrum, rect, unit, color;
 
 /**
  * Constructor for the widget.
@@ -70,14 +85,10 @@ var rect, unit, color;
  * @method  Controller
  * @param {Object} args  Arguments passed to the controller, which will be applied to the main view.
  * @param {Object|String} [args.color]  The color to set.
+ * @param {Object|String} [args.spectrum]  One of the built-in color spectrum names or an object exposing one.
  * @param {Array} [args.children]       Child views to overlay.
  */
 (function constuctor(args) {
-
-  if (args.color) {
-    setColor(args.color);
-    delete args.color;
-  }
 
   if (args.children) {
     _.each(args.children, function(child) {
@@ -85,12 +96,48 @@ var rect, unit, color;
     });
   }
 
-  $.image.applyProperties(_.omit(args, 'id', '__parentSymbol', '__itemTemplate', '$model', 'children'));
+  args.spectrum = args.spectrum || 'ghsv';
+
+  applyProperties(args);
 
 })(arguments[0] || {});
 
-function setColor(clr) {
+/**
+ * Set properties for the widget.
+ *
+ * @param {Object} prop                    Properties to apply to the main view.
+ * @param {Object|String} [prop.color]     The color to set.
+ * @param {Object|String} [prop.spectrum]  One of the built-in color spectrum names or an object exposing one.
+ */
+function applyProperties(prop) {
 
+  if (prop.spectrum) {
+    spectrum = _.isObject(prop.spectrum) ? prop.spectrum : require(WPATH(prop.spectrum));
+
+    var image = spectrum.image;
+
+    if (image.substr(0, 1) !== '/') {
+      image = WPATH(image);
+    }
+
+    prop.backgroundImage = image;
+  }
+
+  var apply = _.omit(prop, 'id', '__parentSymbol', '__itemTemplate', '$model', 'children', 'color', 'spectrum');
+
+  if (_.size(apply) > 0) {
+    $.image.applyProperties(apply);
+  }
+
+  if (prop.color) {
+    setColor(prop.color);
+
+  } else if (prop.spectrum) {
+    setCircle();
+  }
+}
+
+function setColor(clr) {
   parseColor(clr);
 
   setCircle();
@@ -127,25 +174,16 @@ function onColorChange(e) {
   x = Math.max(0, Math.min(rect.width, x));
   y = Math.max(0, Math.min(rect.height, y));
 
-  // position circle
-  $.circle.applyProperties({
-    center: {
-      x: x,
-      y: y
-    },
-    borderColor: color.bw
-  });
-
-  $.circle.show();
-
-  var imageThird = (rect.height / 3);
-
-  var hsv = {
-    h: Math.round((x / rect.width) * 359),
-    s: (y < imageThird) ? 100 : Math.max(0, Math.round(100 - (((y - imageThird) * 100) / imageThird))),
-    v: (y < imageThird) ? Math.round((y * 100) / imageThird) : ((y > (imageThird * 2)) ? Math.round(100 - (((y - (2 * imageThird)) * 100) / imageThird)) : 100)
+  // convert px to pc
+  var pc = {
+    x: (x / rect.width) * 100,
+    y: (y / rect.height) * 100
   };
 
+  // convert pc to hsv
+  var hsv = spectrum.pc2hsv(pc);
+
+  // convert to other spectrums
   var rgb = $.convert.hsv2rgb(hsv);
   var hex = $.convert.rgb2hex(rgb);
   var bw = $.convert.hsv2bw(hsv);
@@ -157,6 +195,17 @@ function onColorChange(e) {
     hex: hex,
     bw: bw
   };
+
+  // position circle
+  $.circle.applyProperties({
+    center: {
+      x: x,
+      y: y
+    },
+    borderColor: bw
+  });
+
+  $.circle.show();
 
   // broadcast change
   $.trigger('change', color);
@@ -183,10 +232,18 @@ function parseColor(clr) {
       return;
     }
 
-  } else {
+  } else if (_.isString(clr)) {
     hex = clr;
     rgb = $.convert.hex2rgb(hex);
+
+    if (!rgb) {
+      return;
+    }
+
     hsv = $.convert.rgb2hsv(rgb);
+
+  } else {
+    return;
   }
 
   bw = $.convert.hsv2bw(hsv);
@@ -203,26 +260,17 @@ function setCircle() {
 
   if (rect && color) {
 
-    var yP;
+    // convert hsv to pc
+    var pc = spectrum.hsv2pc(color.hsv);
 
-    if (color.hsv.s > 0) {
-
-      if (color.hsv.b < 100) {
-        yP = color.hsv.b;
-
-      } else {
-        yP = 200 - color.hsv.s;
-      }
-
-    } else {
-      yP = 300 - color.hsv.b;
-    }
+    // convert pc to px
+    var px = {
+      x: rect.width * (pc.x / 100),
+      y: rect.height * (pc.y / 100)
+    };
 
     $.circle.applyProperties({
-      center: {
-        x: Math.round((color.hsv.h * rect.width) / 359),
-        y: Math.round((yP * rect.height) / 300)
-      },
+      center: px,
       borderColor: color.bw
     });
 
