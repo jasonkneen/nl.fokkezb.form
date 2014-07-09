@@ -38,8 +38,7 @@ $.focus = focus;
 $.setValue = setValue;
 $.getValue = getValue;
 
-$.showValue = showValue;
-$.changeValue = changeValue;
+$.change = change;
 
 $.isValid = isValid;
 $.showError = showError;
@@ -54,6 +53,9 @@ var controllerParam = {
 // hold the value received via constructor until after setInput was called.
 var value;
 
+// hold the form object and field name
+var form, name;
+
 /**
  * Constructor for the row.
  *
@@ -62,20 +64,23 @@ var value;
  * @param args                          Arguments passed to the controller.
  * @param {Object|String} [args.label]  Properties to apply to the `Ti.UI.Label` or value for the text property.
  * @param {String} [args.labelid]       String name to use with `L()` for the `Ti.UI.Label` text property.
- * @param {Object} [args.row]            Properties to apply to the `Ti.UI.TableViwRow`.
+ * @param {Object} [args.row]           Properties to apply to the `Ti.UI.TableViwRow`.
  */
 (function constructor(args) {
+
+  form = args.form;
+  name = args.name;
 
   $.row.applyProperties(_.extend(args.row || {}, {
 
     // for the table's singletap event listener
-    _name: args.name
+    _name: name
   }));
 
   if (args.validator) {
     $.validator = args.validator;
   }
-  
+
   $.required = args.required === true;
 
   // label properties to apply
@@ -86,6 +91,10 @@ var value;
 
   if (args.value !== undefined) {
     value = args.value;
+  }
+
+  if (args.listener) {
+    $.on('change', args.listener);
   }
 
 })(arguments[0]);
@@ -132,7 +141,7 @@ function showError(show) {
  * Sets the focus on the input.
  *
  * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
- * 
+ *
  * @private
  */
 function focus() {
@@ -145,49 +154,29 @@ function focus() {
  * @return {String} Value of the field.
  */
 function getValue() {
-  return value;
+  return $.input.text;
 }
 
 /**
  * Set the value of the field.
  *
- * @param  {String} [value] Value to set.
+ * @param  {Mixed} [value] Value to set.
  */
 function setValue(val) {
-  value = val;
-
-  $.showValue(value);
-}
-
-/**
- * Shows the value via the input.
- *
- * To be overridden by field types so that their input shows the value.
- * 
- * @param  {Mixed} val The value to display.
- * @private
- */
-function showValue(val) {
   $.input.value = val;
 }
 
 /**
- * Changes the value stored to be returned to the form.
- * Also fires the #change event if it has changed.
- * 
- * @param  {Mixed} val The value changed by the input control.
+ * Fires the #change event if it has changed.
+ *
  * @private
  */
-function changeValue(val) {
-
-  if (val === value) {
-    return;
-  }
-
-  value = val;
+function change() {
 
   $.trigger('change', {
-    value: value
+    form: form,
+    field: name,
+    value: $.getValue()
   });
 }
 
@@ -199,7 +188,7 @@ function changeValue(val) {
 function isValid() {
 
   var value = $.getValue();
-  
+
   var valid = true;
 
   if ($.required && !value) {

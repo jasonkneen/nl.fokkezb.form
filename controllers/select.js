@@ -11,12 +11,16 @@
 exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 
 $.focus = focus;
-$.showValue = showValue;
+$.getValue = getValue;
+$.setValue = setValue;
 
-var options;
 var value;
-var iPadArrow = false;
-var cancel = L('nlFokkezbForm_cancel', 'Cancel');
+
+var config = {
+  options: [],
+  iPadArrow: true,
+  cancel: L('nlFokkezbForm_cancel', 'Cancel')
+};
 
 /**
  * Constructor.
@@ -24,18 +28,17 @@ var cancel = L('nlFokkezbForm_cancel', 'Cancel');
  * @constructor
  * @method Controller
  * @param args Arguments which will also be used to call {@link Widgets.nlFokkezbForm.controllers.field#Controller}.
- * @param {Object} [args.input] Properties to apply to the `Ti.UI.Label`.
- * @param {Array|Object} options An `Array` or `Object` in which values are keys and values are labels to display.
  * @param {String|Object} args.label Will be used for the dialog title as well.
- * @param {Boolean} [iPadArrow=false] If `true` it will attach the dialog to the input on iPads.
+ * @param {Object} [args.input] Properties to apply to the `Ti.UI.Label`.
+ * @param {Object} args.select Settings for the select.
+ * @param {Array|Object} args.select.options An `Array` or `Object` in which values are keys and values are labels to display.
+ * @param {Boolean} [args.select.iPadArrow=false] If `true` it will attach the dialog to the input on iPads.
+ * @param {String} [args.select.cancel=L('nlFokkezbForm_cancel', 'Cancel')] Text for the cancel option.
  */
 (function constructor(args) {
 
-  options = args.options || [];
-  iPadArrow = args.iPadArrow === true;
-  
-  if (_.has(args, 'cancel')) {
-    cancel = args.cancel;
+  if (args.select) {
+    _.extend(config, args.select);
   }
 
   // display a hasChild marker
@@ -60,11 +63,11 @@ var cancel = L('nlFokkezbForm_cancel', 'Cancel');
  */
 function focus() {
 
-  var labels = _.values(options);
-  labels.push(cancel);
+  var labels = _.values(config.options);
+  labels.push(config.cancel);
   var cancelIndex = labels.length - 1;
 
-  var selectedIndex = _.isArray(options) ? value : _.indexOf(_.keys(options), value);
+  var selectedIndex = _.isArray(config.options) ? value : _.indexOf(_.keys(config.options), value);
 
   var dialog = Ti.UI.createOptionDialog({
     cancel: cancelIndex,
@@ -79,18 +82,24 @@ function focus() {
       return;
     }
 
-    var val = _.isArray(options) ? e.index : _.keys(options)[e.index];
+    var val = _.isArray(config.options) ? e.index : _.keys(config.options)[e.index];
 
-    $.showValue(val);
-    $.changeValue(val);
+    $.setValue(val);
+    $.change();
 
   });
 
-  dialog.show(iPadArrow ? {
+  dialog.show(config.iPadArrow ? {
     view: $.input
   } : {});
 }
 
-function showValue(val) {
-  $.input.text = options[val];
+function getValue() {
+  return value;
+}
+
+function setValue(val) {
+  value = val;
+
+  $.input.text = config.options[value];
 }

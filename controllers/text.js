@@ -62,5 +62,5 @@ exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 })(arguments[0]);
 
 function onChange(e) {
-  $.changeValue(e.value);
+  $.change();
 }

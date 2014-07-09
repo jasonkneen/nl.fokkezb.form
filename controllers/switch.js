@@ -11,7 +11,8 @@
 exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 
 $.focus = focus;
-$.showValue = showValue;
+$.getValue = getValue;
+$.setValue = setValue;
 $.isValid = isValid;
 
 /**
@@ -46,7 +47,11 @@ function focus() {
   $.input.value = val;
 }
 
-function showValue(val) {
+function getValue(val) {
+  return $.input.value;
+}
+
+function setValue(val) {
   $.input.value = !!val;
 }
 
@@ -60,5 +65,5 @@ function isValid() {
 }
 
 function onChange(e) {
-  $.changeValue(e.value);
+  $.change();
 }

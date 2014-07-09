@@ -6,16 +6,19 @@
   left: 0,
 
   // align up with textfields
+  width: 100,
   height: 40,
 
-  color: "white",
+  color: 'white',
   font: {
     fontSize: 17
   },
+  borderWidth: 1,
+  borderColor: '#E3E3E5',
   borderRadius: 5
 }
 
 ".picker": {
-  width: 250,
-  height: 250
+  width: 320,
+  height: 320
 }
