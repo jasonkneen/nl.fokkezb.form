@@ -27,6 +27,8 @@
 
 exports.baseController = &#39;../widgets/nl.fokkezb.form/controllers/field&#39;;
 
+var format;
+
 <span id='Widgets-nlFokkezbForm-controllers-text-method-Controller'>/**
 </span> * Constructor.
  *
@@ -56,16 +58,23 @@ exports.baseController = &#39;../widgets/nl.fokkezb.form/controllers/field&#39;;
 
   // a string format is given
   if (args.format) {
+    format = args.format;
+    delete args.format;
 
-    switch (args.format) {
+    switch (format) {
+
       case &#39;email&#39;:
         inputProp.keyboardType = inputProp.keyboardType || Ti.UI.KEYBOARD_EMAIL;
         inputProp.autocapitalization = inputProp.autocapitalization || Ti.UI.TEXT_AUTOCAPITALIZATION_NONE;
         inputProp.autocorrect = inputProp.autocorrect === true;
         break;
-    }
 
-    delete args.format;
+      case &#39;float&#39;:
+        inputProp.keyboardType = inputProp.keyboardType || Ti.UI.KEYBOARD_DECIMAL_PAD;
+        inputProp.autocapitalization = inputProp.autocapitalization || Ti.UI.TEXT_AUTOCAPITALIZATION_NONE;
+        inputProp.autocorrect = inputProp.autocorrect === true;
+        break;
+    }
   }
 
   // input properties to apply
@@ -80,6 +89,12 @@ exports.baseController = &#39;../widgets/nl.fokkezb.form/controllers/field&#39;;
 
 function onChange(e) {
   $.change();
+
+  // if (format === &#39;float&#39;) {
+  //   var flt = parseFloat(e.value);
+
+  //   $.setValue(_.isNaN(flt) ? null : flt.toString());
+  // }
 }</pre>
 </body>
 </html>

@@ -42,6 +42,22 @@ To set or get the value of an individual field:
 
 	console.debug(value); // will show 'Jeff';
 	
+### Filters
+You can set a filter to run the values through before returning them with `getValues()`:
+
+	{
+		filter: function(values) {
+			if (values.name === 'Jeff') {
+				values.name = 'Haynie';
+			}
+		}
+		fields: [{
+			name: 'name',
+			label: 'Your name',
+			type: 'text'
+		}]
+	}	
+	
 ## Events
 The form fires a `change` and `change:[field]` event whenever a field's value changes.
 

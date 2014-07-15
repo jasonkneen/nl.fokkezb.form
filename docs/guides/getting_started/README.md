@@ -116,15 +116,15 @@ It can export the properties themselve:
 	};
 	
 ##### Export a function (sync)
-Or export an `extend` function to be called with te existing properties. This way you can return different properties depending on e.g. the values:
+Or export function to be called with te existing properties. This way you can return different properties depending on e.g. the values:
 
-	exports.extend = function(opts) {
+	module.exports = function(form, opts) {
 	
 		return {
 			listener: function(e) {
 				
 				if (e.field === 'name') {
-					e.form.getField('email').required = (e.value === 'Jeff');
+					form.getField('email').required = (e.value === 'Jeff');
 				}
 			
 			},
@@ -149,7 +149,7 @@ Or export an `extend` function to be called with te existing properties. This wa
 ##### Export a function (async)
 If you need to request data to determine the fields, you can also return nothing and call the second argument when you're done:
 
-	exports.extend = function(opts, callback) {
+	module.exports = function(form, opts, callback) {
 	
 		require('xhr').request('http://my.back.end', function(res) {
 		
@@ -157,7 +157,7 @@ If you need to request data to determine the fields, you can also return nothing
 				listener: function(e) {
 					
 					if (e.field === 'name') {
-						e.form.getField('email').required = (e.value === 'Jeff');
+						form.getField('email').required = (e.value === 'Jeff');
 					}
 				
 				},
