@@ -154,7 +154,7 @@ function focus() {
  * @return {String} Value of the field.
  */
 function getValue() {
-  return $.input.text;
+  return $.input.value;
 }
 
 /**

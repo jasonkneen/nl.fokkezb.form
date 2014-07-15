@@ -10,6 +10,8 @@
 
 exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 
+var format;
+
 /**
  * Constructor.
  *
@@ -39,16 +41,23 @@ exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 
   // a string format is given
   if (args.format) {
+    format = args.format;
+    delete args.format;
 
-    switch (args.format) {
+    switch (format) {
+
       case 'email':
         inputProp.keyboardType = inputProp.keyboardType || Ti.UI.KEYBOARD_EMAIL;
         inputProp.autocapitalization = inputProp.autocapitalization || Ti.UI.TEXT_AUTOCAPITALIZATION_NONE;
         inputProp.autocorrect = inputProp.autocorrect === true;
         break;
-    }
 
-    delete args.format;
+      case 'float':
+        inputProp.keyboardType = inputProp.keyboardType || Ti.UI.KEYBOARD_DECIMAL_PAD;
+        inputProp.autocapitalization = inputProp.autocapitalization || Ti.UI.TEXT_AUTOCAPITALIZATION_NONE;
+        inputProp.autocorrect = inputProp.autocorrect === true;
+        break;
+    }
   }
 
   // input properties to apply
@@ -63,4 +72,10 @@ exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 
 function onChange(e) {
   $.change();
+
+  // if (format === 'float') {
+  //   var flt = parseFloat(e.value);
+
+  //   $.setValue(_.isNaN(flt) ? null : flt.toString());
+  // }
 }

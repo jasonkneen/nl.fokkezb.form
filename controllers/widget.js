@@ -47,6 +47,16 @@ var fieldCtrls = {};
  */
 var listener;
 
+/*
+ * @type {Function} Filters values before returning them.
+ */
+var filter;
+
+/*
+ * @type {Object} Values set the form (only updated when calling getValues!)
+ */
+var values = {};
+
 /**
  * Constructor for the form.
  *
@@ -82,13 +92,15 @@ var listener;
  *
  * Called automatically by #Controller if it has `args.fieldsets` or `args.fields`.
  *
- * @param {Object} opts Options. Either `opts.fieldsets` or `opts.fields` is required.
- * @param {String} [opts.config] Path of a CommonJS or JSON file to extend `args` with.
- * @param {Object[]} [opts.table] Optional properties to apply to the `Ti.UI.TableView`.
- * @param {Object[]} [opts.fieldsets] Array of fieldsets.
- * @param {Object[]} [opts.fields] Array of fields.
- * @param {Object} [opts.values] Values as object with field names as keys.
- * @param {Function} [opts.listener] Listener for the form's #change event.
+ * @param {Object} opts                Options. Either `opts.fieldsets` or `opts.fields` is required.
+ * @param {String} [opts.config]       Path of a CommonJS or JSON file to extend `args` with.
+ * @param {Object[]} [opts.table]      Optional properties to apply to the `Ti.UI.TableView`.
+ * @param {Object[]} [opts.fieldsets]  Array of fieldsets.
+ * @param {Object[]} [opts.fields]     Array of fields.
+ * @param {Object} [opts.values]       Values as object with field names as keys.
+ * @param {Function} [opts.listener]   Listener for the form's #change event.
+ * @param {Function} [opts.filter]     Function to filter values before returning them.
+ *
  * @throws {Error} If the required options are missing.
  */
 function init(opts) {
@@ -117,10 +129,10 @@ function init(opts) {
       var config;
 
       // Function
-      if (_.isFunction(cjs.extend)) {
+      if (_.isFunction(cjs)) {
 
         // can be either sync or async
-        config = cjs.extend(opts, function(config) {
+        config = cjs($, opts, function(config) {
           opts = deepExtend(opts, config);
 
           render(opts);
@@ -168,10 +180,9 @@ function render(opts) {
   }
 
   // values for the fields
-  opts.values = opts.values || {};
+  values = opts.values || {};
 
   // clean-up listeners
-  listener = null;
   _.each(fieldCtrls, function(fieldCtrl, name) {
     fieldCtrl.off();
   });
@@ -184,22 +195,30 @@ function render(opts) {
 
   // for each fieldset
   _.each(opts.fieldsets, function(fieldset) {
+    var section;
 
-    // user can pass custom section properties
+    // user can pass section properties
     var sectionProp = fieldset.section || {};
 
-    // create array for rows unless user gave some
-    sectionProp.rows = sectionProp.rows || [];
+    // user can pass Ti.UI.TableViewSection
+    if (sectionProp.apiName === 'Ti.UI.TableViewSection') {
+      section = sectionProp;
 
-    // add class for styling unless user gave some
-    sectionProp.classes = sectionProp.classes || ['section'];
+    } else {
+
+      // user or default classesƒ
+      sectionProp.classes = sectionProp.classes || ['section'];
+
+      // create the section, extending TSS style by args
+      section = $.UI.create('TableViewSection', sectionProp);
+    }
 
     // user can pass legend or legendid we'll use as headerTitle
     if (fieldset.legend) {
-      sectionProp.headerTitle = fieldset.legend;
+      section.headerTitle = fieldset.legend;
 
     } else if (fieldset.legendid) {
-      sectionProp.headerTitle = L(fieldset.legendid);
+      section.headerTitle = L(fieldset.legendid);
     }
 
     // cascade form-wide row properties
@@ -218,14 +237,14 @@ function render(opts) {
       // field can be a Ti.UI.TableViewRow
       // FIXME: apiName is Ti.View (https://jira.appcelerator.org/browse/TC-4278)
       if (field.apiName) {
-        sectionProp.rows.push(field);
+        section.add(field);
 
       } else {
 
         // user can either pass value in field or in separate 'values' arg
         // set both to use the field's value as default
-        if (opts.values[field.name]) {
-          field.value = opts.values[field.name];
+        if (values[field.name]) {
+          field.value = values[field.name];
         }
 
         // cascade fieldset-wide row properties
@@ -268,13 +287,10 @@ function render(opts) {
         });
 
         // push the views of the controller as row
-        sectionProp.rows.push(row);
+        section.add(row);
       }
 
     });
-
-    // create the section, extending TSS style by args
-    var section = $.UI.create('TableViewSection', sectionProp);
 
     // push the section
     tableProp.sections.push(section);
@@ -283,6 +299,16 @@ function render(opts) {
 
   // set the table
   $.table.applyProperties(tableProp);
+
+  // add listener
+  if (opts.listener) {
+    listener = opts.listener;
+  }
+
+  // add filter
+  if (opts.filter) {
+    filter = opts.filter;
+  }
 }
 
 /**
@@ -292,11 +318,13 @@ function render(opts) {
  */
 function getValues() {
 
-  var values = {};
-
   _.each(fieldCtrls, function(fieldCtrl, name) {
     values[name] = fieldCtrl.getValue();
   });
+
+  if (filter) {
+    values = filter(values);
+  }
 
   return values;
 }

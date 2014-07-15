@@ -10,9 +10,6 @@
 
 exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 
-$.getValue = getValue;
-$.setValue = setValue;
-
 /**
  * Constructor.
  *
@@ -35,12 +32,4 @@ $.setValue = setValue;
 
 function onChange(e) {
   $.change();
-}
-
-function getValue() {
-  return $.input.value;
-}
-
-function setValue(val) {
-  $.input.value = val;
 }

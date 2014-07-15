@@ -16,10 +16,13 @@ exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 
 $.focus = focus;
 $.setValue = setValue;
+$.getValue = getValue;
+
+var m;
 
 var picker = {
   type: Ti.UI.PICKER_TYPE_DATE,
-  format: 'YYYY-MM-DD'
+  valueFormat: 'YYYY-MM-DD'
 };
 
 /**
@@ -30,8 +33,9 @@ var picker = {
  * @param args Arguments which will also be used to call {@link Widgets.nlFokkezbForm.controllers.field#Controller}.
  * @param {Object} [args.input] Properties to apply to the `Ti.UI.Label`.
  * @param {Object} [args.picker] Properties to apply to the `Ti.UI.Picker`.
- * @param {Number} [args.picker.type] On Android, if this is `Ti.UI.PICKER_TYPE_DATE` or `Ti.UI.PICKER_TYPE_TIME` this will trigger the related dialogs.
- * @param {String} [args.picker.format] Date format of the value input and output.
+ * @param {Number} [args.picker.type=Ti.UI.PICKER_TYPE_DATE] On Android, if this is `Ti.UI.PICKER_TYPE_DATE` or `Ti.UI.PICKER_TYPE_TIME` this will trigger the related dialogs.
+ * @param {String} [args.picker.valueFormat="YYYY-MM-DD"] Format in which the value is set and get.
+ * @param {String} [args.picker.textFormat] Format in which the value is displayed (defaults to `valueFormat`).
  * @param {String|Object} args.label Will be used for the popover title as well.
  */
 (function constructor(args) {
@@ -68,14 +72,20 @@ var picker = {
  */
 function focus() {
 
-  var m = moment($.getValue(), picker.format);
+  var date;
 
-  // picker needs a year, also for time
-  if (m.year() === 0) {
-    m.year(2000);
+  if (m) {
+
+    // picker needs a year, also for time
+    if (m.year() === 0) {
+
+      date = moment(m).year(2000).toDate();
+    } else {
+      date = m.toDate();
+    }
   }
 
-  $.picker.value = m.toDate();
+  $.picker.value = date;
 
   if (Ti.Platform.osname === 'ipad') {
     $.popover.show({
@@ -97,13 +107,21 @@ function focus() {
   }
 }
 
-function setValue(val) {
+function setValue(value) {
+  var mom = moment(value, (typeof value === 'string') ? picker.valueFormat : undefined);
 
-  if (typeof val === 'object') {
-    val = moment(val).format(picker.format);
+  if (!mom) {
+    console.error('Invalid value: ' + JSON.stringify(value));
+    return;
   }
 
-  $.input.text = val;
+  m = mom;
+
+  $.input.text = m.format(picker.textFormat || picker.valueFormat);
+}
+
+function getValue() {
+  return m ? m.format(picker.valueFormat) : null;
 }
 
 function onDoneClick(e) {
@@ -122,9 +140,7 @@ function onCancelClick(e) {
 function onDialogClose(e) {
 
   if (!e.cancel) {
-    var val = moment(e.value).format(picker.format);
-
-    $.setValue(val);
+    $.setValue(e.value);
     $.change();
   }
 }
