@@ -20,7 +20,8 @@ module.exports = function(grunt) {
           deviceFamily: 'ipad',
           logLevel: 'trace',
           iosVersion: 7.1,
-          shadow: true
+          shadow: true,
+          sdk: '3.3.0.RC'
         }
       }
     }
