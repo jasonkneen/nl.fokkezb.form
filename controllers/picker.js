@@ -20,6 +20,10 @@ $.getValue = getValue;
 
 var m;
 
+var table;
+
+var pickerShowing = false;
+
 var picker = {
   type: Ti.UI.PICKER_TYPE_DATE,
   valueFormat: 'YYYY-MM-DD'
@@ -39,6 +43,9 @@ var picker = {
  * @param {String|Object} args.label Will be used for the popover title as well.
  */
 (function constructor(args) {
+
+  // save a reference to the table
+  table = args.form.table;
 
   // extend picker defaults
   picker = _.extend(picker, args.picker || {});
@@ -92,16 +99,41 @@ function focus() {
       view: $.input
     });
 
-  } else if (picker.type === Ti.UI.PICKER_TYPE_DATE) {
+  } else if (OS_ANDROID && picker.type === Ti.UI.PICKER_TYPE_DATE) {
     $.picker.showDatePickerDialog({
       cancel: onDialogClose
     });
 
-  } else if (picker.type === Ti.UI.PICKER_TYPE_TIME) {
+  } else if (OS_ANDROID && picker.type === Ti.UI.PICKER_TYPE_TIME) {
     $.picker.showTimePickerDialog({
       cancel: onDialogClose
     });
 
+  } else if (Ti.Platform.osname === 'iphone') {
+
+    // Wrap the picker in a row
+    $.pickerRow.add($.picker);
+    // Update the label on change
+    $.picker.addEventListener('change', function(e){
+      onDialogClose({
+        value: $.picker.value
+      });
+    });
+
+    // Check if showing the picker row already
+    if(pickerShowing === false) {
+      //Insert row
+      table.insertRowAfter(e.index,$.pickerRow,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});
+      pickerShowing = true;
+    } else if(pickerShowing === true) {
+       // Delete row
+       table.deleteRow(e.index+1,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.UP});
+       pickerShowing = false
+       // Update the value on close of row
+       onDialogClose({
+         value: $.picker.value
+       });
+    }
   } else {
     throw 'Only support iPad and Android date/time for now.'
   }

@@ -10,5 +10,8 @@
     </RightNavButton>
   </Popover>
 
+  <TableViewRow id="pickerRow" class="popover" platform="ios" formFactor="phone"
+  </TableViewRow>
+
   <Picker id="picker" class="picker" />
 </Alloy>
