@@ -3,7 +3,7 @@
  *
  * The date/picker picker field type is a `Ti.UI.Label` to display current and a `Ti.UI.Picker` to change the value.
  *
- * *WARNING:* Only support iPad and Android date/time for now.
+ * *WARNING:* Only support iOS and Android date/time for now.
  *
  * @class Widgets.nlFokkezbForm.controllers.picker
  * @extends Widgets.nlFokkezbForm.controllers.field
@@ -19,6 +19,10 @@ $.setValue = setValue;
 $.getValue = getValue;
 
 var m;
+
+var table;
+
+var pickerShowing = false;
 
 var picker = {
   type: Ti.UI.PICKER_TYPE_DATE,
@@ -39,6 +43,9 @@ var picker = {
  * @param {String|Object} args.label Will be used for the popover title as well.
  */
 (function constructor(args) {
+
+  // save a reference to the table
+  table = args.form.table;
 
   // extend picker defaults
   picker = _.extend(picker, args.picker || {});
@@ -70,7 +77,7 @@ var picker = {
  *
  * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
  */
-function focus() {
+function focus(e) {
 
   var date;
 
@@ -87,23 +94,55 @@ function focus() {
 
   $.picker.value = date;
 
-  if (Ti.Platform.osname === 'ipad') {
-    $.popover.show({
-      view: $.input
-    });
+  if (OS_IOS) {
 
-  } else if (picker.type === Ti.UI.PICKER_TYPE_DATE) {
+    if (Ti.Platform.osname === 'ipad') {
+      $.popover.show({
+        view: $.input
+      });
+
+    } else {
+      // Wrap the picker in a row
+      $.pickerRow.add($.picker);
+      // Update the label on change
+      $.picker.addEventListener('change', function(e) {
+        onDialogClose({
+          value: $.picker.value
+        });
+      });
+
+      // Check if showing the picker row already
+      if (pickerShowing === false) {
+        //Insert row
+        table.insertRowAfter(e.index, $.pickerRow, {
+          animationStyle: Titanium.UI.iPhone.RowAnimationStyle.DOWN
+        });
+        pickerShowing = true;
+      } else if (pickerShowing === true) {
+        // Delete row
+        table.deleteRow(e.index + 1, {
+          animationStyle: Titanium.UI.iPhone.RowAnimationStyle.UP
+        });
+        pickerShowing = false
+        // Update the value on close of row
+        onDialogClose({
+          value: $.picker.value
+        });
+      }
+    }
+
+  } else if (OS_ANDROID && picker.type === Ti.UI.PICKER_TYPE_DATE) {
     $.picker.showDatePickerDialog({
       cancel: onDialogClose
     });
 
-  } else if (picker.type === Ti.UI.PICKER_TYPE_TIME) {
+  } else if (OS_ANDROID && picker.type === Ti.UI.PICKER_TYPE_TIME) {
     $.picker.showTimePickerDialog({
       cancel: onDialogClose
     });
 
   } else {
-    throw 'Only support iPad and Android date/time for now.'
+    throw 'Only support iOS and Android date/time for now.'
   }
 }
 
