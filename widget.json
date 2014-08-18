@@ -3,7 +3,7 @@
 	"name": "TableView Form",
 	"description" : "Using a TableView as a form",
 	"author": "Fokke Zandbergen",
-	"version": "1.5.1",
+	"version": "1.6.0",
 	"copyright":"Copyright (c) 2014 Fokke Zandbergen",
 	"license":"MIT",
 	"min-alloy-version": "1.3",
