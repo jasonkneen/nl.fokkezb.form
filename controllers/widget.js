@@ -383,5 +383,5 @@ function onTableSingletap(e) {
     return;
   }
 
-  fieldCtrls[e.row._name].focus();
+  fieldCtrls[e.row._name].focus(e);
 }
