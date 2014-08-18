@@ -13,7 +13,7 @@ module.exports = function(grunt) {
       main: ['app/widgets/nl.fokkezb.form']
     },
     titanium: {
-      main: {
+      ipad: {
         options: {
           command: 'build',
           platform: 'ios',
@@ -21,7 +21,18 @@ module.exports = function(grunt) {
           logLevel: 'trace',
           iosVersion: 7.1,
           shadow: true,
-          sdk: '3.3.0.RC'
+          sdk: '3.3.0.GA'
+        }
+      },
+      iphone: {
+        options: {
+          command: 'build',
+          platform: 'ios',
+          deviceFamily: 'iphone',
+          logLevel: 'trace',
+          iosVersion: 7.1,
+          shadow: true,
+          sdk: '3.3.0.GA'
         }
       }
     }
@@ -31,6 +42,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-titanium');
 
-  grunt.registerTask('default', ['clean', 'copy', 'titanium']);
+  grunt.registerTask('update', ['clean', 'copy']);
+
+  grunt.registerTask('ipad', ['update', 'titanium:ipad']);
+  grunt.registerTask('iphone', ['update', 'titanium:iphone']);
+  
+  grunt.registerTask('default', ['ipad']);
 
 };

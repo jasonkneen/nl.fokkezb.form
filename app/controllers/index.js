@@ -31,18 +31,18 @@ $.form.init({
         name: 'lorem',
         label: 'Textarea type',
         type: 'textarea'
-      }, {
+      }, (OS_IOS && Alloy.isTablet) ? {
         name: 'color',
         label: 'Color type (iPad)',
         type: 'color',
         value: '#F00'
-      }, {
+      } : null, {
         name: 'date',
         label: 'Picker type (date)',
         type: 'picker',
         picker: {
           type: Ti.UI.PICKER_TYPE_DATE,
-          format: 'DD-MM-YYYY'
+          valueFormat: 'DD-MM-YYYY'
         },
         value: '04-07-2014'
       }, {
@@ -51,7 +51,7 @@ $.form.init({
         type: 'picker',
         picker: {
           type: Ti.UI.PICKER_TYPE_TIME,
-          format: 'HH:mm'
+          valueFormat: 'HH:mm'
         },
         value: '16:30'
       }
