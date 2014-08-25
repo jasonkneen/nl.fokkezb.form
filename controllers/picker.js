@@ -72,11 +72,33 @@ var picker = {
 
 })(arguments[0]);
 
+
+/**
+ * Hides the popover or TODO hide the picker.
+ *
+ * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
+ */
+
+function blur(e) {
+  if (Ti.Platform.osname === 'ipad') {
+    $.popover.hide();
+  } else if(Ti.Platform.osname === 'iphone'){
+    if(pickerShowing === true) {
+      //  table.deleteRow(e.index+1,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.UP});
+      //  pickerShowing = false
+      //  onDialogClose({
+      //    value: $.picker.value
+      //  });
+    }
+  }
+}
+
 /**
  * Displays an option dialog to change value.
  *
  * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
  */
+
 function focus() {
 
   var date;

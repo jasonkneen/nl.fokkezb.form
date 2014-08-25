@@ -33,3 +33,7 @@ exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 function onChange(e) {
   $.change();
 }
+
+function onReturn(e) {
+  $.onReturn();
+}

@@ -57,6 +57,12 @@ var format;
         inputProp.autocapitalization = inputProp.autocapitalization || Ti.UI.TEXT_AUTOCAPITALIZATION_NONE;
         inputProp.autocorrect = inputProp.autocorrect === true;
         break;
+
+      case 'password':
+        inputProp.passwordMask = inputProp.passwordMask || true;
+        inputProp.autocapitalization = inputProp.autocapitalization || Ti.UI.TEXT_AUTOCAPITALIZATION_NONE;
+        inputProp.autocorrect = inputProp.autocorrect === true;
+        break;
     }
   }
 
@@ -78,4 +84,8 @@ function onChange(e) {
 
   //   $.setValue(_.isNaN(flt) ? null : flt.toString());
   // }
+}
+
+function onReturn(e) {
+  $.onReturn();
 }
