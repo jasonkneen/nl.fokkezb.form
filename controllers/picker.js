@@ -79,7 +79,7 @@ var picker = {
  * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
  */
 
-function blur(e) {
+function blur() {
   if (Ti.Platform.osname === 'ipad') {
     $.popover.hide();
   } else if(Ti.Platform.osname === 'iphone'){
@@ -99,8 +99,7 @@ function blur(e) {
  * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
  */
 
-function focus() {
-
+function focus(e) {
   var date;
 
   if (m) {
@@ -116,48 +115,60 @@ function focus() {
 
   $.picker.value = date;
 
-  if (Ti.Platform.osname === 'ipad') {
-    $.popover.show({
-      view: $.input
-    });
+  if (OS_IOS) {
+
+    if (Ti.Platform.osname === 'ipad') {
+      $.popover.show({
+        view: $.input
+      });
+
+    } else {
+      // Wrap the picker in a row
+      $.pickerRow.add($.picker);
+      // Update the label on change
+      $.picker.addEventListener('change', function(e) {
+        onDialogClose({
+          value: $.picker.value
+        });
+      });
+
+      // Check if showing the picker row already
+      if (pickerShowing === false) {
+        //Insert row
+        table.insertRowAfter(e.index, $.pickerRow, {
+          animationStyle: Titanium.UI.iPhone.RowAnimationStyle.DOWN
+        });
+        pickerShowing = true;
+      } else if (pickerShowing === true) {
+        // Delete row
+        table.deleteRow(e.index + 1, {
+          animationStyle: Titanium.UI.iPhone.RowAnimationStyle.UP
+        });
+        pickerShowing = false
+        // Update the value on close of row
+        onDialogClose({
+          value: $.picker.value
+        });
+      }
+    }
 
   } else if (OS_ANDROID && picker.type === Ti.UI.PICKER_TYPE_DATE) {
     $.picker.showDatePickerDialog({
-      cancel: onDialogClose
+      callback: onDialogClose,
     });
 
   } else if (OS_ANDROID && picker.type === Ti.UI.PICKER_TYPE_TIME) {
-    $.picker.showTimePickerDialog({
-      cancel: onDialogClose
+    //For some reason (I) can't reset the picker type
+    var pickers = Ti.UI.createPicker({
+        type: Ti.UI.PICKER_TYPE_TIME
     });
 
-  } else if (Ti.Platform.osname === 'iphone') {
-
-    // Wrap the picker in a row
-    $.pickerRow.add($.picker);
-    // Update the label on change
-    $.picker.addEventListener('change', function(e){
-      onDialogClose({
-        value: $.picker.value
-      });
+    pickers.showTimePickerDialog({
+        callback: onDialogClose
     });
 
-    // Check if showing the picker row already
-    if(pickerShowing === false) {
-      //Insert row
-      table.insertRowAfter(e.index,$.pickerRow,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.DOWN});
-      pickerShowing = true;
-    } else if(pickerShowing === true) {
-       // Delete row
-       table.deleteRow(e.index+1,{animationStyle:Titanium.UI.iPhone.RowAnimationStyle.UP});
-       pickerShowing = false
-       // Update the value on close of row
-       onDialogClose({
-         value: $.picker.value
-       });
-    }
   } else {
-    throw 'Only support iPad and Android date/time for now.'
+    throw 'Only support iOS and Android date/time for now.'
   }
 }
 
@@ -171,7 +182,7 @@ function setValue(value) {
 
   m = mom;
 
-  $.input.text = m.format(picker.textFormat || picker.valueFormat);
+  $.input.text = " "+m.format(picker.textFormat || picker.valueFormat);
 }
 
 function getValue() {
@@ -181,7 +192,7 @@ function getValue() {
 function onDoneClick(e) {
 
   onDialogClose({
-    value: $.picker.value
+    value: " "+$.picker.value
   });
 
   onCancelClick(e);

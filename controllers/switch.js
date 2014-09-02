@@ -42,7 +42,7 @@ $.isValid = isValid;
  * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on the row.
  */
 function focus() {
-  var val = !$.input.value;
+  var val = (OS_IOS) ? !$.input.value : $.input.value;
 
   $.input.value = val;
 }
