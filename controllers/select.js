@@ -41,9 +41,6 @@ var config = {
     _.extend(config, args.select);
   }
 
-  // If Android manually set the options
-  if(OS_ANDROID) config.options = args.options;
-
   // display a hasChild marker
   $.row.applyProperties($.createStyle({
     classes: ['row']
@@ -92,15 +89,9 @@ function focus() {
 
   });
 
-  if(OS_ANDROID) {
-    dialog.show()
-  } else {
-
-    dialog.show(
-      config.iPadArrow ? {
-      view: $.input
-    } : {});
-  }
+  dialog.show(config.iPadArrow ? {
+    view: $.input
+  } : {});
 }
 
 function getValue() {

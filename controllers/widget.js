@@ -286,12 +286,6 @@ function render(opts) {
           recurse: true
         });
 
-        // Manually set as Android doesn't apply properties
-        if(OS_ANDROID){
-          row.options = field.options
-          row._name = field.name;
-        }
-
         // push the views of the controller as row
         section.add(row);
       }
@@ -305,9 +299,6 @@ function render(opts) {
 
   // set the table
   $.table.applyProperties(tableProp);
-
-  //If Android manually set the section
-  if(OS_ANDROID) $.table.setSections(tableProp.sections);
 
   // add listener
   if (opts.listener) {
