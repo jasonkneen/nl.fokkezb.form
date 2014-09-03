@@ -34,13 +34,11 @@ $.required = false;
 $.setInput = setInput;
 
 $.focus = focus;
-$.blur = blur;
 
 $.setValue = setValue;
 $.getValue = getValue;
 
 $.change = change;
-$.onReturn = onReturn;
 
 $.isValid = isValid;
 $.showError = showError;
@@ -99,10 +97,6 @@ var form, name;
     $.on('change', args.listener);
   }
 
-  if (args.onreturn) {
-    $.on('return', args.onreturn);
-  }
-
 })(arguments[0]);
 
 /**
@@ -155,17 +149,6 @@ function focus() {
 }
 
 /**
- * Blurs the focus on the input.
- *
- * This method is called by {@link Widgets.nlFokkezbForm.controllers.widget} when the user clicks on a different field.
- *
- * @private
- */
-function blur() {
-  $.input.blur();
-}
-
-/**
  * Get the value of the field.
  *
  * @return {String} Value of the field.
@@ -191,21 +174,6 @@ function setValue(val) {
 function change() {
 
   $.trigger('change', {
-    form: form,
-    field: name,
-    value: $.getValue()
-  });
-}
-
-
-/**
- * Fires the #return event if the user clicks return.
- *
- * @private
- */
-function onReturn() {
-
-  $.trigger('return', {
     form: form,
     field: name,
     value: $.getValue()

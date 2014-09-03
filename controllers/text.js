@@ -57,12 +57,6 @@ var format;
         inputProp.autocapitalization = inputProp.autocapitalization || Ti.UI.TEXT_AUTOCAPITALIZATION_NONE;
         inputProp.autocorrect = inputProp.autocorrect === true;
         break;
-
-      case 'password':
-        inputProp.passwordMask = inputProp.passwordMask || true;
-        inputProp.autocapitalization = inputProp.autocapitalization || Ti.UI.TEXT_AUTOCAPITALIZATION_NONE;
-        inputProp.autocorrect = inputProp.autocorrect === true;
-        break;
     }
   }
 

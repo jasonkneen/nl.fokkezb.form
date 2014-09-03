@@ -30,9 +30,6 @@ $.setValues = setValues;
 $.isValid = isValid;
 $.getField = getField;
 
-$.blurFields = blurFields;
-$.getNextField = getNextField;
-
 /*
  * @type {Object} The args the widget was constructed with if auto-initialize couldn't be run.
  * @private
@@ -48,11 +45,7 @@ var fieldCtrls = {};
 /*
  * @type {Function} Form-wide listener added via #init.
  */
-
-/*
- * @type {Function} Form-wide onReturn added via #init.
- */
-var onReturn;
+var listener;
 
 /*
  * @type {Function} Filters values before returning them.
@@ -71,7 +64,7 @@ var values = {};
  *
  * @method Controller
  * @param args Arguments passed to the controller.
-
+ 
  */
 (function constructor(args) {
 
@@ -106,7 +99,6 @@ var values = {};
  * @param {Object[]} [opts.fields]     Array of fields.
  * @param {Object} [opts.values]       Values as object with field names as keys.
  * @param {Function} [opts.listener]   Listener for the form's #change event.
- * @param {Function} [opts.onReturn]   Listener for the form's #onReturn event.
  * @param {Function} [opts.filter]     Function to filter values before returning them.
  *
  * @throws {Error} If the required options are missing.
@@ -285,17 +277,6 @@ function render(opts) {
 
         });
 
-        // pass field events on to the form listeners
-        fieldCtrl.on('return', function(e) {
-          $.trigger('return return:' + e.field, e);
-
-          // form-wide onReturn listener set via init
-          if (onReturn) {
-            onReturn(e);
-          }
-
-        });
-
         // keep a reference to the widget
         fieldCtrls[field.name] = fieldCtrl;
 
@@ -331,11 +312,6 @@ function render(opts) {
   // add listener
   if (opts.listener) {
     listener = opts.listener;
-  }
-
-  // add return listener
-  if (opts.onReturn) {
-    onReturn = opts.onReturn;
   }
 
   // add filter
@@ -389,39 +365,6 @@ function getField(name) {
 }
 
 /**
- * Fire the focus call on the next field.
- *
- * @param  {String} name        Name of the field to get.
- * @return {Object|undefined}   Controller of the next field or `undefined` if not found.
- */
-function getNextField(e) {
-  var checker = false;
-  // I'm sure this could be much cleaner!
-  _.each(fieldCtrls, function(fieldCtrl, name) {
-    if(checker && fieldCtrls[name].__controllerPath == "text"){
-      fieldCtrls[name].focus(e);
-      checker = false;
-    }
-
-    if(e.name == name){
-      checker = true;
-    }
-  });
-  return e;
-}
-
-/**
- * Blur all text fields and text area of the form.
- *
- */
-function blurFields() {
-  _.each(fieldCtrls, function(fieldCtrl, name) {
-    if(fieldCtrls[name].__controllerPath == "text" || fieldCtrls[name].__controllerPath == "textarea" )
-      fieldCtrl.blur(e);
-    });
-}
-
-/**
  * Validate all fields.
  *
  * @return {Boolean} Returns `true` if all fields are valid.
@@ -448,7 +391,6 @@ function onTableSingletap(e) {
   if (!e.row || !e.row._name) {
     return;
   }
-  // blur all fields before we focus the next
-  $.blurFields();
+
   fieldCtrls[e.row._name].focus();
 }

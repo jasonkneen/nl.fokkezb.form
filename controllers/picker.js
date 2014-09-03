@@ -72,7 +72,6 @@ var picker = {
 
 })(arguments[0]);
 
-
 /**
  * Hides the popover or TODO hide the picker.
  *
