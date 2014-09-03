@@ -64,7 +64,7 @@ var values = {};
  *
  * @method Controller
  * @param args Arguments passed to the controller.
- 
+
  */
 (function constructor(args) {
 
@@ -286,6 +286,12 @@ function render(opts) {
           recurse: true
         });
 
+        //Manually pass the options and name for Android
+        if(OS_ANDROID) {
+            row.options = field.options
+            row._name = field.name;
+        }
+
         // push the views of the controller as row
         section.add(row);
       }
@@ -299,6 +305,9 @@ function render(opts) {
 
   // set the table
   $.table.applyProperties(tableProp);
+
+  // Set the section manually for Android
+  if(OS_ANDROID) $.table.setSections(tableProp.sections);
 
   // add listener
   if (opts.listener) {

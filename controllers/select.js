@@ -41,6 +41,9 @@ var config = {
     _.extend(config, args.select);
   }
 
+  // Manually reference as applyProperties won't work
+  if(OS_ANDROID) config.options = args.options;
+
   // display a hasChild marker
   $.row.applyProperties($.createStyle({
     classes: ['row']
@@ -88,10 +91,13 @@ function focus() {
     $.change();
 
   });
-
-  dialog.show(config.iPadArrow ? {
-    view: $.input
-  } : {});
+  if(OS_ANDROID) {
+    dialog.show()
+  } else {
+    dialog.show(config.iPadArrow ? {
+      view: $.input
+    } : {});
+  }
 }
 
 function getValue() {
