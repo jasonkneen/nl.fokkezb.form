@@ -79,7 +79,3 @@ function onChange(e) {
   //   $.setValue(_.isNaN(flt) ? null : flt.toString());
   // }
 }
-
-function onReturn(e) {
-  $.onReturn();
-}
