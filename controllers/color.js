@@ -13,11 +13,14 @@
 exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 
 $.focus = focus;
+$.blur = blur;
 $.setValue = setValue;
 $.getValue = getValue;
 
 var value;
 var showHex = true;
+var spectrums;
+var spectrum;
 
 /**
  * Constructor.
@@ -54,6 +57,22 @@ var showHex = true;
 
   // properties to apply to picker
   if (args.color) {
+
+    // multiple spectrums to toggle between
+    if (args.color.spectrums) {
+      spectrums = args.color.spectrums
+      spectrum = args.color.spectrum = args.color.spectrum || spectrums[0];
+
+      $.toolbar.show();
+      $.win.layout = 'vertical';
+    }
+
+    // hide toolbar
+    else {
+      $.toolbar.hide();
+      $.win.layout = 'composite';
+    }
+
     $.picker.applyProperties(args.color);
   }
 
@@ -74,6 +93,10 @@ function focus() {
   $.popover.show({
     view: $.input
   });
+}
+
+function blur() {
+  $.popover.hide();
 }
 
 function setValue(val) {
@@ -111,4 +134,19 @@ function onColorChange(e) {
 
   $.setValue(val);
   $.change();
+}
+
+function onToggleClick() {
+
+  var i = _.indexOf(spectrums, spectrum) + 1;
+
+  if (i === spectrums.length) {
+    i = 0;
+  }
+
+  spectrum = spectrums[i];
+
+  $.picker.applyProperties({
+    spectrum: spectrum
+  });
 }

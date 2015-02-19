@@ -18,7 +18,13 @@
   borderRadius: 5
 }
 
-".picker": {
+"Window": {
   width: 320,
-  height: 320
+  height: 320,
+
+  layout: 'vertical'
+}
+
+".toggleBtn": {
+  title: L('nlFokkezbForm_toggleBtn', 'Change palette')
 }

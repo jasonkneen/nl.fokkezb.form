@@ -2,15 +2,17 @@
   <Label id="input" class="input" />
 
   <Popover id="popover" class="popover" platform="ios" formFactor="tablet">
-    <LeftNavButton>
-      <Button class="cancel" onClick="onCancelClick" />
-    </LeftNavButton>
-    <RightNavButton>
-      <Button class="done" onClick="onDoneClick" />
-    </RightNavButton>
+    <ContentView>
+      <NavigationWindow>
+        <Window id="win">
+          <RightNavButton onClick="onSetClick" systemButton="SAVE" />
+        </Window>
+      </NavigationWindow>
+    </ContentView>
   </Popover>
 
-  <TableViewRow id="pickerRow" class="popover" platform="ios" formFactor="phone" />
-
   <Picker id="picker" class="picker" />
+
+  <Button id="unset" onClick="onUnsetClick" systemButton="TRASH" />
+
 </Alloy>

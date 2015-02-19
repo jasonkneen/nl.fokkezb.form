@@ -14,21 +14,7 @@
   }
 }
 
-".popover": {
-  width: Ti.UI.SIZE,
-  height: Ti.UI.SIZE
-}
-
-".view": {
-  height: Ti.UI.SIZE,
-
-  layout: 'vertical'
-}
-
-".cancel[platform=ios]": {
-  systemButton: Ti.UI.iPhone.SystemButton.CANCEL
-}
-
-".done[platform=ios]": {
-  systemButton: Ti.UI.iPhone.SystemButton.DONE
+"NavigationWindow": {
+  width: 300,
+  height: 250
 }

@@ -3,7 +3,15 @@
   
   <Popover id="popover" class="popover" platform="ios" formFactor="tablet">
     <ContentView>
-      <Widget src="nl.fokkezb.color" id="picker" class="picker" onChange="onColorChange" />
+      <Window id="win">
+        <Toolbar id="toolbar">
+          <Items>
+            <Button onClick="onToggleClick" class="toggleBtn" />
+            <FlexSpace />
+          </Items>
+        </Toolbar>
+        <Widget src="nl.fokkezb.color" id="picker" class="picker" onChange="onColorChange" />
+      </Window>
     </ContentView>
   </Popover>
   

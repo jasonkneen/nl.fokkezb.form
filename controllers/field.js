@@ -31,9 +31,21 @@ $.validator = null;
  */
 $.required = false;
 
+/**
+ * @type {Object} Reference to the form.
+ */
+$.form = null;
+
+/**
+ * @type {String} Field name.
+ */
+$.name = null;
+
 $.setInput = setInput;
 
 $.focus = focus;
+$.blur = blur;
+$.next = next;
 
 $.setValue = setValue;
 $.getValue = getValue;
@@ -53,9 +65,6 @@ var controllerParam = {
 // hold the value received via constructor until after setInput was called.
 var value;
 
-// hold the form object and field name
-var form, name;
-
 /**
  * Constructor for the row.
  *
@@ -68,13 +77,13 @@ var form, name;
  */
 (function constructor(args) {
 
-  form = args.form;
-  name = args.name;
+  $.form = args.form;
+  $.name = args.name;
 
   $.row.applyProperties(_.extend(args.row || {}, {
 
     // for the table's singletap event listener
-    _name: name
+    _name: $.name
   }));
 
   if (args.validator) {
@@ -149,6 +158,26 @@ function focus() {
 }
 
 /**
+ * Removes the focus from the input
+ */
+function blur() {
+  $.input.blur();
+}
+
+/**
+ * Set focus on the next field and blur this one
+ */
+function next() {
+  var nextField = $.form.getNextField($.name);
+
+  if (nextField) {
+    nextField.focus();
+  }
+
+  $.blur();
+}
+
+/**
  * Get the value of the field.
  *
  * @return {String} Value of the field.
@@ -163,7 +192,7 @@ function getValue() {
  * @param  {Mixed} [value] Value to set.
  */
 function setValue(val) {
-  $.input.value = val;
+  $.input.value = '' + val;
 }
 
 /**
@@ -172,10 +201,9 @@ function setValue(val) {
  * @private
  */
 function change() {
-
   $.trigger('change', {
-    form: form,
-    field: name,
+    form: $.form,
+    field: $.name,
     value: $.getValue()
   });
 }
