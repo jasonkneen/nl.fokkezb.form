@@ -78,6 +78,10 @@ var deepExtend = module.exports = function (/*obj_1, [obj_2], [obj_N]*/) {
             if (typeof val !== &#39;object&#39; || val === null || val.apiName) {
                 target[key] = val;
                 continue;
+            } else if (val instanceof Date) {
+                target[key] = new Date(val);
+                continue;
+
             }/* else if (val instanceof Buffer) {
                 tmpBuf = new Buffer(val.length);
                 val.copy(tmpBuf);

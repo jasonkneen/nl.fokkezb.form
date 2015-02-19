@@ -48,9 +48,21 @@ $.validator = null;
  */
 $.required = false;
 
+<span id='Widgets-nlFokkezbForm-controllers-field-property-form'>/**
+</span> * @type {Object} Reference to the form.
+ */
+$.form = null;
+
+<span id='Widgets-nlFokkezbForm-controllers-field-property-name'>/**
+</span> * @type {String} Field name.
+ */
+$.name = null;
+
 $.setInput = setInput;
 
 $.focus = focus;
+$.blur = blur;
+$.next = next;
 
 $.setValue = setValue;
 $.getValue = getValue;
@@ -70,9 +82,6 @@ var controllerParam = {
 // hold the value received via constructor until after setInput was called.
 var value;
 
-// hold the form object and field name
-var form, name;
-
 <span id='Widgets-nlFokkezbForm-controllers-field-method-Controller'>/**
 </span> * Constructor for the row.
  *
@@ -85,13 +94,13 @@ var form, name;
  */
 (function constructor(args) {
 
-  form = args.form;
-  name = args.name;
+  $.form = args.form;
+  $.name = args.name;
 
   $.row.applyProperties(_.extend(args.row || {}, {
 
     // for the table&#39;s singletap event listener
-    _name: name
+    _name: $.name
   }));
 
   if (args.validator) {
@@ -165,6 +174,26 @@ function focus() {
   $.input.focus();
 }
 
+<span id='Widgets-nlFokkezbForm-controllers-field-method-blur'>/**
+</span> * Removes the focus from the input
+ */
+function blur() {
+  $.input.blur();
+}
+
+<span id='Widgets-nlFokkezbForm-controllers-field-method-next'>/**
+</span> * Set focus on the next field and blur this one
+ */
+function next() {
+  var nextField = $.form.getNextField($.name);
+
+  if (nextField) {
+    nextField.focus();
+  }
+
+  $.blur();
+}
+
 <span id='Widgets-nlFokkezbForm-controllers-field-method-getValue'>/**
 </span> * Get the value of the field.
  *
@@ -180,7 +209,7 @@ function getValue() {
  * @param  {Mixed} [value] Value to set.
  */
 function setValue(val) {
-  $.input.value = val;
+  $.input.value = &#39;&#39; + val;
 }
 
 <span id='Widgets-nlFokkezbForm-controllers-field-method-change'>/**
@@ -189,10 +218,9 @@ function setValue(val) {
  * @private
  */
 function change() {
-
   $.trigger(&#39;change&#39;, {
-    form: form,
-    field: name,
+    form: $.form,
+    field: $.name,
     value: $.getValue()
   });
 }
