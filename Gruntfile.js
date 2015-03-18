@@ -19,9 +19,8 @@ module.exports = function(grunt) {
           platform: 'ios',
           deviceFamily: 'ipad',
           logLevel: 'trace',
-          iosVersion: 7.1,
           shadow: true,
-          sdk: '3.3.0.GA'
+          sdk: '3.5.1.GA'
         }
       },
       iphone: {
@@ -30,9 +29,17 @@ module.exports = function(grunt) {
           platform: 'ios',
           deviceFamily: 'iphone',
           logLevel: 'trace',
-          iosVersion: 7.1,
           shadow: true,
-          sdk: '3.3.0.GA'
+          sdk: '3.5.1.GA'
+        }
+      },
+      android: {
+        options: {
+          command: 'build',
+          platform: 'android',
+          logLevel: 'trace',
+          shadow: true,
+          sdk: '3.5.1.GA'
         }
       }
     }
@@ -46,6 +53,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('ipad', ['update', 'titanium:ipad']);
   grunt.registerTask('iphone', ['update', 'titanium:iphone']);
+  grunt.registerTask('android', ['update', 'titanium:android']);
   
   grunt.registerTask('default', ['ipad']);
 

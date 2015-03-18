@@ -5,6 +5,7 @@
  */
 
 exports.cliVersion = '>=3.X';
+var SILENT = true;
 
 exports.init = function (logger, config, cli, appc) {
 	var path = require('path'),
@@ -18,7 +19,11 @@ exports.init = function (logger, config, cli, appc) {
 		spawn = require('child_process').spawn,
 		parallel = appc.async.parallel;
 
-	function run(deviceFamily, deployType, target, finished) {
+		if(!process.env.sdk) {
+			process.env.sdk = cli.sdk.name;
+		}
+
+	function run(deviceFamily, deployType, target, finished, silent) {
 		var appDir = path.join(cli.argv['project-dir'], 'app');
 		if (!afs.exists(appDir)) {
 			logger.info(__('Project not an Alloy app, continuing'));
@@ -44,6 +49,11 @@ exports.init = function (logger, config, cli, appc) {
 				deploytype: deployType || cli.argv['deploy-type'] || 'development',
 				target: target
 			};
+		if(silent) {
+			// turn off all logging output for code analyzer build hook
+			config.noBanner = 'true';
+			config.logLevel = '-1';
+		}
 
 		config = Object.keys(config).map(function (c) {
 			return c + '=' + config[c];
@@ -145,6 +155,9 @@ exports.init = function (logger, config, cli, appc) {
 						process.exit(1);
 					} else {
 						logger.info(__('Alloy compiler completed successfully'));
+
+						afs.exists(path.join(cli.argv["project-dir"], 'build', 'i18n')) && process.argv.push('--i18n-dir', 'build');
+						afs.exists(path.join(cli.argv["project-dir"], 'build', 'platform')) && (cli.argv['platform-dir'] = 'build/platform');
 					}
 					finished();
 				});
@@ -153,28 +166,13 @@ exports.init = function (logger, config, cli, appc) {
 	}
 
 	cli.addHook('build.pre.compile', function (build, finished) {
-		// TODO: Remove this workaround when the CLI reports the right deploy type for android
-		var deployType = build.deployType;
-		var target = build.target;
+		var deployType = build.deployType,
+			target = build.target;
 
-		if (cli.argv.platform === 'android') {
-			switch(target) {
-				case 'dist-playstore':
-					deployType = 'production';
-					break;
-				case 'device':
-					deployType = 'test';
-					break;
-				case 'emulator':
-				default:
-					deployType = 'development';
-					break;
-			}
-		}
 		run(build.deviceFamily, deployType, target, finished);
 	});
 
 	cli.addHook('codeprocessor.pre.run', function (build, finished) {
-		run('none', 'development', undefined, finished);
+		run('none', 'development', undefined, finished, SILENT);
 	});
 };
