@@ -66,8 +66,8 @@ var picker = {
 
   // compose view
   if (Ti.Platform.osname === 'ipad') {
-    $.popover.title = $.label.text;
-    $.popover.add($.picker);
+    $.win.title = $.label.text;
+    $.win.add($.picker);
   }
 
 })(arguments[0]);
@@ -163,10 +163,18 @@ function getValue() {
   return m ? m.format(picker.valueFormat) : null;
 }
 
-function onDoneClick(e) {
+function onSetClick(e) {
 
   onDialogClose({
     value: $.picker.value
+  });
+
+  onCancelClick(e);
+}
+
+function onUnsetClick(e) {
+  onDialogClose({
+    value: null
   });
 
   onCancelClick(e);
