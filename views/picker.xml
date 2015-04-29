@@ -12,6 +12,9 @@
   </Popover>
 
   <Picker id="picker" class="picker" />
+  
+  <TableViewRow id="pickerRow" class="popover" platform="ios" formFactor="phone">
+  </TableViewRow>
 
   <Button id="unset" onClick="onUnsetClick" systemButton="TRASH" />
 
