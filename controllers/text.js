@@ -30,7 +30,7 @@ var format;
   inputProp = args.input || {};
   delete args.input;
 
-  _.each(['hinttext'], function(property) {
+  _.each(['hintText'], function(property) {
 
     if (_.has(args, property)) {
       inputProp[property] = args[property];
