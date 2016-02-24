@@ -47,13 +47,13 @@ var format;
     switch (format) {
 
       case 'email':
-        inputProp.keyboardType = inputProp.keyboardType || Ti.UI.KEYBOARD_EMAIL;
+        inputProp.keyboardType = inputProp.keyboardType || Ti.UI.KEYBOARD_TYPE_EMAIL;
         inputProp.autocapitalization = inputProp.autocapitalization || Ti.UI.TEXT_AUTOCAPITALIZATION_NONE;
         inputProp.autocorrect = inputProp.autocorrect === true;
         break;
 
       case 'float':
-        inputProp.keyboardType = inputProp.keyboardType || Ti.UI.KEYBOARD_DECIMAL_PAD;
+        inputProp.keyboardType = inputProp.keyboardType || Ti.UI.KEYBOARD_TYPE_DECIMAL_PAD;
         inputProp.autocapitalization = inputProp.autocapitalization || Ti.UI.TEXT_AUTOCAPITALIZATION_NONE;
         inputProp.autocorrect = inputProp.autocorrect === true;
         break;
