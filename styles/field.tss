@@ -1,12 +1,9 @@
 ".row[platform=ios]": {
-  selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-
-  layout: 'horizontal'
+  selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 }
 
 ".label": {
   width: 145,
-  height: Ti.UI.SIZE,
   
   top: 19,
   left: 15,
@@ -14,13 +11,19 @@
   color: '#000'
 }
 
+".label[platform=ios]": {
+  height: Ti.UI.SIZE
+}
+".label[platform=android]": {
+  lines: 1
+}
 ".control": {
   height: Ti.UI.SIZE,
 
   top: 10,
   bottom: 10,
   right: 15,
-  left: 15
+  left: 160
 }
 
 ".errorRow": {

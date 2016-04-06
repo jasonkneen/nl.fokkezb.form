@@ -298,7 +298,19 @@ function render(opts) {
   });
 
   // set the table
-  $.table.applyProperties(tableProp);
+  // FIXME: applyProperties not working on Android (https://jira.appcelerator.org/browse/TIMOB-19556)
+  if (OS_ANDROID){
+    $.table.setSections(tableProp.sections);
+    _.each(opts.table, function (value, key) {
+
+      // Skip sections
+      if (key === 'sections') return;
+
+      $.table[key] = value;
+    });
+  } else {
+    $.table.applyProperties(tableProp);
+  }
 
   // add listener
   if (opts.listener) {
