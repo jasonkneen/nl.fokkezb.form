@@ -137,11 +137,11 @@ function setInput(input) {
 function showError(show) {
 
   if (show) {
-    Alloy.addClass(controllerParam, $.row, 'errorRow');
+    Alloy.addClass(controllerParam, OS_IOS ? $.row : $.background, 'errorRow');
     Alloy.addClass(controllerParam, $.label, 'errorLabel');
 
   } else {
-    Alloy.removeClass(controllerParam, $.row, 'errorRow');
+    Alloy.removeClass(controllerParam, OS_IOS ? $.row : $.background, 'errorRow');
     Alloy.removeClass(controllerParam, $.label, 'errorLabel');
   }
 }
