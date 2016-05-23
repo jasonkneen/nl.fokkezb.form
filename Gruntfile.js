@@ -18,9 +18,7 @@ module.exports = function(grunt) {
           command: 'build',
           platform: 'ios',
           deviceFamily: 'ipad',
-          logLevel: 'trace',
-          shadow: true,
-          sdk: '3.5.1.GA'
+          logLevel: 'trace'
         }
       },
       iphone: {
@@ -28,18 +26,14 @@ module.exports = function(grunt) {
           command: 'build',
           platform: 'ios',
           deviceFamily: 'iphone',
-          logLevel: 'trace',
-          shadow: true,
-          sdk: '3.5.1.GA'
+          logLevel: 'trace'
         }
       },
       android: {
         options: {
           command: 'build',
           platform: 'android',
-          logLevel: 'trace',
-          shadow: true,
-          sdk: '3.5.1.GA'
+          logLevel: 'trace'
         }
       }
     }

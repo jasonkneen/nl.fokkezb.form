@@ -10,3 +10,5 @@ tmp
 Thumbs.db
 app/widgets/nl.fokkezb.form
 node_modules
+/i18n
+/platform
