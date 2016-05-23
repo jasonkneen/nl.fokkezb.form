@@ -40,8 +40,8 @@ var config = {
   if (args.select) {
     _.extend(config, args.select);
   }
-  
-  options = args.options || [];
+
+  config.options = args.options || [];
 
   // display a hasChild marker
   $.row.applyProperties($.createStyle({
@@ -65,12 +65,11 @@ var config = {
  */
 function focus() {
 
-  var labels = _.values(options);
-  Ti.API.warn(options);
+  var labels = _.values(config.options);
   labels.push(config.cancel);
   var cancelIndex = labels.length - 1;
 
-  var selectedIndex = _.isArray(options) ? value : _.indexOf(_.keys(options), value);
+  var selectedIndex = _.isArray(config.options) ? value : _.indexOf(_.keys(config.options), value);
 
   var dialog = Ti.UI.createOptionDialog({
     cancel: cancelIndex,
@@ -85,7 +84,7 @@ function focus() {
       return;
     }
 
-    var val = _.isArray(options) ? e.index : _.keys(options)[e.index];
+    var val = _.isArray(config.options) ? e.index : _.keys(config.options)[e.index];
     $.setValue(val);
     $.change();
 
@@ -103,5 +102,5 @@ function getValue() {
 function setValue(val) {
   value = val;
 
-  $.input.text = options[value];
+  $.input.text = config.options[value];
 }
