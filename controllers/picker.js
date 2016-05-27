@@ -133,12 +133,12 @@ function focus(e) {
 
   } else if (OS_ANDROID && picker.type === Ti.UI.PICKER_TYPE_DATE) {
     $.picker.showDatePickerDialog({
-      cancel: onDialogClose
+      callback: onDialogClose
     });
 
   } else if (OS_ANDROID && picker.type === Ti.UI.PICKER_TYPE_TIME) {
     $.picker.showTimePickerDialog({
-      cancel: onDialogClose
+      callback: onDialogClose
     });
 
   } else {
