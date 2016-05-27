@@ -1,5 +1,6 @@
 ".container": {
-    layout: "horizontal"
+    layout: "horizontal",
+    height: Ti.UI.SIZE
 }
 ".row[platform=ios]": {
   selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE

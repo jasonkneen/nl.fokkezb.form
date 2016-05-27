@@ -91,9 +91,9 @@ var value;
     $.container.layout = args.row.layout;
   }
 
-  // Android can't fit in rest of size in the row, label.width + label.left + control.left + control.right
-  if (OS_ANDROID && $.container.layout === 'horizontal') {
-    var platformWidth = require('alloy/measurement').pxToDP(Ti.Platform.displayCaps.platformWidth);
+  // Fit control view into the row, label.width + label.left + control.left + control.right
+  if ($.container.layout === 'horizontal') {
+    var platformWidth = OS_ANDROID ? require('alloy/measurement').pxToDP(Ti.Platform.displayCaps.platformWidth) : Ti.Platform.displayCaps.platformWidth;
     $.control.width = platformWidth - $.label.left - $.label.width - $.control.left - 15;
   }
 
