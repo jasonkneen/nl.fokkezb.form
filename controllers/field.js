@@ -80,11 +80,13 @@ var value;
   $.form = args.form;
   $.name = args.name;
 
-  $.row.applyProperties(_.extend(args.row || {}, {
+  if (args.row){
+    $.row.applyProperties(args.row);
+  }
 
-    // for the table's singletap event listener
-    _name: $.name
-  }));
+  // Android can't ser custom properties with applyProperties
+  // for the table's singletap event listener
+  $.row._name = $.name;
 
   // Overwrite layout value from args.row
   if (args.row && args.row.layout) {
