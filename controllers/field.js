@@ -86,6 +86,17 @@ var value;
     _name: $.name
   }));
 
+  // Overwrite layout value from args.row
+  if (args.row && args.row.layout) {
+    $.container.layout = args.row.layout;
+  }
+
+  // Android can't fit in rest of size in the row, label.width + label.left + control.left + control.right
+  if (OS_ANDROID && $.container.layout === 'horizontal') {
+    var platformWidth = require('alloy/measurement').pxToDP(Ti.Platform.displayCaps.platformWidth);
+    $.control.width = platformWidth - $.label.left - $.label.width - $.control.left - 15;
+  }
+
   if (args.validator) {
     $.validator = args.validator;
   }
@@ -137,11 +148,11 @@ function setInput(input) {
 function showError(show) {
 
   if (show) {
-    Alloy.addClass(controllerParam, OS_IOS ? $.row : $.background, 'errorRow');
+    Alloy.addClass(controllerParam, $.container, 'errorRow');
     Alloy.addClass(controllerParam, $.label, 'errorLabel');
 
   } else {
-    Alloy.removeClass(controllerParam, OS_IOS ? $.row : $.background, 'errorRow');
+    Alloy.removeClass(controllerParam, $.container, 'errorRow');
     Alloy.removeClass(controllerParam, $.label, 'errorLabel');
   }
 }
