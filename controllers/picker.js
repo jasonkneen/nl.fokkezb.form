@@ -56,6 +56,11 @@ var picker = {
     classes: ['row']
   }));
 
+  // Remove hasChild width to save all in same row in case of horizontal layout
+  if ($.container.layout === 'horizontal') {
+    $.control.width = $.control.width - 35;
+  }
+
   // input properties to apply
   if (args.input) {
     $.input.applyProperties(args.input);
