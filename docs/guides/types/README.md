@@ -26,13 +26,13 @@ By leaving most of the common views and logic in {@link Widgets.nlFokkezbForm.co
 
 	})(arguments[0]);
 	
-	$.setValue(val) {
+	$.setValue = function(val) {
 		$.input.value = val;
-	}
+	};
 	
-	$.getValue() {
+	$.getValue = function() {
 		return $.input.value;
-	}
+	};
 	
 	function onChange(e) {
 		$.change();
