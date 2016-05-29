@@ -29,6 +29,7 @@ $.getValues = getValues;
 $.setValues = setValues;
 $.isValid = isValid;
 $.getField = getField;
+$.blurAll = blurAll;
 
 /*
  * @type {Object} The args the widget was constructed with if auto-initialize couldn't be run.
@@ -64,7 +65,6 @@ var values = {};
  *
  * @method Controller
  * @param args Arguments passed to the controller.
- 
  */
 (function constructor(args) {
 
@@ -376,7 +376,13 @@ function isValid() {
   var valid = true;
 
   _.each(fieldCtrls, function(fieldCtrl, name) {
-    valid = valid && fieldCtrl.isValid();
+    var _valid = valid && fieldCtrl.isValid();
+
+    if (valid && !_valid){
+      fieldCtrls[name].focus();
+
+      valid = false;
+    }
   });
 
   return valid;
@@ -396,4 +402,29 @@ function onTableSingletap(e) {
   }
 
   fieldCtrls[e.row._name].focus(e);
+}
+
+/**
+ * Blur all fields
+ *
+ * @return void
+ * @author Hazem Khaled <hazem.khaled@gmail.com>
+ */
+function blurAll() {
+
+    _.each(fieldCtrls, function(fieldCtrl) {
+        fieldCtrl.blur();
+    });
+}
+
+/**
+ * Focus on specific field
+ *
+ * @param  string fieldName Name for the field to focus on
+ * @return void
+ * @author Hazem Khaled <hazem.khaled@gmail.com>
+ */
+function focus(fieldName) {
+
+    fieldCtrls[fieldName].focus(e);
 }
