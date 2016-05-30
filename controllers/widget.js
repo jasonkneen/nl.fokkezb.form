@@ -153,6 +153,25 @@ function init(opts) {
     }
   }
 
+	_.each(opts.children, function (child) {
+
+		// fix: https://jira.appcelerator.org/browse/TC-3583
+		if (!child) {
+			return;
+		}
+
+		console.debug('adding footer/header views from xml', child.role);
+
+		switch (child.role) {
+		  case 'headerView':
+		    $.table.headerView = child;
+		    break;
+		  case 'footerView':
+		    $.table.footerView = child;
+		    break;
+		}
+	});
+
   render(opts);
 }
 
