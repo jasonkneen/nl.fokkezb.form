@@ -80,11 +80,24 @@ var value;
   $.form = args.form;
   $.name = args.name;
 
-  $.row.applyProperties(_.extend(args.row || {}, {
+  if (args.row){
+    $.row.applyProperties(args.row);
+  }
 
-    // for the table's singletap event listener
-    _name: $.name
-  }));
+  // Android can't ser custom properties with applyProperties
+  // for the table's singletap event listener
+  $.row._name = $.name;
+
+  // Overwrite layout value from args.row
+  if (args.row && args.row.layout) {
+    $.container.layout = args.row.layout;
+  }
+
+  // Fit control view into the row, label.width + label.left + control.left + control.right
+  if ($.container.layout === 'horizontal') {
+    var platformWidth = OS_ANDROID ? require('alloy/measurement').pxToDP(Ti.Platform.displayCaps.platformWidth) : Ti.Platform.displayCaps.platformWidth;
+    $.control.width = platformWidth - $.label.left - $.label.width - $.control.left - 15;
+  }
 
   if (args.validator) {
     $.validator = args.validator;
@@ -137,11 +150,11 @@ function setInput(input) {
 function showError(show) {
 
   if (show) {
-    Alloy.addClass(controllerParam, OS_IOS ? $.row : $.background, 'errorRow');
+    Alloy.addClass(controllerParam, $.container, 'errorRow');
     Alloy.addClass(controllerParam, $.label, 'errorLabel');
 
   } else {
-    Alloy.removeClass(controllerParam, OS_IOS ? $.row : $.background, 'errorRow');
+    Alloy.removeClass(controllerParam, $.container, 'errorRow');
     Alloy.removeClass(controllerParam, $.label, 'errorLabel');
   }
 }

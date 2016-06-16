@@ -56,6 +56,11 @@ var picker = {
     classes: ['row']
   }));
 
+  // Remove hasChild width to save all in same row in case of horizontal layout
+  if ($.container.layout === 'horizontal') {
+    $.control.width = $.control.width - 35;
+  }
+
   // input properties to apply
   if (args.input) {
     $.input.applyProperties(args.input);
@@ -133,12 +138,12 @@ function focus(e) {
 
   } else if (OS_ANDROID && picker.type === Ti.UI.PICKER_TYPE_DATE) {
     $.picker.showDatePickerDialog({
-      cancel: onDialogClose
+      callback: onDialogClose
     });
 
   } else if (OS_ANDROID && picker.type === Ti.UI.PICKER_TYPE_TIME) {
     $.picker.showTimePickerDialog({
-      cancel: onDialogClose
+      callback: onDialogClose
     });
 
   } else {

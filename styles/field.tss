@@ -1,10 +1,14 @@
+".container": {
+    layout: "horizontal",
+    height: Ti.UI.SIZE
+}
 ".row[platform=ios]": {
   selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 }
 
 ".label": {
-  width: 145,
-  
+  width: 120,
+
   top: 19,
   left: 15,
 
@@ -23,7 +27,7 @@
   top: 10,
   bottom: 10,
   right: 15,
-  left: 160
+  left: 10
 }
 
 ".errorRow": {

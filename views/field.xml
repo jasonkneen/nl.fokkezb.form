@@ -1,7 +1,8 @@
 <Alloy autoStyle="true">
-  <TableViewRow id="row" class="row">
-      <View id="background" platform="android"/>
-      <Label id="label" class="label" />
-      <View id="control" class="control" />
-  </TableViewRow>
+    <TableViewRow id="row" class="row">
+        <View id="container" class="container">
+            <Label id="label" class="label"/>
+            <View id="control" class="control"/>
+        </View>
+    </TableViewRow>
 </Alloy>
