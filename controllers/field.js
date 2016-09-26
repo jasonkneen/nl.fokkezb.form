@@ -108,6 +108,10 @@ var value;
     $.control.width = platformWidth - $.label.left - $.label.width - $.control.left - 15;
   }
 
+  if (args.control){
+    $.control.applyProperties(args.control);
+  }
+
   if (args.validator) {
     $.validator = args.validator;
   }
