@@ -120,13 +120,13 @@ function focus(e) {
       if (pickerShowing === false) {
         //Insert row
         table.insertRowAfter(e.index, $.pickerRow, {
-          animationStyle: Titanium.UI.iPhone.RowAnimationStyle.DOWN
+          animationStyle: Ti.UI.iOS.RowAnimationStyle.DOWN
         });
         pickerShowing = true;
       } else if (pickerShowing === true) {
         // Delete row
         table.deleteRow(e.index + 1, {
-          animationStyle: Titanium.UI.iPhone.RowAnimationStyle.UP
+          animationStyle: Ti.UI.iOS.RowAnimationStyle.UP
         });
         pickerShowing = false
         // Update the value on close of row
