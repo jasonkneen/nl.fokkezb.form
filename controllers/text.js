@@ -70,7 +70,7 @@ var format;
 
 })(arguments[0]);
 
-function onChange(e) {
+function onChange() {
   $.change();
 
   // if (format === 'float') {

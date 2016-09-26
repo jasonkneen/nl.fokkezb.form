@@ -110,7 +110,7 @@ function focus(e) {
       // Wrap the picker in a row
       $.pickerRow.add($.picker);
       // Update the label on change
-      $.picker.addEventListener('change', function(e) {
+      $.picker.addEventListener('change', function() {
         onDialogClose({
           value: $.picker.value
         });
@@ -131,7 +131,7 @@ function focus(e) {
         table.deleteRow(e.index + 1, {
           animationStyle: Ti.UI.iOS.RowAnimationStyle.UP
         });
-        pickerShowing = false
+        pickerShowing = false;
         // Update the value on close of row
         onDialogClose({
           value: $.picker.value
@@ -150,7 +150,7 @@ function focus(e) {
     });
 
   } else {
-    throw 'Only support iOS and Android date/time for now.'
+    throw 'Only support iOS and Android date/time for now.';
   }
 }
 
@@ -188,7 +188,7 @@ function onUnsetClick(e) {
   onCancelClick(e);
 }
 
-function onCancelClick(e) {
+function onCancelClick() {
   $.popover.hide();
 }
 

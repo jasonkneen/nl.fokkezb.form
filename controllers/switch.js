@@ -47,7 +47,7 @@ function focus() {
   $.input.value = val;
 }
 
-function getValue(val) {
+function getValue() {
   return $.input.value;
 }
 
@@ -64,6 +64,6 @@ function isValid() {
   return true;
 }
 
-function onChange(e) {
+function onChange() {
   $.change();
 }

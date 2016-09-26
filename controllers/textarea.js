@@ -37,7 +37,7 @@ exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 
     if (inputProp.returnKeyType && inputProp.returnKeyType === Ti.UI.RETURNKEY_NEXT) {
 
-      $.input.addEventListener('return', function(e) {
+      $.input.addEventListener('return', function() {
         $.next();
       });
     }
@@ -50,6 +50,6 @@ exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 
 })(arguments[0]);
 
-function onChange(e) {
+function onChange() {
   $.change();
 }

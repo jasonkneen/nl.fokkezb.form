@@ -60,7 +60,7 @@ var spectrum;
 
     // multiple spectrums to toggle between
     if (args.color.spectrums) {
-      spectrums = args.color.spectrums
+      spectrums = args.color.spectrums;
       spectrum = args.color.spectrum = args.color.spectrum || spectrums[0];
 
       $.toolbar.show();
