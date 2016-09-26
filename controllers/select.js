@@ -115,8 +115,10 @@ function setOptions (_options) {
     config.options = _options || [];
 
     if (_.isFunction(config.options)) {
-      config.options(function (_options) {
-        config.options = _options;
+      config.options(function (__options) {
+        config.options = __options;
+
+        $.input.text = config.options[value];
       });
     }
 }
