@@ -123,6 +123,9 @@ function focus(e) {
           animationStyle: Ti.UI.iOS.RowAnimationStyle.DOWN
         });
         pickerShowing = true;
+
+        // Make sure row appear in the screen
+        table.scrollToIndex(e.index + 1);
       } else if (pickerShowing === true) {
         // Delete row
         table.deleteRow(e.index + 1, {
