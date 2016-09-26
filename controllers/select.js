@@ -13,6 +13,7 @@ exports.baseController = '../widgets/nl.fokkezb.form/controllers/field';
 $.focus = focus;
 $.getValue = getValue;
 $.setValue = setValue;
+$.setOptions = setOptions;
 
 var value;
 
@@ -41,7 +42,7 @@ var config = {
     _.extend(config, args.select);
   }
 
-  config.options = args.options || [];
+  setOptions(args.options);
 
   // display a hasChild marker
   $.row.applyProperties($.createStyle({
@@ -108,4 +109,16 @@ function setValue(val) {
   value = val;
 
   $.input.text = config.options[value];
+}
+
+function setOptions (_options) {
+    config.options = _options || [];
+
+    if (_.isFunction(config.options)) {
+      config.options(function (__options) {
+        config.options = __options;
+
+        $.input.text = config.options[value];
+      });
+    }
 }

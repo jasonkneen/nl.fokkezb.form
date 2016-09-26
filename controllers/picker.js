@@ -110,7 +110,7 @@ function focus(e) {
       // Wrap the picker in a row
       $.pickerRow.add($.picker);
       // Update the label on change
-      $.picker.addEventListener('change', function(e) {
+      $.picker.addEventListener('change', function() {
         onDialogClose({
           value: $.picker.value
         });
@@ -120,15 +120,18 @@ function focus(e) {
       if (pickerShowing === false) {
         //Insert row
         table.insertRowAfter(e.index, $.pickerRow, {
-          animationStyle: Titanium.UI.iPhone.RowAnimationStyle.DOWN
+          animationStyle: Ti.UI.iOS.RowAnimationStyle.DOWN
         });
         pickerShowing = true;
+
+        // Make sure row appear in the screen
+        table.scrollToIndex(e.index + 1);
       } else if (pickerShowing === true) {
         // Delete row
         table.deleteRow(e.index + 1, {
-          animationStyle: Titanium.UI.iPhone.RowAnimationStyle.UP
+          animationStyle: Ti.UI.iOS.RowAnimationStyle.UP
         });
-        pickerShowing = false
+        pickerShowing = false;
         // Update the value on close of row
         onDialogClose({
           value: $.picker.value
@@ -138,7 +141,7 @@ function focus(e) {
 
   } else if (OS_ANDROID && picker.type === Ti.UI.PICKER_TYPE_DATE) {
     $.picker.showDatePickerDialog({
-      callback: onDialogClose
+      callback:onDialogClose
     });
 
   } else if (OS_ANDROID && picker.type === Ti.UI.PICKER_TYPE_TIME) {
@@ -147,7 +150,7 @@ function focus(e) {
     });
 
   } else {
-    throw 'Only support iOS and Android date/time for now.'
+    throw 'Only support iOS and Android date/time for now.';
   }
 }
 
@@ -185,7 +188,7 @@ function onUnsetClick(e) {
   onCancelClick(e);
 }
 
-function onCancelClick(e) {
+function onCancelClick() {
   $.popover.hide();
 }
 

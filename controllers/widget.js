@@ -72,7 +72,7 @@ var values = {};
   delete args.id;
   delete args.classes;
   delete args.__parentSymbol;
-  delete args['$model'];
+  delete args.$model;
   delete args.__itemTemplate;
 
   // if we have one of these we can auto-initialize
@@ -153,6 +153,27 @@ function init(opts) {
     }
   }
 
+	_.each(opts.children, function (child, key) {
+
+		// fix: https://jira.appcelerator.org/browse/TC-3583
+		if (!child) {
+			return;
+		}
+
+		console.debug('Adding', child.role,'from xml to this form');
+
+		switch (child.role) {
+		  case 'headerView':
+		    $.table.headerView = opts.children[key];
+		    break;
+		  case 'footerView':
+		    $.table.footerView = opts.children[key];
+		    break;
+		  default:
+		    console.warn('role can be role=[headerView|footerView]', child);
+		}
+	});
+
   render(opts);
 }
 
@@ -183,7 +204,7 @@ function render(opts) {
   values = opts.values || {};
 
   // clean-up listeners
-  _.each(fieldCtrls, function(fieldCtrl, name) {
+  _.each(fieldCtrls, function(fieldCtrl) {
     fieldCtrl.off();
   });
 
@@ -304,7 +325,9 @@ function render(opts) {
     _.each(opts.table, function (value, key) {
 
       // Skip sections
-      if (key === 'sections') return;
+      if (key === 'sections') {
+        return;
+      }
 
       $.table[key] = value;
     });
@@ -426,5 +449,5 @@ function blurAll() {
  */
 function focus(fieldName) {
 
-    fieldCtrls[fieldName].focus(e);
+    fieldCtrls[fieldName].focus();
 }
