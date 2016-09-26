@@ -55,6 +55,9 @@ $.change = change;
 $.isValid = isValid;
 $.showError = showError;
 
+$.hide = hide;
+$.show = show;
+
 // keep a reference to our controllerParam for showError()
 // when we are extended the original values will change to our child's.
 var controllerParam = {
@@ -79,6 +82,12 @@ var value;
 
   $.form = args.form;
   $.name = args.name;
+
+  if (args.visible === false) {
+    _.defer(function (hide) {
+      hide();
+    }, hide);
+  }
 
   if (args.row){
     $.row.applyProperties(args.row);
@@ -242,4 +251,23 @@ function isValid() {
   $.showError(!valid);
 
   return valid;
+}
+
+/**
+ * Remove this TableViwRow from the table
+ */
+function hide(){
+  $.args.form.table.deleteRow($.row, {
+    animated: true
+  });
+}
+
+/**
+ * Adding this row to the table, Using Ti.UI.TableView.insertRowAfter()
+ * @param  {Integer} index Index of the previous row to show this row after
+ */
+function show(index){
+  $.args.form.table.insertRowAfter(index, $.row, {
+    animated: true
+  });
 }
