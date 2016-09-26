@@ -153,22 +153,24 @@ function init(opts) {
     }
   }
 
-	_.each(opts.children, function (child) {
+	_.each(opts.children, function (child, key) {
 
 		// fix: https://jira.appcelerator.org/browse/TC-3583
 		if (!child) {
 			return;
 		}
 
-		console.debug('adding footer/header views from xml', child.role);
+		console.debug('Adding', child.role,'from xml to this form');
 
 		switch (child.role) {
 		  case 'headerView':
-		    $.table.headerView = child;
+		    $.table.headerView = opts.children[key];
 		    break;
 		  case 'footerView':
-		    $.table.footerView = child;
+		    $.table.footerView = opts.children[key];
 		    break;
+		  default:
+		    console.warn('role can be role=[headerView|footerView]', child);
 		}
 	});
 
