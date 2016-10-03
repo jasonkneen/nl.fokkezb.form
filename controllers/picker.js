@@ -29,7 +29,7 @@ var picker = {
   valueFormat: 'YYYY-MM-DD'
 };
 
-var forceIphoneBehavior = false;
+var disablePopover = false;
 /**
  * Constructor.
  *
@@ -71,11 +71,11 @@ var forceIphoneBehavior = false;
   $.setInput($.input);
 
   // compose view
-  if (Ti.Platform.osname === 'ipad' && !args.forceIphoneBehavior) {
+  if (Ti.Platform.osname === 'ipad' && !args.disablePopover) {
       $.win.title = $.label.text;
       $.win.add($.picker);
   } else {
-      forceIphoneBehavior = args.forceIphoneBehavior;
+      forceIphoneBehavior = args.disablePopover;
   }
 
 })(arguments[0]);
@@ -104,7 +104,7 @@ function focus(e) {
 
   if (OS_IOS) {
 
-    if (Ti.Platform.osname === 'ipad' && !forceIphoneBehavior) {
+    if (Ti.Platform.osname === 'ipad' && !disablePopover) {
       $.popover.show({
         view: $.input
       });
