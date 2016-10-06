@@ -105,7 +105,7 @@ function focus(e) {
 
   if (OS_IOS) {
 
-     if (Ti.Platform.osname === 'ipad' && !disablePopover) {
+    if (Ti.Platform.osname === 'ipad' && !disablePopover) {
       $.popover.show({
         view: $.input
       });
