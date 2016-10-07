@@ -29,6 +29,7 @@ var picker = {
   valueFormat: 'YYYY-MM-DD'
 };
 
+var disablePopover = false;
 /**
  * Constructor.
  *
@@ -40,6 +41,7 @@ var picker = {
  * @param {Number} [args.picker.type=Ti.UI.PICKER_TYPE_DATE] On Android, if this is `Ti.UI.PICKER_TYPE_DATE` or `Ti.UI.PICKER_TYPE_TIME` this will trigger the related dialogs.
  * @param {String} [args.picker.valueFormat="YYYY-MM-DD"] Format in which the value is set and get.
  * @param {String} [args.picker.textFormat] Format in which the value is displayed (defaults to `valueFormat`).
+ * @param {Boolean} [args.disablePopover] Set to true to not use the popover for the picker iPad.
  * @param {String|Object} args.label Will be used for the popover title as well.
  */
 (function constructor(args) {
@@ -70,9 +72,11 @@ var picker = {
   $.setInput($.input);
 
   // compose view
-  if (Ti.Platform.osname === 'ipad') {
-    $.win.title = $.label.text;
-    $.win.add($.picker);
+  if (Ti.Platform.osname === 'ipad' && !args.disablePopover) {
+      $.win.title = $.label.text;
+      $.win.add($.picker);
+  } else {
+      disablePopover = args.disablePopover;
   }
 
 })(arguments[0]);
@@ -101,7 +105,7 @@ function focus(e) {
 
   if (OS_IOS) {
 
-    if (Ti.Platform.osname === 'ipad') {
+    if (Ti.Platform.osname === 'ipad' && !disablePopover) {
       $.popover.show({
         view: $.input
       });
