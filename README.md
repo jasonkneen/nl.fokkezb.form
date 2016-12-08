@@ -1,3 +1,5 @@
+NOTE: We facing a [bug with Titanium 6+ on Android](https://jira.appcelerator.org/browse/AC-4661), follow this [workaround](https://github.com/FokkeZB/nl.fokkezb.form/issues/34) or help fix it.
+
 # Alloy Form Widget [![Appcelerator Alloy](http://www-static.appcelerator.com/badges/alloy-git-badge-sq.png)](http://appcelerator.com/alloy/)
 
 An [Alloy](http://appcelerator.com/alloy) [Widget](http://docs.appcelerator.com/titanium/latest/#!/guide/Alloy_Widgets) to create a form using a [TableView](http://docs.appcelerator.com/titanium/latest/#!/guide/TableViews), much like the familiar settings views on iOS.
