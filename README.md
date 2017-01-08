@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/FokkeZB/nl.fokkezb.form.png?label=ready&title=Ready)](https://waffle.io/FokkeZB/nl.fokkezb.form)
 NOTE: We facing a [bug with Titanium 6+ on Android](https://jira.appcelerator.org/browse/AC-4661), follow this [workaround](https://github.com/FokkeZB/nl.fokkezb.form/issues/34) or help fix it.
 
 # Alloy Form Widget [![Appcelerator Alloy](http://www-static.appcelerator.com/badges/alloy-git-badge-sq.png)](http://appcelerator.com/alloy/)
