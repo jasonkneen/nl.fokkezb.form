@@ -1,3 +1,5 @@
+> **UNMAINTAINED:** I'm no longer actively maintaining this project. If you'd like to take it over, create an issue requesting so. If you've found an issue, send me a PR and I may still be able to review and merge.
+
 # Alloy Form Widget [![Appcelerator Alloy](http://www-static.appcelerator.com/badges/alloy-git-badge-sq.png)](http://appcelerator.com/alloy/)
 
 An [Alloy](http://appcelerator.com/alloy) [Widget](http://docs.appcelerator.com/titanium/latest/#!/guide/Alloy_Widgets) to create a form using a [TableView](http://docs.appcelerator.com/titanium/latest/#!/guide/TableViews), much like the familiar settings views on iOS.
